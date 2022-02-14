@@ -9,28 +9,18 @@ const Drawer = createDrawerNavigator();
 let defaultProductNavTitle = "Product list"
 
 export function useProductNavTitle() {
-
-  const [productNavTitle, setNewProductNavTitle] = React.useState(defaultProductNavTitle);
-  return { productNavTitle, setNewProductNavTitle };
+  let [productNavTitle, setProductNavTitle] = React.useState(defaultProductNavTitle);
+  return { productNavTitle, setProductNavTitle };
 }
 
 function DrawerNavs({navigation, route}: any) {
 
-  let xd = defaultProductNavTitle
-
-  const productNavTitle = useProductNavTitle();
-
-  React.useEffect(
-    () => {
-      xd = productNavTitle.productNavTitle
-      console.log(xd)
-    }, [xd, productNavTitle]
-  );
+  const navTitle = useProductNavTitle().productNavTitle;
 
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator initialRouteName="Home" >
       <Drawer.Screen name="Home" component={HomeScreen} options={{ title: 'Main screen'}} />
-      <Drawer.Screen name="Products" component={ProductNavs} options={{title: "Products", headerTitle: productNavTitle.productNavTitle,  unmountOnBlur: true}} />
+      <Drawer.Screen name="Products" component={ProductNavs} options={{drawerLabel: "Products", headerTitle: navTitle,  unmountOnBlur: true}} />
     </Drawer.Navigator>
   );
 }

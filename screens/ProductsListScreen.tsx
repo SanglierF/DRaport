@@ -4,13 +4,13 @@ import { useProductNavTitle } from '../navigators/DrawerNavs'
 
 export default function ProductsListScreen({ navigation, route }: any) {
 
-  const { setNewProductNavTitle } = useProductNavTitle();
+  const { productNavTitle, setProductNavTitle } = useProductNavTitle();
 
   return(
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>ProductsListScreen: {route.params.text} </Text>
       <Button onPress={() => navigation.navigate('AddProduct', {productId: 2})} title="Add product" />
-      <Button onPress={() => setNewProductNavTitle("NEW TITLE")} title="Change title" />
+      <Button onPress={() => setProductNavTitle("kasndsajdna")} title="Change title" />
     </View>
   )
 }
