@@ -11,19 +11,20 @@ let defaultProductNavTitle = "Product list"
 export function useProductNavTitle() {
 
   const [productNavTitle, setNewProductNavTitle] = React.useState(defaultProductNavTitle);
-
-
   return { productNavTitle, setNewProductNavTitle };
 }
 
 function DrawerNavs({navigation, route}: any) {
 
+  let xd = defaultProductNavTitle
+
   const productNavTitle = useProductNavTitle();
 
   React.useEffect(
     () => {
-      console.log(productNavTitle.productNavTitle)
-    }, [productNavTitle.productNavTitle]
+      xd = productNavTitle.productNavTitle
+      console.log(xd)
+    }, [xd, productNavTitle]
   );
 
   return (
