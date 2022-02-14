@@ -6,11 +6,30 @@ import ProductNavs from "./ProductNavs";
 
 const Drawer = createDrawerNavigator();
 
-function DrawerNavs() {
+let defaultProductNavTitle = "Product list"
+
+export function useProductNavTitle() {
+
+  const [productNavTitle, setNewProductNavTitle] = React.useState(defaultProductNavTitle);
+
+
+  return { productNavTitle, setNewProductNavTitle };
+}
+
+function DrawerNavs({navigation, route}: any) {
+
+  const productNavTitle = useProductNavTitle();
+
+  React.useEffect(
+    () => {
+      console.log(productNavTitle.productNavTitle)
+    }, [productNavTitle.productNavTitle]
+  );
+
   return (
     <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeScreen} options={{ title: 'Main sceen' }} />
-      <Drawer.Screen name="ProductNavs" component={ProductNavs}/>
+      <Drawer.Screen name="Home" component={HomeScreen} options={{ title: 'Main screen'}} />
+      <Drawer.Screen name="Products" component={ProductNavs} options={{title: "Products", headerTitle: productNavTitle.productNavTitle,  unmountOnBlur: true}} />
     </Drawer.Navigator>
   );
 }
