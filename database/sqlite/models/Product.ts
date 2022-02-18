@@ -1,16 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
+@Entity('Product')
 export class Product {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   productId: number;
 
-  @Column()
+  @Column({length: 50})
   name: string;
 
-  @Column()
-  price: float;
+  @Column({type: "float"}, )
+  price: number;
 
-  @Column()
+  @Column({nullable: true})
   image: string;
 }
