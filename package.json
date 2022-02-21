@@ -27,7 +27,7 @@
     "react-native-screens": "~3.10.1",
     "react-native-web": "0.17.1",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.43",
+    "typeorm": "0.2.41",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

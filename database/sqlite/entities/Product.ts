@@ -8,7 +8,7 @@ export class Product {
   @Column({length: 50})
   name: string;
 
-  @Column({type: "float"}, )
+  @Column({type: "float"})
   price: number;
 
   @Column({nullable: true})
