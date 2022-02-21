@@ -13,7 +13,7 @@ import LocalDatabase from "./database/LocalDatabase";
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-
+  
   return (
     <DbContext.Provider value={new LocalDatabase()}>
       <NavigationContainer>

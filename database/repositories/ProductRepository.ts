@@ -1,6 +1,6 @@
 import { Connection, getRepository } from 'typeorm';
 //entities
-import { Product } from "./sqlite/entities/Product";
+import { Product } from "../entities/Product";
 
 export default class ProductRepository {
   private repository: Repository<Product>;
