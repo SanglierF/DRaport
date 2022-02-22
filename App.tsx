@@ -13,9 +13,11 @@ import LocalDatabase from "./database/LocalDatabase";
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-  
+
+  const localDatabase = new LocalDatabase();
+
   return (
-    <DbContext.Provider value={new LocalDatabase()}>
+    <DbContext.Provider value={localDatabase}>
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName="Home"

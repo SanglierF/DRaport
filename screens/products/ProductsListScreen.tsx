@@ -1,23 +1,66 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import DbContext from '../../DbContext'
-import ProductRepository from '../../database/repositories/ProductRepository';
+import * as React from "react";
+import { StyleSheet, Text, View, Button, FlatList, Pressable } from "react-native";
+import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import DbContext from "../../DbContext";
+import ProductRepository from "../../database/repositories/ProductRepository";
+import { Product } from "../../database/entities/Product";
+import ItemFlatlist from "../../components/ItemFlatlist";
 
 export default function ProductsListScreen({ navigation, route }: any) {
-
+  const [productList, setProductList] = React.useState([]);
   const context = React.useContext(DbContext);
-  let productsList = [];
-  let productRepository = null;
+  const productRepository = new ProductRepository(context.dbConnection);
+
+  let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    productRepository = new ProductRepository(context.dbConnection);
-    console.log("first init")
-  },[productsList]) //
+    if (productRepository) {
+      productRepository.getAll().then(found => {
+        setProductList(found);
+      });
+    }
+  }, [isFocused]);
 
-  return(
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+  React.useEffect(() => {
+    console.log(productList);
+  }, [productList]);
+  //keyExtractor={(item, index) => index.toString()}
+
+  function renderItem({ item }) {
+    return (
+      <View style={itemStyles.container}>
+        <Text>{item.name}</Text>
+        <Text>{item.price.toString()}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>ProductsListScreen: {route.params.text} </Text>
-      <Button onPress={() => navigation.navigate('AddProduct', {productId: 2})} title="Add product" />
+      <FlatList
+        extraData={isFocused}
+        renderItem={renderItem}
+        data={productList}
+        keyExtractor={item => item.productId}
+      />
+      <Button
+        onPress={() => navigation.navigate("AddProduct", { productId: 2 })}
+        title="Add product"
+      />
     </View>
-  )
+  );
 }
+
+const itemStyles = StyleSheet.create({
+  container: {
+    padding: 24,
+    backgroundColor: "#eaeaea"
+  },
+  item: {
+    borderWidth: 4,
+    backgroundColor: "#61dafb",
+    color: "#20232a",
+    textAlign: "center"
+  }
+});

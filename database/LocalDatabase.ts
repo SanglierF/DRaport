@@ -6,7 +6,7 @@ export default class LocalDatabase {
   dbConnection: Connection;
 
   constructor() {
-    const connection = DbConnection().then(
+    DbConnection().then(
       value => {
         this.dbConnection = value;
       },
@@ -20,7 +20,7 @@ async function DbConnection() {
   // TODO either chceck if local setting and change for rest api
   return await createConnection({
     name: "default",
-    database: "test",
+    database: "lmaotest",
     driver: require("expo-sqlite"),
     entities: [Product],
     synchronize: true,
