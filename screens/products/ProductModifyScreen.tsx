@@ -2,16 +2,30 @@ import * as React from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import DbContext from "../../DbContext";
 import ProductRepository from "../../database/repositories/ProductRepository";
+import { Product } from "../../database/entities/Product";
 
-export default function ProductAddScreen({ navigation, route }: any) {
+export default function ProductModifyScreen({ navigation, route }: any) {
   const context = React.useContext(DbContext);
   const productRepository = new ProductRepository(context.dbConnection);
 
-  function addProduct() {
+  const [product, setProduct] = React.useState(null);
+
+  React.useEffect(() => {
+    productRepository.findById(route.params.productId).then(
+      found => {
+        setProduct(found);
+        setName(found.name);
+        setPrice(found.price.toString());
+      },
+      () => {}
+    );
+  }, []);
+
+  function editProduct() {
     if (name && price) {
-      const newProduct = productRepository.create(name, Number(price));
-      console.log(newProduct);
-      productRepository.saveProduct(newProduct);
+      product.name = name;
+      product.price = price;
+      productRepository.modify(product);
     }
   }
 
@@ -24,7 +38,7 @@ export default function ProductAddScreen({ navigation, route }: any) {
       <TextInput placeholder="Hehe xd" value={name} onChangeText={setName} />
       <Text>Product price:</Text>
       <TextInput placeholder="13.37" value={price} onChangeText={setPrice} />
-      <Button onPress={addProduct} title="Add test product" />
+      <Button onPress={editProduct} title="Add test product" />
     </View>
   );
 }

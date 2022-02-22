@@ -12,16 +12,30 @@ export default class ProductRepository {
   public async getAll() {
     const productList = await this.repository.find();
 
-    return productList
+    return productList;
+  }
+  public async findById(productId: number) {
+    const product = await this.repository.findOne(productId);
+    return product;
   }
   public async saveProduct(product: Product) {
     return await this.repository.save(product);
   }
-  public create(productName: string, productPrice: number, productImage: string = ""){
-    return  this.repository.create({
+  public async modify(product: Product) {
+    return await this.repository.save(product);
+  }
+  public create(
+    productName: string,
+    productPrice: number,
+    productImage: string = ""
+  ) {
+    return this.repository.create({
       name: productName,
       price: productPrice,
-      image: productImage,
-    })
+      image: productImage
+    });
+  }
+  public async delete(productId: number) {
+    this.repository.delete(productId);
   }
 }
