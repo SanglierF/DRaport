@@ -17,7 +17,6 @@ export default class LocalDatabase {
   }
 }
 async function DbConnection() {
-  // TODO either chceck if local setting and change for rest api
   return await createConnection({
     name: "default",
     database: "lmaotest",
