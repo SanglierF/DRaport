@@ -1,5 +1,6 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Button, FlatList, Pressable } from "react-native";
+import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import { List, Button, FAB, Divider} from 'react-native-paper'
 import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 import DbContext from "../../DbContext";
 import ProductRepository from "../../database/repositories/ProductRepository";
@@ -28,10 +29,10 @@ export default function ProductsListScreen({ navigation, route }: any) {
 
   function renderItem({ item }) {
     return (
-      <View style={itemStyles.container}>
+      <Pressable style={itemStyles.container} onPress={() => {}}>
         <Text>{item.name}</Text>
         <Text>{item.price.toString()}</Text>
-      </View>
+      </Pressable>
     );
   }
 
@@ -46,8 +47,8 @@ export default function ProductsListScreen({ navigation, route }: any) {
       />
       <Button
         onPress={() => navigation.navigate("AddProduct", { productId: 2 })}
-        title="Add product"
-      />
+        >Dodaj produkt
+      </Button>
     </View>
   );
 }
