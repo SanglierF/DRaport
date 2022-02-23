@@ -18,7 +18,7 @@ export default class ProductRepository {
     const product = await this.repository.findOne(productId);
     return product;
   }
-  public async saveProduct(product: Product) {
+  public async save(product: Product) {
     return await this.repository.save(product);
   }
   public async modify(product: Product) {

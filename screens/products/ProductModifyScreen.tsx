@@ -2,7 +2,6 @@ import * as React from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import DbContext from "../../DbContext";
 import ProductRepository from "../../database/repositories/ProductRepository";
-import { Product } from "../../database/entities/Product";
 
 export default function ProductModifyScreen({ navigation, route }: any) {
   const context = React.useContext(DbContext);
@@ -22,6 +21,7 @@ export default function ProductModifyScreen({ navigation, route }: any) {
   }, []);
 
   function editProduct() {
+
     if (name && price) {
       product.name = name;
       product.price = price;
@@ -38,7 +38,7 @@ export default function ProductModifyScreen({ navigation, route }: any) {
       <TextInput placeholder="Hehe xd" value={name} onChangeText={setName} />
       <Text>Product price:</Text>
       <TextInput placeholder="13.37" value={price} onChangeText={setPrice} />
-      <Button onPress={editProduct} title="Add test product" />
+      <Button onPress={editProduct} title="Save changes" />
     </View>
   );
 }

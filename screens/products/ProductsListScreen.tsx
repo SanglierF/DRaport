@@ -11,7 +11,7 @@ import { List, Button, FAB, Divider, Modal } from "react-native-paper";
 import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 import DbContext from "../../DbContext";
 import ProductRepository from "../../database/repositories/ProductRepository";
-import { Product } from "../../database/entities/Product";
+import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function ProductsListScreen({ navigation, route }: any) {
   const [productList, setProductList] = React.useState([]);
@@ -88,39 +88,18 @@ export default function ProductsListScreen({ navigation, route }: any) {
     );
   }
 
-  function deleteProduct(productId) {
+  function deleteProduct(productId: number) {
     productRepository.delete(productId);
     setChangeCounter(changeCounter + 1);
   }
 
-  function modalConfirmation() {
-    return (
-      <Modal visible={modalVisible} style={localStyle.modal}>
-        <View>
-          <Text>Confirm delete!</Text>
-          <View style={localStyle.modalButtons}>
-            <Pressable
-              style={localStyle.modalButton}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                deleteProduct(deleteProductId);
-              }}
-            >
-              <Text> YES DELETE </Text>
-            </Pressable>
-            <Pressable
-              style={localStyle.modalButton}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Text> Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
+  const deleteObject = () => {
+    deleteProduct(deleteProductId);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -137,7 +116,12 @@ export default function ProductsListScreen({ navigation, route }: any) {
         icon="plus"
         onPress={() => navigation.navigate("AddProduct")}
       />
-      {modalConfirmation()}
+      <ModalConfirmation
+      deleteObjectFn={deleteProduct}
+      objectId={deleteProductId}
+      modalVisible={modalVisible}
+      setModalVisible={setModalVisible}
+      />
     </View>
   );
 }
@@ -152,29 +136,4 @@ const localStyle = StyleSheet.create({
     right: 15,
     margin: 10
   },
-  modal: {
-    margin: 20,
-    justifyContent: "center",
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  modalButtons: {
-    marginTop: 25,
-    justifyContent: "space-around"
-  },
-  modalButton: {
-    padding: 25,
-    backgroundColor: "gray",
-    margin: 10
-  }
 });

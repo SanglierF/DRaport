@@ -8,11 +8,14 @@ export default function ProductAddScreen({ navigation, route }: any) {
   const productRepository = new ProductRepository(context.dbConnection);
 
   function addProduct() {
+    let success = null
+
     if (name && price) {
       const newProduct = productRepository.create(name, Number(price));
       console.log(newProduct);
-      productRepository.saveProduct(newProduct);
+      success = productRepository.save(newProduct);
     }
+    if(success) navigation.goBack();
   }
 
   const [name, setName] = React.useState("");
@@ -24,7 +27,9 @@ export default function ProductAddScreen({ navigation, route }: any) {
       <TextInput placeholder="Hehe xd" value={name} onChangeText={setName} />
       <Text>Product price:</Text>
       <TextInput placeholder="13.37" value={price} onChangeText={setPrice} />
-      <Button onPress={addProduct} title="Add test product" />
+      <Button onPress={
+        addProduct
+      } title="Add test product" />
     </View>
   );
 }
