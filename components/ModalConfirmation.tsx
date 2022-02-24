@@ -16,7 +16,6 @@ const ModalConfirmation = ({
         setModalVisible(false);
       }}
     >
-      <View>
         <Text style={modalStyle.modalText}>Confirm delete!</Text>
         <View style={modalStyle.modalButtons}>
           <Pressable
@@ -37,7 +36,6 @@ const ModalConfirmation = ({
             <Text>No</Text>
           </Pressable>
         </View>
-      </View>
     </Modal>
   );
 };
@@ -47,9 +45,10 @@ export default ModalConfirmation;
 const modalStyle = StyleSheet.create({
   modal: {
     flex: 1,
-    marginTop: "45%",
-    height: "35%",
-    marginHorizontal: "20%",
+    height: 150,
+    width: 350,
+    marginTop: "50%",
+    marginStart: "10%",
     justifyContent: "space-evenly",
     backgroundColor: "white",
     borderRadius: 20,
