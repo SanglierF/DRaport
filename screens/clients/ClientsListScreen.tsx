@@ -39,7 +39,7 @@ export default function ClientsListScreen({ navigation, route }: any) {
         title={item.nickname}
         left={props => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title={"Price: "+item.name} right={() => <View />} />
+        <List.Item title={"Nickname: "+item.name} right={() => <View />} />
         <List.Item
           title={() => (
             <View
