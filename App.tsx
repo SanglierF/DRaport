@@ -34,7 +34,7 @@ export default function App() {
             name="Clients"
             component={Clients}
             options={{
-              title: "Products",
+              title: "Clients",
               headerShown: false,
               unmountOnBlur: true
             }}
@@ -52,7 +52,7 @@ export default function App() {
             name="Warehouses"
             component={Warehouses}
             options={{
-              title: "Products",
+              title: "Warehouses",
               headerShown: false,
               unmountOnBlur: true
             }}

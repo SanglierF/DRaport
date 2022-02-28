@@ -21,12 +21,12 @@ export default function Warehouses({ navigation, route }: any) {
       <Stack.Screen
         name="AddWarehouse"
         component={WarehouseAddScreen}
-        options={{ title: "Add product" }}
+        options={{ title: "Add warehouse" }}
       />
       <Stack.Screen
         name="ModifyWarehouse"
         component={WarehouseModifyScreen}
-        options={{ title: "Modify product" }}
+        options={{ title: "Modify warehouse" }}
       />
     </Stack.Navigator>
   );

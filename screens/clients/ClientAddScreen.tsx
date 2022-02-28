@@ -23,6 +23,8 @@ export default function ClientAddScreen({ navigation, route }: any) {
 
   const [name, setName] = React.useState("");
   const [nickname, setNickname] = React.useState("");
+  const [nip, setNip] = React.useState('');
+  const [voivodeship, setVoivodeship] = React.useState('');
 
   return (
     <View style={styleAdd.containerAdd}>
@@ -41,6 +43,23 @@ export default function ClientAddScreen({ navigation, route }: any) {
           mode="outlined"
           value={nickname}
           onChangeText={setNickname}
+          autoComplete="off"
+        />
+        <TextInput
+          style={styleAdd.textInput}
+          label="Client nip"
+          mode="outlined"
+          value={nip}
+          onChangeText={setNip}
+          autoComplete="off"
+          keyboardType="decimal-pad"
+        />
+        <TextInput
+          style={styleAdd.textInput}
+          label="Client voivodeship"
+          mode="outlined"
+          value={voivodeship}
+          onChangeText={setVoivodeship}
           autoComplete="off"
         />
       </View>

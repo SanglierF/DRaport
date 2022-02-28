@@ -21,12 +21,12 @@ export default function Clients({ navigation, route }: any) {
       <Stack.Screen
         name="AddClient"
         component={ClientAddScreen}
-        options={{ title: "Add product" }}
+        options={{ title: "Add client" }}
       />
       <Stack.Screen
         name="ModifyClient"
         component={ClientModifyScreen}
-        options={{ title: "Modify product" }}
+        options={{ title: "Modify client" }}
       />
     </Stack.Navigator>
   );
