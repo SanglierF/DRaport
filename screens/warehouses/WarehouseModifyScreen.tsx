@@ -16,7 +16,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
       found => {
         setWarehouse(found);
         setName(found.name);
-        setPrice(found.nickname);
+        setNickname(found.nickname);
       },
       () => {}
     );
@@ -32,13 +32,13 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
   }
 
   const [name, setName] = React.useState("");
-  const [nickname, setPrice] = React.useState("");
+  const [nickname, setNickname] = React.useState("");
 
   return (
     <View style={styleModify.containerAdd}>
       <View style={styleModify.containerInputs}>
       <TextInput style={styleModify.textInput} label="Warehouse name" mode='outlined' value={name} onChangeText={setName} autoComplete='off'/>
-      <TextInput style={styleModify.textInput} label="Warehouse nickname" mode='outlined' value={nickname} onChangeText={setPrice} autoComplete='off'/>
+      <TextInput style={styleModify.textInput} label="Warehouse nickname" mode='outlined' value={nickname} onChangeText={setNickname} autoComplete='off'/>
       </View>
       <Button style={styleModify.buttonAdd} onPress={editWarehouse} mode='contained'>
       Edit warehouse

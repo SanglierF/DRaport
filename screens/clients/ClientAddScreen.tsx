@@ -16,7 +16,6 @@ export default function ClientAddScreen({ navigation, route }: any) {
 
     if (validFields) {
       const newClient = clientRepository.create({ nickname: nickname, name: name});
-      console.log(newClient);
       clientRepository.save(newClient)
       navigation.goBack();
     }
@@ -40,7 +39,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           style={styleAdd.textInput}
           label="Client nickname"
           mode="outlined"
-          value={name}
+          value={nickname}
           onChangeText={setNickname}
           autoComplete="off"
         />

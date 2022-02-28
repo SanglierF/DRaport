@@ -40,7 +40,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           style={styleAdd.textInput}
           label="Warehouse nickname"
           mode="outlined"
-          value={name}
+          value={nickname}
           onChangeText={setNickname}
           autoComplete="off"
         />
