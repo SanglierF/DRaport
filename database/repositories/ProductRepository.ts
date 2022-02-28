@@ -25,14 +25,14 @@ export default class ProductRepository {
     return await this.repository.save(product);
   }
   public create(
-    productName: string,
-    productPrice: number,
-    productImage: string = ""
+    name: string,
+    price: number,
+    image: string = ""
   ) {
     return this.repository.create({
-      name: productName,
-      price: productPrice,
-      image: productImage
+      name: name,
+      price: price,
+      image: image
     });
   }
   public async delete(productId: number) {
