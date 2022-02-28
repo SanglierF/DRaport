@@ -6,7 +6,9 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./screens/HomeScreen";
+import Clients from "./screens/clients/Clients";
 import Products from "./screens/products/Products";
+import Warehouses from "./screens/warehouses/Warehouses";
 import DbContext from "./DbContext";
 import LocalDatabase from "./database/LocalDatabase";
 
@@ -29,8 +31,26 @@ export default function App() {
             options={{ title: "Main screen" }}
           />
           <Drawer.Screen
+            name="Clients"
+            component={Clients}
+            options={{
+              title: "Products",
+              headerShown: false,
+              unmountOnBlur: true
+            }}
+          />
+          <Drawer.Screen
             name="Products"
             component={Products}
+            options={{
+              title: "Products",
+              headerShown: false,
+              unmountOnBlur: true
+            }}
+          />
+          <Drawer.Screen
+            name="Warehouses"
+            component={Warehouses}
             options={{
               title: "Products",
               headerShown: false,
