@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { QueryClient, QueryClientProvider } from 'react-query';
 import HomeScreen from "./screens/HomeScreen";
 import Clients from "./screens/clients/Clients";
 import Products from "./screens/products/Products";
@@ -16,10 +17,13 @@ const Drawer = createDrawerNavigator();
 
 export default function App() {
 
+  const queryClient = new QueryClient();
+
   const localDatabase = new LocalDatabase();
 
   return (
     <DbContext.Provider value={localDatabase}>
+    <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName="Home"
@@ -59,6 +63,7 @@ export default function App() {
           />
         </Drawer.Navigator>
       </NavigationContainer>
+      </QueryClientProvider>
     </DbContext.Provider>
   );
 }
