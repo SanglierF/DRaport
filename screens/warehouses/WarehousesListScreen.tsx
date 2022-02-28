@@ -39,7 +39,7 @@ export default function WarehousesListScreen({ navigation, route }: any) {
         title={item.nickname}
         left={props => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title={"Full name: "+item.name} right={() => <View />} />
+        <List.Item title={`Full name ${item.name}`} right={() => <View />} />
         <List.Item
           title={() => (
             <View

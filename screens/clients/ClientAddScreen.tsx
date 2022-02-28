@@ -4,7 +4,7 @@ import { TextInput, Button } from "react-native-paper";
 import DbContext from "../../DbContext";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import styleClientDetails from "./styleClientDetails";
-import { nameValidation, priceValidation } from "../../components/Validators"
+import { nameValidation, priceValidation } from "../../components/Validators";
 
 export default function ClientAddScreen({ navigation, route }: any) {
   const context = React.useContext(DbContext);
@@ -12,19 +12,26 @@ export default function ClientAddScreen({ navigation, route }: any) {
 
   function addClient() {
     let validFields = false;
-    validFields = (nameValidation(name) && nameValidation(nickname))? true: false;
+    validFields =
+      nameValidation(name) && nameValidation(nickname) ? true : false;
 
     if (validFields) {
-      const newClient = clientRepository.create({ nickname: nickname, name: name});
-      clientRepository.save(newClient)
+      const newClient = clientRepository.create({
+        nickname: nickname,
+        name: name,
+        nip: nip,
+        voivodeship: voivodeship
+      });
+      clientRepository.save(newClient);
+      console.log(newClient);
       navigation.goBack();
     }
   }
 
   const [name, setName] = React.useState("");
   const [nickname, setNickname] = React.useState("");
-  const [nip, setNip] = React.useState('');
-  const [voivodeship, setVoivodeship] = React.useState('');
+  const [nip, setNip] = React.useState("");
+  const [voivodeship, setVoivodeship] = React.useState("");
 
   return (
     <View style={styleAdd.containerAdd}>

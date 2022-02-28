@@ -39,7 +39,7 @@ export default function ProductsListScreen({ navigation, route }: any) {
         title={item.name}
         left={props => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title={"Price: "+item.price} right={() => <View />} />
+        <List.Item title={`Price: ${item.price}`} right={() => <View />} />
         <Image
           style={{
             marginTop: 20,

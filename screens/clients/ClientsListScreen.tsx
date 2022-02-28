@@ -39,10 +39,16 @@ export default function ClientsListScreen({ navigation, route }: any) {
         title={item.nickname}
         left={props => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title={"Nickname: "+item.name} right={() => <View />} />
-        <List.Item title={"Nip: "+item.nip} right={() => <View />} />
-        <List.Item title={"voivodeship: "+item.voivodeship} right={() => <View />} />
-
+        <List.Item title={`Nickname: ${item.name}`} right={() => <View />} />
+        {item.nip ? (
+          <List.Item title={`Nip: ${item.nip}`} right={() => <View />} />
+        ) : null}
+        {item.voivodeship ? (
+          <List.Item
+            title={`voivodeship: ${item.voivodeship}`}
+            right={() => <View />}
+          />
+        ) : null}
         <List.Item
           title={() => (
             <View
@@ -109,10 +115,10 @@ export default function ClientsListScreen({ navigation, route }: any) {
         onPress={() => navigation.navigate("AddClient")}
       />
       <ModalConfirmation
-      deleteObjectFn={deleteClient}
-      objectId={deleteClientId}
-      modalVisible={modalVisible}
-      setModalVisible={setModalVisible}
+        deleteObjectFn={deleteClient}
+        objectId={deleteClientId}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
       />
     </View>
   );
@@ -127,5 +133,5 @@ const localStyle = StyleSheet.create({
     bottom: 25,
     right: 15,
     margin: 10
-  },
+  }
 });
