@@ -39,17 +39,15 @@ export default function ProductsListScreen({ navigation, route }: any) {
         title={item.name}
         left={props => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title="Price:" right={() => <Text>{item.price}</Text>} />
+        <List.Item title={"Price: "+item.price} right={() => <View />} />
         <Image
           style={{
+            marginTop: 20,
             width: 140,
             height: 140,
             alignSelf: "center"
           }}
-          source={{
-            uri:
-              "https://cdn.discordapp.com/attachments/937318254408523786/938473160171466782/miodlipowy.png"
-          }}
+          source={require('../../assets/icon.png')}
         />
         <List.Item
           title={() => (
