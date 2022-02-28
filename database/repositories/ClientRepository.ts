@@ -24,20 +24,19 @@ export default class ClientRepository {
   public async modify(client: Client) {
     return await this.repository.save(client);
   }
-  public create(
-    nickname: string,
-    nip: number = null,
-    regon: number = null,
-    name: string = "",
-    voivodeship: string = "",
-    city: string = "",
-    zip_code: string = "",
-    street: string = "",
-    tel_number: string = "",
-    longitude: number = null,
-    latitude: number = null,
-
-
+  public create({
+    nickname,
+    nip = null,
+    regon = null,
+    name = "",
+    voivodeship = "",
+    city = "",
+    zip_code = "",
+    street = "",
+    tel_number = "",
+    longitude = null,
+    latitude = null
+  }
   ) {
     return this.repository.create({
       nickname: nickname,

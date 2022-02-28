@@ -24,14 +24,14 @@ export default class WarehouseRepository {
   public async modify(warehouse: Warehouse) {
     return await this.repository.save(warehouse);
   }
-  public create(
-    nickname: string,
-    nip: number = null,
-    regon: number = null,
-    name: string = "",
-    tel_number: string = "",
-    email: string = "",
-  ) {
+  public create({
+    nickname,
+    nip = null,
+    regon = null,
+    name = "",
+    tel_number = "",
+    email = "",
+  }) {
     return this.repository.create({
       nickname: nickname,
       name: name,
