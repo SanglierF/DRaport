@@ -5,7 +5,7 @@ import {
   View,
   FlatList,
   Pressable,
-  Image
+  Image,
 } from "react-native";
 import { List, Button, FAB, Divider, Modal } from "react-native-paper";
 import { useIsFocused, useFocusEffect } from "@react-navigation/native";
@@ -26,7 +26,7 @@ export default function WarehousesListScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (warehouseRepository) {
-      warehouseRepository.getAll().then(found => {
+      warehouseRepository.getAll().then((found) => {
         setWarehouseList(found);
       });
     }
@@ -37,15 +37,31 @@ export default function WarehousesListScreen({ navigation, route }: any) {
     return (
       <List.Accordion
         title={item.nickname}
-        left={props => <List.Icon {...props} icon="basket" />}
+        left={(props) => <List.Icon {...props} icon="basket" />}
       >
         <List.Item title={`Full name ${item.name}`} right={() => <View />} />
+        {item.nip ? (
+          <List.Item title={`Nip: ${item.nip}`} right={() => <View />} />
+        ) : null}
+
+        {item.regon ? (
+          <List.Item title={`regon: ${item.regon}`} right={() => <View />} />
+        ) : null}
+        {item.tel_number ? (
+          <List.Item
+            title={`tel_number: ${item.tel_number}`}
+            right={() => <View />}
+          />
+        ) : null}
+        {item.email ? (
+          <List.Item title={`email: ${item.email}`} right={() => <View />} />
+        ) : null}
         <List.Item
           title={() => (
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around"
+                justifyContent: "space-around",
               }}
             >
               <Button
@@ -53,7 +69,7 @@ export default function WarehousesListScreen({ navigation, route }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyWarehouse", {
-                    warehouseId: item.warehouseId
+                    warehouseId: item.warehouseId,
                   });
                 }}
               >
@@ -96,7 +112,7 @@ export default function WarehousesListScreen({ navigation, route }: any) {
         extraData={isFocused}
         renderItem={renderItem}
         data={warehouseList}
-        keyExtractor={item => item.warehouseId}
+        keyExtractor={(item) => item.warehouseId}
         ItemSeparatorComponent={Divider}
       />
       <FAB
@@ -106,10 +122,10 @@ export default function WarehousesListScreen({ navigation, route }: any) {
         onPress={() => navigation.navigate("AddWarehouse")}
       />
       <ModalConfirmation
-      deleteObjectFn={deleteWarehouse}
-      objectId={deleteWarehouseId}
-      modalVisible={modalVisible}
-      setModalVisible={setModalVisible}
+        deleteObjectFn={deleteWarehouse}
+        objectId={deleteWarehouseId}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
       />
     </View>
   );
@@ -117,12 +133,12 @@ export default function WarehousesListScreen({ navigation, route }: any) {
 
 const localStyle = StyleSheet.create({
   list: {
-    textAlign: "center"
+    textAlign: "center",
   },
   fab: {
     position: "absolute",
     bottom: 25,
     right: 15,
-    margin: 10
+    margin: 10,
   },
 });
