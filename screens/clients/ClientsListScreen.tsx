@@ -43,9 +43,39 @@ export default function ClientsListScreen({ navigation, route }: any) {
         {item.nip ? (
           <List.Item title={`Nip: ${item.nip}`} right={() => <View />} />
         ) : null}
+        {item.regon ? (
+          <List.Item
+            title={`regon: ${item.regon}`}
+            right={() => <View />}
+          />
+        ) : null}
         {item.voivodeship ? (
           <List.Item
             title={`voivodeship: ${item.voivodeship}`}
+            right={() => <View />}
+          />
+        ) : null}
+        {item.city ? (
+          <List.Item
+            title={`city: ${item.city}`}
+            right={() => <View />}
+          />
+        ) : null}
+        {item.zip_code ? (
+          <List.Item
+            title={`zip_code: ${item.zip_code}`}
+            right={() => <View />}
+          />
+        ) : null}
+        {item.street ? (
+          <List.Item
+            title={`street: ${item.street}`}
+            right={() => <View />}
+          />
+        ) : null}
+        {item.tel_number ? (
+          <List.Item
+            title={`tel_number: ${item.tel_number}`}
             right={() => <View />}
           />
         ) : null}
