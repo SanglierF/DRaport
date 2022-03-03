@@ -11,8 +11,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
   const warehouseRepository = new WarehouseRepository(context.dbConnection);
 
   function addWarehouse() {
-    let validFields = false;
-    validFields = (nameValidation(name) && nameValidation(nickname))? true: false;
+    const validFields = (nameValidation(name) && nameValidation(nickname))? true: false;
 
     if (validFields) {
       const newWarehouse = warehouseRepository.create({ nickname: nickname, name: name});

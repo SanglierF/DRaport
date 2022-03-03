@@ -19,8 +19,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
   const [voivodeship, setVoivodeship] = React.useState("");
 
   function addClient() {
-    let validFields = false;
-    validFields =
+    const validFields =
       nameValidation(name) && nameValidation(nickname) ? true : false;
 
     if (validFields) {
