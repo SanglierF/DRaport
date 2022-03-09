@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Calendar from "./WorkdaysCalendar";
+import WorkdaysCalendar from "./WorkdaysCalendar";
 import Workday from "./Workday";
 const Stack = createNativeStackNavigator();
 
