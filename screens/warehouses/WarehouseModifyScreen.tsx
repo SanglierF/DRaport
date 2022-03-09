@@ -42,10 +42,10 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
   const [email, setEmail] = React.useState("");
 
   return (
-    <View style={styleModify.containerAdd}>
-      <View style={styleModify.containerInputs}>
+    <View style={styleWarehouseDetails.containerAdd}>
+      <View style={styleWarehouseDetails.containerInputs}>
         <TextInput
-          style={styleModify.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse name"
           mode="outlined"
           value={name}
@@ -53,7 +53,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleModify.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse nickname"
           mode="outlined"
           value={nickname}
@@ -61,7 +61,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse nip"
           mode="outlined"
           value={nip}
@@ -69,7 +69,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse regon"
           mode="outlined"
           value={regon}
@@ -77,7 +77,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse tel_number"
           mode="outlined"
           value={tel}
@@ -85,7 +85,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleWarehouseDetails.textInput}
           label="Warehouse email"
           mode="outlined"
           value={email}
@@ -93,11 +93,9 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button style={styleModify.buttonAdd} onPress={editWarehouse} mode="contained">
+      <Button style={styleWarehouseDetails.buttonAdd} onPress={editWarehouse} mode="contained">
         Edit warehouse
       </Button>
     </View>
   );
 }
-
-const styleModify = styleWarehouseDetails;
