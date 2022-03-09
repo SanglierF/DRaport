@@ -3,6 +3,7 @@ import { createConnection, Connection } from "typeorm";
 import { Client } from "./entities/Client";
 import { Product } from "./entities/Product";
 import { Warehouse } from "./entities/Warehouse";
+import { Workday } from "./entities/Workday";
 
 
 export default class LocalDatabase {
@@ -24,7 +25,7 @@ async function DbConnection() {
     name: "default",
     database: "lmaotest",
     driver: require("expo-sqlite"),
-    entities: [Client, Product, Warehouse],
+    entities: [Client, Product, Warehouse, Workday],
     synchronize: true,
     type: "expo"
   });
