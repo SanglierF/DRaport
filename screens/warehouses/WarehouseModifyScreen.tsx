@@ -93,11 +93,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button
-        style={styleModify.buttonAdd}
-        onPress={editWarehouse}
-        mode="contained"
-      >
+      <Button style={styleModify.buttonAdd} onPress={editWarehouse} mode="contained">
         Edit warehouse
       </Button>
     </View>

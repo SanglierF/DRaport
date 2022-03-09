@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, Pressable, Image } from "react-native";
 import { List, Button, FAB, Divider, Modal } from "react-native-paper";
 import { useIsFocused, useFocusEffect } from "@react-navigation/native";
 import DbContext from "../../DbContext";
@@ -40,22 +33,13 @@ export default function WarehousesListScreen({ navigation, route }: any) {
         left={(props) => <List.Icon {...props} icon="basket" />}
       >
         <List.Item title={`Full name ${item.name}`} right={() => <View />} />
-        {item.nip ? (
-          <List.Item title={`Nip: ${item.nip}`} right={() => <View />} />
-        ) : null}
+        {item.nip ? <List.Item title={`Nip: ${item.nip}`} right={() => <View />} /> : null}
 
-        {item.regon ? (
-          <List.Item title={`regon: ${item.regon}`} right={() => <View />} />
-        ) : null}
+        {item.regon ? <List.Item title={`regon: ${item.regon}`} right={() => <View />} /> : null}
         {item.tel_number ? (
-          <List.Item
-            title={`tel_number: ${item.tel_number}`}
-            right={() => <View />}
-          />
+          <List.Item title={`tel_number: ${item.tel_number}`} right={() => <View />} />
         ) : null}
-        {item.email ? (
-          <List.Item title={`email: ${item.email}`} right={() => <View />} />
-        ) : null}
+        {item.email ? <List.Item title={`email: ${item.email}`} right={() => <View />} /> : null}
         <List.Item
           title={() => (
             <View

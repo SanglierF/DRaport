@@ -11,16 +11,8 @@ export default function Workdays({ navigation, route }: any) {
       initialRouteName="Calendar"
       screenOptions={{ headerShown: true, headerTitleAlign: "center" }}
     >
-    <Stack.Screen
-      name="Calendar"
-      component={WorkdaysCalendar}
-      options={{ title: "Workday" }}
-    />
-      <Stack.Screen
-        name="Workday"
-        component={Workday}
-        options={{ title: "Workday" }}
-      />
+      <Stack.Screen name="Calendar" component={WorkdaysCalendar} options={{ title: "Workday" }} />
+      <Stack.Screen name="Workday" component={Workday} options={{ title: "Workday" }} />
     </Stack.Navigator>
   );
 }
