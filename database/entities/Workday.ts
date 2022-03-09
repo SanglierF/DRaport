@@ -9,7 +9,7 @@ export class Workday {
   date: string;
 
   @Column({ type: "datetime" })
-  work_time_beign: string;
+  work_time_begin: string;
 
   @Column({ type: "datetime", nullable: true })
   work_time_end: string;
