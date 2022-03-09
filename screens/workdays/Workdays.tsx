@@ -14,13 +14,11 @@ export default function Workdays({ navigation, route }: any) {
     <Stack.Screen
       name="Calendar"
       component={Calendar}
-      initialParams={{ text: "xd" }}
       options={{ title: "Workday" }}
     />
       <Stack.Screen
         name="Workday"
         component={Workday}
-        initialParams={{ text: "xd" }}
         options={{ title: "Workday" }}
       />
     </Stack.Navigator>
