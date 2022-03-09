@@ -13,6 +13,11 @@ import Warehouses from "./screens/warehouses/Warehouses";
 import Workdays from "./screens/workdays/Workdays";
 import DbContext from "./DbContext";
 import LocalDatabase from "./database/LocalDatabase";
+import {
+  enGB,
+  registerTranslation,
+} from 'react-native-paper-dates'
+registerTranslation('en-GB', enGB)
 
 const Drawer = createDrawerNavigator();
 
