@@ -8,13 +8,13 @@ export class Workday {
   @Column({ type: "datetime", unique: true })
   date: string;
 
-  @Column({ type: "datetime" })
+  @Column({ type: "datetime", nullable: true })
   work_time_begin: string;
 
   @Column({ type: "datetime", nullable: true })
   work_time_end: string;
 
-  @Column()
+  @Column({ nullable: true} )
   car_counter_begin: number;
 
   @Column({ nullable: true })
