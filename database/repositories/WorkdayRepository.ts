@@ -17,6 +17,9 @@ export default class WorkdayRepository {
     const workday = await this.repository.findOne(workdayId);
     return workday;
   }
+  public async findByDate(wordkayDate: string) {
+    const workday = await this.repository.findOne({where: {date: wordkayDate}})
+  }
   public async save(workday: Workday) {
     return await this.repository.save(workday);
   }
