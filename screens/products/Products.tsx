@@ -6,7 +6,7 @@ import ProductAddScreen from "./ProductAddScreen";
 import ProductModifyScreen from "./ProductModifyScreen";
 const Stack = createNativeStackNavigator();
 
-export default function Products({ navigation, route }: any) {
+export default function Products() {
   return (
     <Stack.Navigator
       initialRouteName="ProductList"
