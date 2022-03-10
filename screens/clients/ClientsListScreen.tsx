@@ -7,13 +7,13 @@ import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function ClientsListScreen({ navigation }: any) {
+  const context = React.useContext(DbContext);
+  const clientRepository = new ClientRepository(context.dbConnection);
+
   const [clientList, setClientList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [deleteClientId, setDeleteClientId] = React.useState(-1);
-
-  const context = React.useContext(DbContext);
-  const clientRepository = new ClientRepository(context.dbConnection);
 
   let isFocused = useIsFocused();
 

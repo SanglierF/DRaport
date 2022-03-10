@@ -11,6 +11,7 @@ import { nameValidation } from "../../components/Validators";
 export default function ClientAddScreen({ navigation }: any) {
   const context = React.useContext(DbContext);
   const clientRepository = new ClientRepository(context.dbConnection);
+
   const [loadingStatus, setLoadingStatus] = React.useState(false);
 
   const [name, setName] = React.useState("");
