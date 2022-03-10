@@ -1,5 +1,5 @@
-import { Connection, getRepository, Repository } from "typeorm";
-//entities
+import { Connection, Repository } from "typeorm";
+
 import { Product } from "../entities/Product";
 
 export default class ProductRepository {
@@ -11,7 +11,6 @@ export default class ProductRepository {
 
   public async getAll() {
     const productList = await this.repository.find();
-
     return productList;
   }
   public async findById(productId: number) {

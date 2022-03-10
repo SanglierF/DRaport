@@ -1,5 +1,5 @@
-import { Connection, getRepository, Repository } from "typeorm";
-//entities
+import { Connection, Repository } from "typeorm";
+
 import { Workday } from "../entities/Workday";
 
 export default class WorkdayRepository {
@@ -27,7 +27,7 @@ export default class WorkdayRepository {
     return this.repository.create({
       date: date,
       work_time_begin: work_time_begin,
-      car_counter_begin: car_counter_begin
+      car_counter_begin: car_counter_begin,
     });
   }
   public async delete(workdayId: number) {

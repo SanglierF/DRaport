@@ -1,25 +1,25 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity('Warehouse')
+@Entity("Warehouse")
 export class Warehouse {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn("increment")
   warehouseId: number;
 
-  @Column({length: 50})
+  @Column({ length: 50 })
   nickname: string;
 
-  @Column({length: 50, nullable: true})
+  @Column({ length: 50, nullable: true })
   name: string;
 
-  @Column({type: "int", nullable: true})
+  @Column({ type: "int", nullable: true })
   nip: number;
 
-  @Column({type: "int", nullable: true})
+  @Column({ type: "int", nullable: true })
   regon: number;
 
-  @Column({length: 50, nullable: true})
+  @Column({ length: 50, nullable: true })
   tel_number: string;
 
-  @Column({length: 50, nullable: true})
+  @Column({ length: 50, nullable: true })
   email: string;
 }

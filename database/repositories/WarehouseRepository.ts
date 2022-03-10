@@ -1,5 +1,5 @@
-import { Connection, getRepository, Repository } from "typeorm";
-//entities
+import { Connection, Repository } from "typeorm";
+
 import { Warehouse } from "../entities/Warehouse";
 
 export default class WarehouseRepository {

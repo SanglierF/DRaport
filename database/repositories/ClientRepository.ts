@@ -1,5 +1,5 @@
-import { Connection, getRepository, Repository } from "typeorm";
-//entities
+import { Connection, Repository } from "typeorm";
+
 import { Client } from "../entities/Client";
 
 export default class ClientRepository {
@@ -11,7 +11,6 @@ export default class ClientRepository {
 
   public async getAll() {
     const clientList = await this.repository.find();
-
     return clientList;
   }
   public async findById(clientId: number) {
@@ -35,9 +34,8 @@ export default class ClientRepository {
     street = "",
     tel_number = "",
     longitude = null,
-    latitude = null
-  }
-  ) {
+    latitude = null,
+  }) {
     return this.repository.create({
       nickname: nickname,
       name: name,
