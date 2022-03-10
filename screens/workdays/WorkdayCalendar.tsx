@@ -7,7 +7,7 @@ import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 
-export default function WorkdaysCalendar() {
+export default function WorkdayCalendar() {
   return (
     <View>
       <Calendar
