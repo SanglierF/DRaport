@@ -2,7 +2,6 @@ import "reflect-metadata"; //for typeorm
 import "react-native-gesture-handler";
 import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -18,7 +17,6 @@ const Drawer = createDrawerNavigator();
 
 export default function App() {
   const queryClient = new QueryClient();
-
   const localDatabase = new LocalDatabase();
 
   return (
@@ -33,7 +31,7 @@ export default function App() {
               options={{
                 title: "Clients",
                 headerShown: false,
-                unmountOnBlur: true
+                unmountOnBlur: true,
               }}
             />
             <Drawer.Screen
@@ -42,7 +40,7 @@ export default function App() {
               options={{
                 title: "Products",
                 headerShown: false,
-                unmountOnBlur: true
+                unmountOnBlur: true,
               }}
             />
             <Drawer.Screen
@@ -51,7 +49,7 @@ export default function App() {
               options={{
                 title: "Warehouses",
                 headerShown: false,
-                unmountOnBlur: true
+                unmountOnBlur: true,
               }}
             />
             <Drawer.Screen
@@ -60,7 +58,7 @@ export default function App() {
               options={{
                 title: "Workdays",
                 headerShown: false,
-                unmountOnBlur: true
+                unmountOnBlur: true,
               }}
             />
           </Drawer.Navigator>
@@ -69,12 +67,3 @@ export default function App() {
     </DbContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
