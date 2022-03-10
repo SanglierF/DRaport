@@ -6,7 +6,7 @@ import ClientAddScreen from "./ClientAddScreen";
 import ClientModifyScreen from "./ClientModifyScreen";
 const Stack = createNativeStackNavigator();
 
-export default function Clients({ navigation, route }: any) {
+export default function Clients() {
   return (
     <Stack.Navigator
       initialRouteName="ClientList"

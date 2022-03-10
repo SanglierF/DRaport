@@ -1,14 +1,14 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { Text, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import axios from "axios";
 import { useQuery } from "react-query";
 import DbContext from "../../DbContext";
 import ClientRepository from "../../database/repositories/ClientRepository";
-import styleClientDetails from "./styleClientDetails";
-import { nameValidation, priceValidation } from "../../components/Validators";
+import styleItemDetails from "../../styles/styleItemDetails";
+import { nameValidation } from "../../components/Validators";
 
-export default function ClientAddScreen({ navigation, route }: any) {
+export default function ClientAddScreen({ navigation }: any) {
   const context = React.useContext(DbContext);
   const clientRepository = new ClientRepository(context.dbConnection);
   const [loadingStatus, setLoadingStatus] = React.useState(false);
@@ -23,10 +23,8 @@ export default function ClientAddScreen({ navigation, route }: any) {
   const [street, setStreet] = React.useState("");
   const [tel, setTel] = React.useState("");
 
-
   function addClient() {
-    const validFields =
-      nameValidation(name) && nameValidation(nickname) ? true : false;
+    const validFields = nameValidation(name) && nameValidation(nickname) ? true : false;
 
     if (validFields) {
       const newClient = clientRepository.create({
@@ -51,53 +49,52 @@ export default function ClientAddScreen({ navigation, route }: any) {
     refetch();
   }
 
-  async function axi() { //pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_"
+  async function axi() {
+    //pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_"
     return await axios({
       method: "post",
-      url:
-        "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj",
+      url: "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj",
       data: {
-        pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_"
-      }
+        pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_",
+      },
     })
-      .then(r => r.data.d)
-      .then(sessionId => {
+      .then((r) => r.data.d)
+      .then((sessionId) => {
         return axios({
           method: "post",
-          url:
-            "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/daneSzukaj",
+          url: "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/daneSzukaj",
           headers: {
-            sid: sessionId
+            sid: sessionId,
           },
           data: {
             jestWojPowGmnMiej: true,
             pParametryWyszukiwania: {
               Nip: 5252344078,
-              PrzewazajacePKD: false
-            }
-          }
+              PrzewazajacePKD: false,
+            },
+          },
         });
       });
   }
 
   const { refetch } = useQuery("gusinfo", async () => axi(), {
     enabled: false,
-    onSuccess: result => {
+    onSuccess: (result) => {
       console.log(result.data.d); // success
       setLoadingStatus(false);
     },
-    onError: error => {
+    onError: (error) => {
       console.log(error);
       setLoadingStatus(false);
-    }
+    },
   });
 
   return (
-    <View style={styleAdd.containerAdd}>
-      <View style={styleAdd.containerInputs}>
+    <View style={styleItemDetails.containerAdd}>
+      <View style={styleItemDetails.containerInputs}>
         {loadingStatus ? <Text>'Loading data from GUS...'</Text> : null}
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client name"
           mode="outlined"
           value={name}
@@ -105,7 +102,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client nickname"
           mode="outlined"
           value={nickname}
@@ -113,7 +110,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client nip"
           mode="outlined"
           value={nip}
@@ -122,7 +119,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           keyboardType="decimal-pad"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client regon"
           mode="outlined"
           value={regon}
@@ -131,7 +128,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           keyboardType="decimal-pad"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client voivodeship"
           mode="outlined"
           value={voivodeship}
@@ -139,7 +136,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client city"
           mode="outlined"
           value={city}
@@ -147,7 +144,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client zip"
           mode="outlined"
           value={zip}
@@ -155,7 +152,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client street"
           mode="outlined"
           value={street}
@@ -163,7 +160,7 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Client tel number"
           mode="outlined"
           value={tel}
@@ -171,14 +168,12 @@ export default function ClientAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button style={styleAdd.buttonAdd} onPress={addClient} mode="contained">
+      <Button style={styleItemDetails.buttonAdd} onPress={addClient} mode="contained">
         Add client
       </Button>
-      <Button style={styleAdd.buttonAdd} onPress={fillData} mode="contained">
+      <Button style={styleItemDetails.buttonAdd} onPress={fillData} mode="contained">
         Fill data
       </Button>
     </View>
   );
 }
-
-const styleAdd = styleClientDetails;

@@ -1,19 +1,12 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  Image
-} from "react-native";
-import { List, Button, FAB, Divider, Modal } from "react-native-paper";
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import { StyleSheet, View, FlatList } from "react-native";
+import { List, Button, FAB, Divider } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 import DbContext from "../../DbContext";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
-export default function ClientsListScreen({ navigation, route }: any) {
+export default function ClientsListScreen({ navigation }: any) {
   const [clientList, setClientList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -26,7 +19,7 @@ export default function ClientsListScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (clientRepository) {
-      clientRepository.getAll().then(found => {
+      clientRepository.getAll().then((found) => {
         setClientList(found);
       });
     }
@@ -37,54 +30,28 @@ export default function ClientsListScreen({ navigation, route }: any) {
     return (
       <List.Accordion
         title={item.nickname}
-        left={props => <List.Icon {...props} icon="basket" />}
+        left={(props) => <List.Icon {...props} icon="basket" />}
       >
         <List.Item title={`Nickname: ${item.name}`} right={() => <View />} />
-        {item.nip ? (
-          <List.Item title={`Nip: ${item.nip}`} right={() => <View />} />
-        ) : null}
-        {item.regon ? (
-          <List.Item
-            title={`regon: ${item.regon}`}
-            right={() => <View />}
-          />
-        ) : null}
+        {item.nip ? <List.Item title={`Nip: ${item.nip}`} right={() => <View />} /> : null}
+        {item.regon ? <List.Item title={`regon: ${item.regon}`} right={() => <View />} /> : null}
         {item.voivodeship ? (
-          <List.Item
-            title={`voivodeship: ${item.voivodeship}`}
-            right={() => <View />}
-          />
+          <List.Item title={`voivodeship: ${item.voivodeship}`} right={() => <View />} />
         ) : null}
-        {item.city ? (
-          <List.Item
-            title={`city: ${item.city}`}
-            right={() => <View />}
-          />
-        ) : null}
+        {item.city ? <List.Item title={`city: ${item.city}`} right={() => <View />} /> : null}
         {item.zip_code ? (
-          <List.Item
-            title={`zip_code: ${item.zip_code}`}
-            right={() => <View />}
-          />
+          <List.Item title={`zip_code: ${item.zip_code}`} right={() => <View />} />
         ) : null}
-        {item.street ? (
-          <List.Item
-            title={`street: ${item.street}`}
-            right={() => <View />}
-          />
-        ) : null}
+        {item.street ? <List.Item title={`street: ${item.street}`} right={() => <View />} /> : null}
         {item.tel_number ? (
-          <List.Item
-            title={`tel_number: ${item.tel_number}`}
-            right={() => <View />}
-          />
+          <List.Item title={`tel_number: ${item.tel_number}`} right={() => <View />} />
         ) : null}
         <List.Item
           title={() => (
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around"
+                justifyContent: "space-around",
               }}
             >
               <Button
@@ -92,7 +59,7 @@ export default function ClientsListScreen({ navigation, route }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyClient", {
-                    clientId: item.clientId
+                    clientId: item.clientId,
                   });
                 }}
               >
@@ -121,21 +88,13 @@ export default function ClientsListScreen({ navigation, route }: any) {
     setChangeCounter(changeCounter + 1);
   }
 
-  const deleteObject = () => {
-    deleteClient(deleteClientId);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         extraData={isFocused}
         renderItem={renderItem}
         data={clientList}
-        keyExtractor={item => item.clientId}
+        keyExtractor={(item) => item.clientId}
         ItemSeparatorComponent={Divider}
       />
       <FAB
@@ -156,12 +115,12 @@ export default function ClientsListScreen({ navigation, route }: any) {
 
 const localStyle = StyleSheet.create({
   list: {
-    textAlign: "center"
+    textAlign: "center",
   },
   fab: {
     position: "absolute",
     bottom: 25,
     right: 15,
-    margin: 10
-  }
+    margin: 10,
+  },
 });

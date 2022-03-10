@@ -1,11 +1,11 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import DbContext from "../../DbContext";
 import ClientRepository from "../../database/repositories/ClientRepository";
-import styleClientDetails from "./styleClientDetails";
+import styleItemDetails from "../../styles/styleItemDetails";
 
-export default function ClientModifyScreen({ navigation, route }: any) {
+export default function ClientModifyScreen({ route }: any) {
   const context = React.useContext(DbContext);
   const clientRepository = new ClientRepository(context.dbConnection);
 
@@ -13,7 +13,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     clientRepository.findById(route.params.clientId).then(
-      found => {
+      (found) => {
         setClient(found);
         setName(found.name);
         setNickname(found.nickname);
@@ -48,10 +48,10 @@ export default function ClientModifyScreen({ navigation, route }: any) {
   const [tel, setTel] = React.useState("");
 
   return (
-    <View style={styleClientDetails.containerAdd}>
-      <View style={styleClientDetails.containerInputs}>
+    <View style={styleItemDetails.containerAdd}>
+      <View style={styleItemDetails.containerInputs}>
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client name"
           mode="outlined"
           value={name}
@@ -59,7 +59,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client nickname"
           mode="outlined"
           value={nickname}
@@ -67,7 +67,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client nip"
           mode="outlined"
           value={nip}
@@ -76,7 +76,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           keyboardType="decimal-pad"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client regon"
           mode="outlined"
           value={regon}
@@ -85,7 +85,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           keyboardType="decimal-pad"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client voivodeship"
           mode="outlined"
           value={voivodeship}
@@ -93,7 +93,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client city"
           mode="outlined"
           value={city}
@@ -101,7 +101,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client zip"
           mode="outlined"
           value={zip}
@@ -109,7 +109,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client street"
           mode="outlined"
           value={street}
@@ -117,7 +117,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleClientDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Client tel number"
           mode="outlined"
           value={tel}
@@ -125,7 +125,7 @@ export default function ClientModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button style={styleClientDetails.buttonAdd} onPress={editClient} mode="contained">
+      <Button style={styleItemDetails.buttonAdd} onPress={editClient} mode="contained">
         Edit client
       </Button>
     </View>
