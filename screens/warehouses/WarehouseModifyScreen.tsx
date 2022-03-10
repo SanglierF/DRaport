@@ -1,15 +1,21 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import DbContext from "../../DbContext";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
-import styleWarehouseDetails from "./styleWarehouseDetails";
+import styleItemDetails from "../../styles/styleItemDetails";
 
-export default function WarehouseModifyScreen({ navigation, route }: any) {
+export default function WarehouseModifyScreen({ route }: any) {
   const context = React.useContext(DbContext);
   const warehouseRepository = new WarehouseRepository(context.dbConnection);
 
   const [warehouse, setWarehouse] = React.useState(null);
+  const [name, setName] = React.useState("");
+  const [nickname, setNickname] = React.useState("");
+  const [nip, setNip] = React.useState("");
+  const [regon, setRegon] = React.useState("");
+  const [tel, setTel] = React.useState("");
+  const [email, setEmail] = React.useState("");
 
   React.useEffect(() => {
     warehouseRepository.findById(route.params.warehouseId).then(
@@ -34,18 +40,11 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
     }
   }
 
-  const [name, setName] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [nip, setNip] = React.useState("");
-  const [regon, setRegon] = React.useState("");
-  const [tel, setTel] = React.useState("");
-  const [email, setEmail] = React.useState("");
-
   return (
-    <View style={styleWarehouseDetails.containerAdd}>
-      <View style={styleWarehouseDetails.containerInputs}>
+    <View style={styleItemDetails.containerAdd}>
+      <View style={styleItemDetails.containerInputs}>
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse name"
           mode="outlined"
           value={name}
@@ -53,7 +52,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse nickname"
           mode="outlined"
           value={nickname}
@@ -61,7 +60,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse nip"
           mode="outlined"
           value={nip}
@@ -69,7 +68,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse regon"
           mode="outlined"
           value={regon}
@@ -77,7 +76,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse tel_number"
           mode="outlined"
           value={tel}
@@ -85,7 +84,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleWarehouseDetails.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse email"
           mode="outlined"
           value={email}
@@ -93,7 +92,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button style={styleWarehouseDetails.buttonAdd} onPress={editWarehouse} mode="contained">
+      <Button style={styleItemDetails.buttonAdd} onPress={editWarehouse} mode="contained">
         Edit warehouse
       </Button>
     </View>

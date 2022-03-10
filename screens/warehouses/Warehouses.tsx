@@ -6,7 +6,7 @@ import WarehouseAddScreen from "./WarehouseAddScreen";
 import WarehouseModifyScreen from "./WarehouseModifyScreen";
 const Stack = createNativeStackNavigator();
 
-export default function Warehouses({ navigation, route }: any) {
+export default function Warehouses() {
   return (
     <Stack.Navigator
       initialRouteName="WarehouseList"

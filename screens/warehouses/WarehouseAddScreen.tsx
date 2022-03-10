@@ -1,18 +1,24 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import DbContext from "../../DbContext";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
-import styleWarehouseDetails from "./styleWarehouseDetails";
-import { nameValidation, priceValidation } from "../../components/Validators";
+import styleItemDetails from "../../styles/styleItemDetails";
+import { nameValidation } from "../../components/Validators";
 
-export default function WarehouseAddScreen({ navigation, route }: any) {
+export default function WarehouseAddScreen({ navigation }: any) {
   const context = React.useContext(DbContext);
   const warehouseRepository = new WarehouseRepository(context.dbConnection);
 
+  const [name, setName] = React.useState("");
+  const [nickname, setNickname] = React.useState("");
+  const [nip, setNip] = React.useState("");
+  const [regon, setRegon] = React.useState("");
+  const [tel, setTel] = React.useState("");
+  const [email, setEmail] = React.useState("");
+
   function addWarehouse() {
-    const validFields =
-      nameValidation(name) && nameValidation(nickname) ? true : false;
+    const validFields = nameValidation(name) && nameValidation(nickname) ? true : false;
 
     if (validFields) {
       const newWarehouse = warehouseRepository.create({
@@ -28,18 +34,11 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
     }
   }
 
-  const [name, setName] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [nip, setNip] = React.useState("");
-  const [regon, setRegon] = React.useState("");
-  const [tel, setTel] = React.useState("");
-  const [email, setEmail] = React.useState("");
-
   return (
-    <View style={styleAdd.containerAdd}>
-      <View style={styleAdd.containerInputs}>
+    <View style={styleItemDetails.containerAdd}>
+      <View style={styleItemDetails.containerInputs}>
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse name"
           mode="outlined"
           value={name}
@@ -47,7 +46,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse nickname"
           mode="outlined"
           value={nickname}
@@ -55,7 +54,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse nip"
           mode="outlined"
           value={nip}
@@ -63,7 +62,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse regon"
           mode="outlined"
           value={regon}
@@ -71,7 +70,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse tel_number"
           mode="outlined"
           value={tel}
@@ -79,7 +78,7 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
         <TextInput
-          style={styleAdd.textInput}
+          style={styleItemDetails.textInput}
           label="Warehouse email"
           mode="outlined"
           value={email}
@@ -87,15 +86,9 @@ export default function WarehouseAddScreen({ navigation, route }: any) {
           autoComplete="off"
         />
       </View>
-      <Button
-        style={styleAdd.buttonAdd}
-        onPress={addWarehouse}
-        mode="contained"
-      >
+      <Button style={styleItemDetails.buttonAdd} onPress={addWarehouse} mode="contained">
         Add warehouse
       </Button>
     </View>
   );
 }
-
-const styleAdd = styleWarehouseDetails;

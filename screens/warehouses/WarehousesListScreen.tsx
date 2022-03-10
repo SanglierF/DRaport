@@ -1,19 +1,19 @@
 import * as React from "react";
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from "react-native";
-import { List, Button, FAB, Divider, Modal } from "react-native-paper";
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import { StyleSheet, View, FlatList } from "react-native";
+import { List, Button, FAB, Divider } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 import DbContext from "../../DbContext";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
-export default function WarehousesListScreen({ navigation, route }: any) {
+export default function WarehousesListScreen({ navigation }: any) {
+  const context = React.useContext(DbContext);
+  const warehouseRepository = new WarehouseRepository(context.dbConnection);
+
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [deleteWarehouseId, setDeleteWarehouseId] = React.useState(-1);
-
-  const context = React.useContext(DbContext);
-  const warehouseRepository = new WarehouseRepository(context.dbConnection);
 
   let isFocused = useIsFocused();
 
@@ -81,14 +81,6 @@ export default function WarehousesListScreen({ navigation, route }: any) {
     warehouseRepository.delete(warehouseId);
     setChangeCounter(changeCounter + 1);
   }
-
-  const deleteObject = () => {
-    deleteWarehouse(deleteWarehouseId);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <View style={{ flex: 1 }}>
