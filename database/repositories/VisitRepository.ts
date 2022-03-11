@@ -1,6 +1,8 @@
-import { Connection, Repository, Like } from "typeorm";
+import { Connection, Repository } from "typeorm";
 
 import { Visit } from "../entities/Visit";
+import { Workday } from "../entities/Workday"
+import { Client } from "../entities/Client"
 
 export default class VisitRepository {
   private repository: Repository<Visit>;
@@ -23,10 +25,10 @@ export default class VisitRepository {
   public async modify(visit: Visit) {
     return await this.repository.save(visit);
   }
-  public create(workdayId: number, visitId: number, description:string="", visit_time:number=null ) {
+  public create(workday: Workday, client: Client, description:string="", visit_time:number=null ) {
     return this.repository.create({
-      workdayId: workdayId,
-      visitId: visitId,
+      workday: workday,
+      client: client,
       descirption: description,
       visit_time: visit_time
     });
