@@ -1,14 +1,14 @@
 import * as React from "react";
 import { View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import { nameValidation } from "../../components/Validators";
 
 export default function WarehouseAddScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const warehouseRepository = new WarehouseRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
 
   const [name, setName] = React.useState("");
   const [nickname, setNickname] = React.useState("");

@@ -3,14 +3,14 @@ import { Text, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import axios from "axios";
 import { useQuery } from "react-query";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import { nameValidation } from "../../components/Validators";
 
 export default function ClientAddScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const clientRepository = new ClientRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const clientRepository = new ClientRepository(localDb.dbConnection);
 
   const [loadingStatus, setLoadingStatus] = React.useState(false);
 

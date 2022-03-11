@@ -2,13 +2,13 @@ import * as React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function WarehousesListScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const warehouseRepository = new WarehouseRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
 
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);

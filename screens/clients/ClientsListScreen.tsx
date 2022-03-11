@@ -2,13 +2,13 @@ import * as React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function ClientsListScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const clientRepository = new ClientRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const clientRepository = new ClientRepository(localDb.dbConnection);
 
   const [clientList, setClientList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);

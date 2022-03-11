@@ -6,6 +6,7 @@ import { Warehouse } from "./entities/Warehouse";
 import { Workday } from "./entities/Workday";
 
 export default class LocalDatabase {
+  static dbInstance = null;
   dbConnection: Connection;
 
   constructor() {
@@ -18,14 +19,28 @@ export default class LocalDatabase {
       }
     );
   }
+  static getInstance(){
+    if(LocalDatabase.dbInstance===null){
+      LocalDatabase.dbInstance= new LocalDatabase();
+    }
+    return this.dbInstance;
+  }
+  async awaitDbConnection() {
+    while(this.dbConnection===undefined){
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    //console.log(this.dbConnection)
+    return true
+  }
 }
 async function DbConnection() {
   return await createConnection({
     name: "default",
-    database: "lmaotest",
+    database: "lmaotest2",
     driver: require("expo-sqlite"),
     entities: [Client, Product, Warehouse, Workday],
     synchronize: true,
     type: "expo",
   });
+
 }

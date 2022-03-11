@@ -5,10 +5,7 @@ export class Workday {
   @PrimaryGeneratedColumn("increment")
   workdayId: number;
 
-  @Column({ type: "datetime", unique: true })
-  date: string;
-
-  @Column({ type: "datetime", nullable: true })
+  @Column({ type: "datetime", nullable: false })
   work_time_begin: string;
 
   @Column({ type: "datetime", nullable: true })

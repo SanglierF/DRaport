@@ -1,4 +1,4 @@
-import { Connection, Repository } from "typeorm";
+import { Connection, Repository, Like } from "typeorm";
 
 import { Workday } from "../entities/Workday";
 
@@ -17,8 +17,11 @@ export default class WorkdayRepository {
     const workday = await this.repository.findOne(workdayId);
     return workday;
   }
-  public async findByDate(wordkayDate: string) {
-    const workday = await this.repository.findOne({where: {date: wordkayDate}})
+  public async findByDate(workdayDate: string) {
+    const workday = await this.repository.findOne({
+      work_time_begin: Like(workdayDate+'%'),
+    })
+    return workday
   }
   public async save(workday: Workday) {
     return await this.repository.save(workday);
@@ -26,9 +29,8 @@ export default class WorkdayRepository {
   public async modify(workday: Workday) {
     return await this.repository.save(workday);
   }
-  public create(date: string, work_time_begin: string = "", car_counter_begin: number = 0) {
+  public create(work_time_begin, car_counter_begin: number = 0) {
     return this.repository.create({
-      date: date,
       work_time_begin: work_time_begin,
       car_counter_begin: car_counter_begin,
     });

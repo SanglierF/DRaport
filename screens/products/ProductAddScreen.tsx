@@ -1,14 +1,14 @@
 import * as React from "react";
 import { View, Image } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import { nameValidation, priceValidation } from "../../components/Validators";
 
 export default function ProductAddScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const productRepository = new ProductRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const productRepository = new ProductRepository(localDb.dbConnection);
 
   const [name, setName] = React.useState("");
   const [price, setPrice] = React.useState("");
@@ -31,7 +31,9 @@ export default function ProductAddScreen({ navigation }: any) {
     if (validFields) {
       const newProduct = productRepository.create(name, priceConv);
       console.log(newProduct);
-      productRepository.save(newProduct);
+      productRepository.save(newProduct).then((saved) => {
+        console.log(saved)
+      });
       navigation.goBack();
     }
   }

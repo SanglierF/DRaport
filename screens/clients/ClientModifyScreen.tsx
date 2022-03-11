@@ -1,13 +1,13 @@
 import * as React from "react";
 import { View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 
 export default function ClientModifyScreen({ route }: any) {
-  const context = React.useContext(DbContext);
-  const clientRepository = new ClientRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const clientRepository = new ClientRepository(localDb.dbConnection);
 
   const [client, setClient] = React.useState(null);
 

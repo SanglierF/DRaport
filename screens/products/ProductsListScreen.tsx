@@ -2,13 +2,13 @@ import * as React from "react";
 import { StyleSheet, View, FlatList, Image } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
-import DbContext from "../../DbContext";
+import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function ProductsListScreen({ navigation }: any) {
-  const context = React.useContext(DbContext);
-  const productRepository = new ProductRepository(context.dbConnection);
+  const localDb = LocalDatabase.getInstance();
+  const productRepository = new ProductRepository(localDb.dbConnection);
 
   const [productList, setProductList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);

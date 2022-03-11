@@ -9,7 +9,7 @@
       "config": "metro.config.js"
     },
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/favicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
