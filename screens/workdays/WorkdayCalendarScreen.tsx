@@ -7,7 +7,7 @@ import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 
-export default function WorkdayCalendar({ navigation }) {
+export default function WorkdayCalendarScreen({ navigation }) {
   const localDb = LocalDatabase.getInstance();
   const workdayRepository = new WorkdayRepository(localDb.dbConnection);
 
@@ -30,9 +30,7 @@ export default function WorkdayCalendar({ navigation }) {
 
   function gotoDay(day: Date) {
     console.log("selected day", day.toISOString());
-    // TODO find day
-    // ifdoesntexist dont do anything else
-    // navigation.navigate("Workday", params: {workdayId: 0})
+    // TODO find day if doesntexist dont do anything else navigation.navigate("Workday", params: {workdayId: 0})
   }
 
   function changeMarked() {

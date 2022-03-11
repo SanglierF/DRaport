@@ -15,6 +15,7 @@ import WarehouseRepository from "./repositories/WarehouseRepository";
 export default class LocalDatabase {
   static dbInstance = null;
   dbConnection: Connection;
+;
 
   constructor() {
     DbConnection().then(
