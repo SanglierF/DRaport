@@ -20,6 +20,9 @@ export default class ProductRepository {
   public async save(product: Product) {
     return await this.repository.save(product);
   }
+  public async saveAll(products: Product[]){
+    return await this.repository.save(products);
+  }
   public async modify(product: Product) {
     return await this.repository.save(product);
   }

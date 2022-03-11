@@ -25,7 +25,6 @@ export default function ClientsListScreen({ navigation }: any) {
     }
   }, [isFocused, changeCounter]);
 
-  // TODO in List.Accordion change icon to minature image if i can
   function renderItem({ item }) {
     return (
       <List.Accordion

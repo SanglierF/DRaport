@@ -26,6 +26,9 @@ export default class WorkdayRepository {
   public async save(workday: Workday) {
     return await this.repository.save(workday);
   }
+  public async saveAll(workdays: Workday[]) {
+    return await this.repository.save(workdays);
+  }
   public async modify(workday: Workday) {
     return await this.repository.save(workday);
   }

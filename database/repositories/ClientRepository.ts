@@ -20,6 +20,9 @@ export default class ClientRepository {
   public async save(client: Client) {
     return await this.repository.save(client);
   }
+  public async saveAll(clients: Client[]) {
+    return await this.repository.save(clients);
+  }
   public async modify(client: Client) {
     return await this.repository.save(client);
   }

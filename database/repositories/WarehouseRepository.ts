@@ -21,6 +21,9 @@ export default class WarehouseRepository {
   public async save(warehouse: Warehouse) {
     return await this.repository.save(warehouse);
   }
+  public async saveAll(warehouses: Warehouse[]) {
+    return await this.repository.save(warehouses);
+  }
   public async modify(warehouse: Warehouse) {
     return await this.repository.save(warehouse);
   }

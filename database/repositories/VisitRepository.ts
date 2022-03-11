@@ -22,6 +22,9 @@ export default class VisitRepository {
   public async save(visit: Visit) {
     return await this.repository.save(visit);
   }
+  public async saveAll(visits: Visit[]) {
+    return await this.repository.save(visits);
+  }
   public async modify(visit: Visit) {
     return await this.repository.save(visit);
   }

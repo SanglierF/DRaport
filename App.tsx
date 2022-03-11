@@ -13,6 +13,7 @@ import Warehouses from "./screens/warehouses/Warehouses";
 import Workdays from "./screens/workdays/Workdays";
 import LocalDatabase from "./database/LocalDatabase";
 
+
 const Drawer = createDrawerNavigator();
 
 export default function App() {
@@ -24,10 +25,9 @@ export default function App() {
   React.useEffect(() => {
     async function prepare() {
       try {
-        // Keep the splash screen visible while we fetch resources
         await SplashScreen.preventAutoHideAsync();
-        // Pre-load fonts, make any API calls you need to do here
         await localDatabase.awaitDbConnection();
+        await localDatabase.populateDatabase();
       } catch (e) {
         console.warn(e);
       } finally {
