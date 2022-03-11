@@ -18,13 +18,23 @@ export default function HomeScreen({ navigation }: any) {
 
     if (workdayRepository) {
       workdayRepository.findByDate(date).then((found) => {
-        if(found){
+        if (found) {
           setWorkdayId(found.workdayId);
           setIsWorking("Continue day");
         }
       });
     }
   }, [isFocused]);
+
+  function saveNewWorkday() {
+    const workday = workdayRepository.create(new Date().toISOString());
+    let id = -1;
+    workdayRepository.save(workday).then((saved) => {
+      console.log(saved);
+      id = saved.workdayId;
+    });
+    return id;
+  }
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -42,12 +52,10 @@ export default function HomeScreen({ navigation }: any) {
               params: { workdayId: workdayId },
             });
           } else {
-            const workday = workdayRepository.create(new Date().toISOString());
-            workdayRepository.save(workday).then((saved) => {
-              navigation.navigate("Workdays", {
-                screen: "Workday",
-                params: { workdayId: saved.workdayId },
-              });
+            const savedWorkdayId = saveNewWorkday();
+            navigation.navigate("Workdays", {
+              screen: "Workday",
+              params: { workdayId: savedWorkdayId },
             });
           }
         }}
