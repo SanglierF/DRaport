@@ -29,7 +29,7 @@ export default class VisitRepository {
     return this.repository.create({
       workday: workday,
       client: client,
-      descirption: description,
+      description: description,
       visit_time: visit_time
     });
   }

@@ -14,7 +14,7 @@ export class Visit {
   client: Client;
 
   @Column({ length: 150, nullable: true })
-  descirption: string;
+  description: string;
 
   @Column({ nullable: true })
   visit_time: number;
