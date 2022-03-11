@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Visit } from "./Visit";
 
 @Entity("Workday")
 export class Workday {
@@ -11,9 +12,12 @@ export class Workday {
   @Column({ type: "datetime", nullable: true })
   work_time_end: string;
 
-  @Column({ nullable: true} )
+  @Column({ nullable: true })
   car_counter_begin: number;
 
   @Column({ nullable: true })
   car_counter_end: number;
+
+  @OneToMany(() => Visit, (visit) => visit.workday)
+  visits: Visit[];
 }

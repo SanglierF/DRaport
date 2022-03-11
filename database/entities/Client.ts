@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Visit } from "./Visit";
 
 @Entity("Client")
 export class Client {
@@ -37,4 +38,7 @@ export class Client {
 
   @Column({ type: "float", nullable: true })
   longitude: number;
+
+  @OneToMany(() => Visit, (visit) => visit.client)
+  visits: Visit[];
 }

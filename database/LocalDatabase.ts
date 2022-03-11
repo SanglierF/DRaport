@@ -4,6 +4,7 @@ import { Client } from "./entities/Client";
 import { Product } from "./entities/Product";
 import { Warehouse } from "./entities/Warehouse";
 import { Workday } from "./entities/Workday";
+import { Visit } from "./entities/Visit";
 
 export default class LocalDatabase {
   static dbInstance = null;
@@ -38,7 +39,7 @@ async function DbConnection() {
     name: "default",
     database: "lmaotest2",
     driver: require("expo-sqlite"),
-    entities: [Client, Product, Warehouse, Workday],
+    entities: [Client, Product, Warehouse, Workday, Visit],
     synchronize: true,
     type: "expo",
   });
