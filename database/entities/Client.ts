@@ -4,7 +4,7 @@ import { Visit } from "./Visit";
 @Entity("Client")
 export class Client {
   @PrimaryGeneratedColumn("increment")
-  clientId: number;
+  id: number;
 
   @Column({ length: 50 })
   nickname: string;

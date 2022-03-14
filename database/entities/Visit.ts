@@ -5,7 +5,7 @@ import { Client } from "./Client";
 @Entity("Visit")
 export class Visit {
   @PrimaryGeneratedColumn("increment")
-  visitId: number;
+  id: number;
 
   @ManyToOne(() => Workday, (workday) => workday.visits, {nullable: false})
   workday: Workday;

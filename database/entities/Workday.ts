@@ -4,7 +4,7 @@ import { Visit } from "./Visit";
 @Entity("Workday")
 export class Workday {
   @PrimaryGeneratedColumn("increment")
-  workdayId: number;
+  id: number;
 
   @Column({ type: "datetime", nullable: false })
   work_time_begin: string;
