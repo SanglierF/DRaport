@@ -24,6 +24,7 @@ export default class LocalDatabase {
       },
       () => {
         this.dbConnection = null;
+        console.log("Baza popsuta")
       }
     );
   }
@@ -94,7 +95,7 @@ export default class LocalDatabase {
 async function DbConnection() {
   return await createConnection({
     name: "default",
-    database: "develop",
+    database: "hgghfgf",
     driver: require("expo-sqlite"),
     entities: [Client, Product, Warehouse, Workday, Visit],
     synchronize: true,

@@ -5,13 +5,16 @@ import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
 import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import VisitRepository from "../../database/repositories/VisitRepository";
+import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function WorkdayScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
   const workdayRepository = new WorkdayRepository(localDb.dbConnection);
+  const clientRepository = new ClientRepository(localDb.dbConnection);
   const visitRepository = new VisitRepository(localDb.dbConnection);
 
+  const [workday, setWorkday] = React.useState(null);
   const [visitList, setVisitList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -20,12 +23,19 @@ export default function WorkdayScreen({ navigation, route }: any) {
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (visitRepository) {
-      visitRepository.getAllInDay(route.params.workdayId).then((found) => {
+    workdayRepository.findById(route.params.workdayId).then((found) => {
+      setWorkday(found);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (workday) {
+      visitRepository.getAllInDay(workday).then((found) => {
+        console.log(found);
         setVisitList(found);
       });
     }
-  }, [isFocused, changeCounter]);
+  }, [isFocused, changeCounter, workday]);
 
   function renderItem({ item }) {
     return (
@@ -47,7 +57,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   mode="text"
                   onPress={() => {
                     navigation.navigate("ModifyVisit", {
-                      visitId: item.visitId,
+                      visitId: item.id,
                     });
                   }}
                 >
@@ -57,7 +67,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   icon="delete"
                   mode="text"
                   onPress={() => {
-                    setDeleteVisitId(item.visitId);
+                    setDeleteVisitId(item.id);
                     setModalVisible(true);
                   }}
                 >
@@ -83,7 +93,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
         extraData={isFocused}
         renderItem={renderItem}
         data={visitList}
-        keyExtractor={(item) => item.visitId}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
       />
       <FAB

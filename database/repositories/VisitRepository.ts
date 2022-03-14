@@ -44,11 +44,12 @@ export default class VisitRepository {
   public async delete(id: number) {
     this.repository.delete(id);
   }
-  public async getAllInDay(workdayId: number) {
+  public async getAllInDay(workday: Workday) {
     return this.repository.find({
       where: {
-        workday: workdayId
-      }
+        workday: workday
+      },
+      relations: ["workday", "client"]
     });
   }
 }
