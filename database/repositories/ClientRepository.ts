@@ -13,8 +13,8 @@ export default class ClientRepository {
     const clientList = await this.repository.find();
     return clientList;
   }
-  public async findById(clientId: number) {
-    const client = await this.repository.findOne(clientId);
+  public async findById(id: number) {
+    const client = await this.repository.findOne(id);
     return client;
   }
   public async save(client: Client) {
@@ -53,7 +53,7 @@ export default class ClientRepository {
       longitude: longitude,
     });
   }
-  public async delete(clientId: number) {
-    this.repository.delete(clientId);
+  public async delete(id: number) {
+    this.repository.delete(id);
   }
 }

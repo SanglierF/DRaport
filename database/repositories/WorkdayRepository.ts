@@ -13,8 +13,8 @@ export default class WorkdayRepository {
     const workdayList = await this.repository.find();
     return workdayList;
   }
-  public async findById(workdayId: number) {
-    const workday = await this.repository.findOne(workdayId);
+  public async findById(id: number) {
+    const workday = await this.repository.findOne(id);
     return workday;
   }
   public async findByDate(workdayDate: string) {
@@ -38,7 +38,7 @@ export default class WorkdayRepository {
       car_counter_begin: car_counter_begin,
     });
   }
-  public async delete(workdayId: number) {
-    this.repository.delete(workdayId);
+  public async delete(id: number) {
+    this.repository.delete(id);
   }
 }

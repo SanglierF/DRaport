@@ -14,8 +14,8 @@ export default class WarehouseRepository {
 
     return warehouseList;
   }
-  public async findById(warehouseId: number) {
-    const warehouse = await this.repository.findOne(warehouseId);
+  public async findById(id: number) {
+    const warehouse = await this.repository.findOne(id);
     return warehouse;
   }
   public async save(warehouse: Warehouse) {
@@ -44,7 +44,7 @@ export default class WarehouseRepository {
       email: email,
     });
   }
-  public async delete(warehouseId: number) {
-    this.repository.delete(warehouseId);
+  public async delete(id: number) {
+    this.repository.delete(id);
   }
 }

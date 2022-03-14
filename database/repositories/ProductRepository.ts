@@ -13,8 +13,8 @@ export default class ProductRepository {
     const productList = await this.repository.find();
     return productList;
   }
-  public async findById(productId: number) {
-    const product = await this.repository.findOne(productId);
+  public async findById(id: number) {
+    const product = await this.repository.findOne(id);
     return product;
   }
   public async save(product: Product) {
@@ -29,7 +29,7 @@ export default class ProductRepository {
   public create(
     name: string,
     price: number,
-    image: string = ""
+    image: string = "",
   ) {
     return this.repository.create({
       name: name,
@@ -37,7 +37,7 @@ export default class ProductRepository {
       image: image
     });
   }
-  public async delete(productId: number) {
-    this.repository.delete(productId);
+  public async delete(id: number) {
+    this.repository.delete(id);
   }
 }
