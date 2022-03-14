@@ -58,7 +58,7 @@ export default function ClientsListScreen({ navigation }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyClient", {
-                    clientId: item.clientId,
+                    clientId: item.id,
                   });
                 }}
               >
@@ -68,7 +68,7 @@ export default function ClientsListScreen({ navigation }: any) {
                 icon="delete"
                 mode="text"
                 onPress={() => {
-                  setDeleteClientId(item.clientId);
+                  setDeleteClientId(item.id);
                   setModalVisible(true);
                 }}
               >

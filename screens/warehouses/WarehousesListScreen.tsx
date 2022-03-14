@@ -52,7 +52,7 @@ export default function WarehousesListScreen({ navigation }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyWarehouse", {
-                    warehouseId: item.warehouseId,
+                    warehouseId: item.id,
                   });
                 }}
               >
@@ -62,7 +62,7 @@ export default function WarehousesListScreen({ navigation }: any) {
                 icon="delete"
                 mode="text"
                 onPress={() => {
-                  setDeleteWarehouseId(item.warehouseId);
+                  setDeleteWarehouseId(item.id);
                   setModalVisible(true);
                 }}
               >
@@ -87,7 +87,7 @@ export default function WarehousesListScreen({ navigation }: any) {
         extraData={isFocused}
         renderItem={renderItem}
         data={warehouseList}
-        keyExtractor={(item) => item.warehouseId}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
       />
       <FAB

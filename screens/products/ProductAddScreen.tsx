@@ -22,15 +22,12 @@ export default function ProductAddScreen({ navigation }: any) {
     let priceConv = 0;
     try {
       priceConv = parseFloat(price);
-      console.log(priceConv);
       validFields = nameValidation(name) && priceValidation(priceConv) ? true : false;
     } catch (exception) {
       alert("Invalid price");
     }
-    console.log(validFields);
     if (validFields) {
       const newProduct = productRepository.create(name, priceConv);
-      console.log(newProduct);
       productRepository.save(newProduct).then((saved) => {
         console.log(saved)
       });

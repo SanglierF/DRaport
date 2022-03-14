@@ -52,7 +52,7 @@ export default function ProductsListScreen({ navigation }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyProduct", {
-                    productId: item.productId,
+                    id: item.id,
                   });
                 }}
               >
@@ -62,7 +62,7 @@ export default function ProductsListScreen({ navigation }: any) {
                 icon="delete"
                 mode="text"
                 onPress={() => {
-                  setDeleteProductId(item.productId);
+                  setDeleteProductId(item.id);
                   setModalVisible(true);
                 }}
               >
@@ -76,8 +76,8 @@ export default function ProductsListScreen({ navigation }: any) {
     );
   }
 
-  function deleteProduct(productId: number) {
-    productRepository.delete(productId);
+  function deleteProduct(id: number) {
+    productRepository.delete(id);
     setChangeCounter(changeCounter + 1);
   }
 
@@ -87,7 +87,7 @@ export default function ProductsListScreen({ navigation }: any) {
         extraData={isFocused}
         renderItem={renderItem}
         data={productList}
-        keyExtractor={(item) => item.productId}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
       />
       <FAB

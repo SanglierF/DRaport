@@ -14,13 +14,15 @@ export default function HomeScreen({ navigation }: any) {
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    const date = new Date().toISOString().slice(0, 7);
-
+    const date = (new Date().toISOString().split('T'))[0];
     if (workdayRepository) {
       workdayRepository.findByDate(date).then((found) => {
         if (found) {
-          setWorkdayId(found.workdayId);
+          setWorkdayId(found.id);
           setIsWorking("Continue day");
+        }else{
+          setWorkdayId(-1);
+          setIsWorking("Start new day 2");
         }
       });
     }
@@ -30,8 +32,7 @@ export default function HomeScreen({ navigation }: any) {
     const workday = workdayRepository.create(new Date().toISOString());
     let id = -1;
     workdayRepository.save(workday).then((saved) => {
-      console.log(saved);
-      id = saved.workdayId;
+      id = saved.id;
     });
     return id;
   }

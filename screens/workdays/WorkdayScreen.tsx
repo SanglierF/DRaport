@@ -21,7 +21,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (visitRepository) {
-      visitRepository.getAll().then((found) => {
+      visitRepository.getAllInDay(route.params.workdayId).then((found) => {
         setVisitList(found);
       });
     }
