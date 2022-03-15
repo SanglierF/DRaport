@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Workday } from "./Workday";
 import { Client } from "./Client";
+import { Order } from "./Order";
 
 @Entity("Visit")
 export class Visit {
@@ -18,4 +19,7 @@ export class Visit {
 
   @Column({ nullable: true })
   visit_time: number;
+
+  @OneToMany(() => Order, (order) => order.visit)
+  orders: Order[];
 }
