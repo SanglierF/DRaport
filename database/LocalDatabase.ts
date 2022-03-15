@@ -5,12 +5,16 @@ import { Product } from "./entities/Product";
 import { Warehouse } from "./entities/Warehouse";
 import { Workday } from "./entities/Workday";
 import { Visit } from "./entities/Visit";
+import { Order } from "./entities/Order";
+import { OrderedProduct } from "./entities/OrderedProduct";
 
 import ClientRepository from "./repositories/ClientRepository";
 import ProductRepository from "./repositories/ProductRepository";
 import VisitRepository from "./repositories/VisitRepository";
 import WorkdayRepository from "./repositories/WorkdayRepository";
 import WarehouseRepository from "./repositories/WarehouseRepository";
+import OrderRepository from "./repositories/OrderRepository";
+import OrderedProductRepository from "./repositories/OrderedProductRepository";
 
 export default class LocalDatabase {
   static dbInstance = null;
@@ -97,7 +101,7 @@ async function DbConnection() {
     name: "default",
     database: "hgghfgf",
     driver: require("expo-sqlite"),
-    entities: [Client, Product, Warehouse, Workday, Visit],
+    entities: [Client, Product, Warehouse, Workday, Visit, Order, OrderedProduct],
     synchronize: true,
     type: "expo",
   });
