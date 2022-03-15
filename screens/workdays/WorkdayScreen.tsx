@@ -56,8 +56,8 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   icon="account-edit"
                   mode="text"
                   onPress={() => {
-                    navigation.navigate("ModifyVisit", {
-                      visitId: item.id,
+                    navigation.navigate("VisitAddScreen", {
+                      visit: item.id,
                     });
                   }}
                 >
@@ -100,7 +100,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
         style={localStyle.fab}
         small
         icon="plus"
-        onPress={() => navigation.navigate("AddVisit")}
+        onPress={() => navigation.navigate("VisitScreen", { params: { workday: workday } })}
       />
       <ModalConfirmation
         deleteObjectFn={deleteVisit}
