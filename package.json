@@ -32,7 +32,7 @@
     "react-native-web": "0.17.1",
     "react-query": "^3.34.16",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "0.2.41",
+    "typeorm": "^0.2.45",
     "yarn": "^1.22.17"
   },
   "devDependencies": {
