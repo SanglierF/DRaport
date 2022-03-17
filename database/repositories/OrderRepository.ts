@@ -19,8 +19,15 @@ export default class OrderRepository {
     const order = await this.repository.findOne(id);
     return order;
   }
+  public async findByUuid(uuid: string) {
+    return await this.repository.findOne({ where: { uuid: uuid } });
+  }
   public async save(order: Order) {
-    return await this.repository.save(order);
+    if (!order.uuid) {
+      order.uuid = new Date().toISOString();
+    }
+    await this.repository.save(order);
+    return await this.findByUuid(order.uuid);
   }
   public async saveAll(orders: Order[]) {
     return await this.repository.save(orders);
