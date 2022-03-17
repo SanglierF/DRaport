@@ -11,7 +11,6 @@ import ModalConfirmation from "../../components/ModalConfirmation";
 export default function WorkdayScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
   const workdayRepository = new WorkdayRepository(localDb.dbConnection);
-  const clientRepository = new ClientRepository(localDb.dbConnection);
   const visitRepository = new VisitRepository(localDb.dbConnection);
 
   const [workday, setWorkday] = React.useState(null);
@@ -100,7 +99,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
         style={localStyle.fab}
         small
         icon="plus"
-        onPress={() => navigation.navigate("VisitScreen", { params: { workday: workday } })}
+        onPress={() => navigation.navigate("VisitAdd", { params: { workdayId: workday.id } })}
       />
       <ModalConfirmation
         deleteObjectFn={deleteVisit}
