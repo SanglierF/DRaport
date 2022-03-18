@@ -1,50 +1,89 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, Image, Text } from "react-native";
-import { List, Button, FAB, Divider } from "react-native-paper";
+import { StyleSheet, View, FlatList, Text } from "react-native";
+import { List, Button, FAB, Divider, TextInput } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
 import { useIsFocused } from "@react-navigation/native";
 import OrderRepository from "../../database/repositories/OrderRepository";
+import ClientRepository from "../../database/repositories/ClientRepository";
+import WorkdayRepository from "../../database/repositories/WorkdayRepository";
+import VisitRepository from "../../database/repositories/VisitRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
-import { nameValidation } from "../../components/Validators";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function VisitAddScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
   const orderRepository = new OrderRepository(localDb.dbConnection);
+  const clientRepository = new ClientRepository(localDb.dbConnection);
+  const workdayRepository = new WorkdayRepository(localDb.dbConnection);
+  const visitRepository = new VisitRepository(localDb.dbConnection);
 
   const [orderList, setOrderList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [deleteOrderId, setDeleteOrderId] = React.useState(-1);
+  const [visit, setVisit] = React.useState(null);
   const [client, setClient] = React.useState(null);
-  const workday = route.params.workday;
+  const [workday, setWorkday] = React.useState(null);
+  const [addVisitDisabled, setAddVisitDisabled] = React.useState(true);
 
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (orderRepository) {
-      orderRepository.getAll().then((found) => {
+    workdayRepository.findById(route.params.workdayId).then((found) => {
+      setWorkday(found);
+      if (!client) {
+        navigation.navigate("VisitClient");
+      }
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (visit) {
+      orderRepository.getAllInVisit(visit).then((found) => {
         setOrderList(found);
       });
     }
-  }, [isFocused, changeCounter]);
+  }, [isFocused, changeCounter, visit]);
 
-  function renderItem({ item }) {
+  React.useEffect(() => {
+    if (route.params?.clientId) {
+      clientRepository.findById(route.params.clientId).then((found) => {
+        setClient(found);
+      });
+    }
+  }, [route.params?.clientId]);
+
+  React.useEffect(() => {
+    if (client === null) {
+      return;
+    }
+    if (!visit) {
+      const newVisit = visitRepository.create(workday, client);
+      visitRepository.save(newVisit).then(() => {
+        //TODO if multiple clients are allowed in a single workday it has to be changed to functionality returning id
+        visitRepository.findVisitByWorkdayClient(workday, client).then((found) => {
+          setVisit(found);
+          setAddVisitDisabled(false);
+        });
+      });
+    } else {
+      visit.client = client;
+      visitRepository.save(visit);
+    }
+  }, [client]);
+
+  React.useEffect(() => {}, [visit]);
+
+  function renderOrderItem({ item }) {
     return (
       <View>
-        <List.Accordion
-          title={item.cient.nickname}
-          left={(props) => <List.Icon {...props} icon="basket" />}
-        >
-          {item.price ? <List.Item title={`Price: ${item.price}`} right={() => <View />} /> : null}
-          <Image
-            style={{
-              marginTop: 20,
-              width: 140,
-              height: 140,
-              alignSelf: "center",
-            }}
-            source={require("../../assets/icon.png")}
+        <List.Accordion title={item.id} left={(props) => <List.Icon {...props} icon="basket" />}>
+          <FlatList
+            extraData={isFocused}
+            renderItem={renderOrderedProductItem}
+            data={item.orderedProducts}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={Divider}
           />
           <List.Item
             title={() => (
@@ -84,9 +123,26 @@ export default function VisitAddScreen({ navigation, route }: any) {
     );
   }
 
-  function deleteVisit(id: number) {
+  function renderOrderedProductItem({ item }) {
+    return (
+      <List.Item
+        title={`Product: ${item.product.name} Price: ${item.product.price} Number: ${item.quantity}`}
+        right={() => <View />}
+      />
+    );
+  }
+
+  function deleteOrder(id: number) {
     orderRepository.delete(id);
     setChangeCounter(changeCounter + 1);
+  }
+
+  function selectClient() {
+    navigation.navigate("VisitClient");
+  }
+
+  function goAddOrder() {
+    navigation.navigate("AddOrder", { visitId: visit.id });
   }
 
   function Orders() {
@@ -94,19 +150,13 @@ export default function VisitAddScreen({ navigation, route }: any) {
       <View>
         <FlatList
           extraData={isFocused}
-          renderItem={renderItem}
+          renderItem={renderOrderItem}
           data={orderList}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(order) => order.id}
           ItemSeparatorComponent={Divider}
         />
-        <FAB
-          style={localStyle.fab}
-          small
-          icon="plus"
-          onPress={() => navigation.navigate("AddVisit")}
-        />
         <ModalConfirmation
-          deleteObjectFn={deleteVisit}
+          deleteObjectFn={deleteOrder}
           objectId={deleteOrderId}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
@@ -117,8 +167,20 @@ export default function VisitAddScreen({ navigation, route }: any) {
 
   return (
     <View style={{ flex: 1 }}>
-      // TODO header with client
+      {client ? <Text>{client.nickname}</Text> : <Text>Wybierz klienta</Text>}
+      <Button onPress={selectClient} mode="contained" style={{ width: 200, alignSelf: "flex-end" }}>
+        Wybierz
+      </Button>
       {client ? <Orders /> : <Text>Select client</Text>}
+      {client ? (
+        <FAB
+          style={localStyle.fab}
+          small
+          icon="plus"
+          disabled={addVisitDisabled}
+          onPress={goAddOrder}
+        />
+      ) : null}
     </View>
   );
 }
