@@ -30,7 +30,6 @@ export default function WorkdayScreen({ navigation, route }: any) {
   React.useEffect(() => {
     if (workday) {
       visitRepository.getAllInDay(workday).then((found) => {
-        console.log(found);
         setVisitList(found);
       });
     }
@@ -99,7 +98,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
         style={localStyle.fab}
         small
         icon="plus"
-        onPress={() => navigation.navigate("VisitAdd", { params: { workdayId: workday.id } })}
+        onPress={() => navigation.navigate("VisitAdd", { workdayId: workday.id })}
       />
       <ModalConfirmation
         deleteObjectFn={deleteVisit}
