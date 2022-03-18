@@ -52,4 +52,14 @@ export default class VisitRepository {
       relations: ["workday", "client"]
     });
   }
+  public async findVisitByWorkdayClient(workday: Workday, client: Client){
+    return this.repository.findOne({
+      where: {
+        workday: workday,
+        client: client
+      },
+      relations: ["workday", "client"]
+    });
+    //TODO force one client visit per workday? or find other way of finding recent visit id
+  }
 }
