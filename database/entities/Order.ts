@@ -8,13 +8,13 @@ export class Order {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(() => Visit, (visit) => visit.orders, { nullable: false })
+  @ManyToOne(() => Visit, (visit) => visit.orders, { nullable: false, onDelete: "CASCADE" })
   visit: Visit;
 
-  @ManyToOne(() => Warehouse, (warehouse) => warehouse.orders, { nullable: true })
+  @ManyToOne(() => Warehouse, (warehouse) => warehouse.orders, { nullable: true, onDelete: "CASCADE" })
   warehouse: Warehouse;
 
-  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.order)
+  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.order, {cascade: true})
   orderedProducts: OrderedProduct[];
 
   @Column()

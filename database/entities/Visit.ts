@@ -20,6 +20,6 @@ export class Visit {
   @Column({ nullable: true })
   visit_time: number;
 
-  @OneToMany(() => Order, (order) => order.visit)
+  @OneToMany(() => Order, (order) => order.visit, {cascade: true })
   orders: Order[];
 }
