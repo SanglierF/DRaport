@@ -26,4 +26,7 @@ export class Warehouse {
 
   @OneToMany(() => Order, (order) => order.visit)
   orders: Order[];
+
+  @Column()
+  uuid: string;
 }

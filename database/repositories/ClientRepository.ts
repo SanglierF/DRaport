@@ -17,8 +17,15 @@ export default class ClientRepository {
     const client = await this.repository.findOne(id);
     return client;
   }
+  public async findByUuid(uuid: string) {
+    return await this.repository.findOne({ where: { uuid: uuid } });
+  }
   public async save(client: Client) {
-    return await this.repository.save(client);
+    if (!client.uuid) {
+      client.uuid = new Date().toISOString();
+    }
+    await this.repository.save(client);
+    return await this.findByUuid(client.uuid);
   }
   public async saveAll(clients: Client[]) {
     return await this.repository.save(clients);

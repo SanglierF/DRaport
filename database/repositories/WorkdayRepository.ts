@@ -19,12 +19,19 @@ export default class WorkdayRepository {
   }
   public async findByDate(workdayDate: string) {
     const workday = await this.repository.findOne({
-      work_time_begin: Like(workdayDate+'%'),
-    })
-    return workday
+      work_time_begin: Like(workdayDate + "%"),
+    });
+    return workday;
+  }
+  public async findByUuid(uuid: string) {
+    return await this.repository.findOne({ where: { uuid: uuid } });
   }
   public async save(workday: Workday) {
-    return await this.repository.save(workday);
+    if (!workday.uuid) {
+      workday.uuid = new Date().toISOString();
+    }
+    await this.repository.save(workday);
+    return await this.findByUuid(workday.uuid);
   }
   public async saveAll(workdays: Workday[]) {
     return await this.repository.save(workdays);

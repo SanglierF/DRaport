@@ -41,4 +41,7 @@ export class Client {
 
   @OneToMany(() => Visit, (visit) => visit.client)
   visits: Visit[];
+
+  @Column()
+  uuid: string;
 }

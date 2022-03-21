@@ -20,4 +20,7 @@ export class Workday {
 
   @OneToMany(() => Visit, (visit) => visit.workday)
   visits: Visit[];
+
+  @Column()
+  uuid: string;
 }

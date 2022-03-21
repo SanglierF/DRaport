@@ -17,4 +17,7 @@ export class Product {
 
   @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.product)
   orderedProducts: OrderedProduct[];
+
+  @Column()
+  uuid: string;
 }

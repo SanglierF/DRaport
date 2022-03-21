@@ -15,4 +15,7 @@ export class OrderedProduct {
 
   @Column({ nullable: false })
   quantity: number;
+
+  @Column()
+  uuid: string;
 }

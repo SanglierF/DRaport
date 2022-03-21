@@ -19,8 +19,15 @@ export default class VisitRepository {
     const visit = await this.repository.findOne(id);
     return visit;
   }
+  public async findByUuid(uuid: string) {
+    return await this.repository.findOne({ where: { uuid: uuid } });
+  }
   public async save(visit: Visit) {
-    return await this.repository.save(visit);
+    if (!visit.uuid) {
+      visit.uuid = new Date().toISOString();
+    }
+    await this.repository.save(visit);
+    return await this.findByUuid(visit.uuid);
   }
   public async saveAll(visits: Visit[]) {
     return await this.repository.save(visits);
@@ -47,18 +54,18 @@ export default class VisitRepository {
   public async getAllInDay(workday: Workday) {
     return this.repository.find({
       where: {
-        workday: workday
+        workday: workday,
       },
-      relations: ["workday", "client"]
+      relations: ["workday", "client"],
     });
   }
-  public async findVisitByWorkdayClient(workday: Workday, client: Client){
+  public async findVisitByWorkdayClient(workday: Workday, client: Client) {
     return this.repository.findOne({
       where: {
         workday: workday,
-        client: client
+        client: client,
       },
-      relations: ["workday", "client"]
+      relations: ["workday", "client"],
     });
     //TODO force one client visit per workday? or find other way of finding recent visit id
   }

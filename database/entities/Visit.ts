@@ -22,4 +22,7 @@ export class Visit {
 
   @OneToMany(() => Order, (order) => order.visit, {cascade: true })
   orders: Order[];
+
+  @Column()
+  uuid: string;
 }

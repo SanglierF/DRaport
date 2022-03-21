@@ -18,8 +18,15 @@ export default class WarehouseRepository {
     const warehouse = await this.repository.findOne(id);
     return warehouse;
   }
+  public async findByUuid(uuid: string) {
+    return await this.repository.findOne({ where: { uuid: uuid } });
+  }
   public async save(warehouse: Warehouse) {
-    return await this.repository.save(warehouse);
+    if (!warehouse.uuid) {
+      warehouse.uuid = new Date().toISOString();
+    }
+    await this.repository.save(warehouse);
+    return await this.findByUuid(warehouse.uuid);
   }
   public async saveAll(warehouses: Warehouse[]) {
     return await this.repository.save(warehouses);
@@ -27,14 +34,7 @@ export default class WarehouseRepository {
   public async modify(warehouse: Warehouse) {
     return await this.repository.save(warehouse);
   }
-  public create({
-    nickname,
-    nip = null,
-    regon = null,
-    name = "",
-    tel_number = "",
-    email = "",
-  }) {
+  public create({ nickname, nip = null, regon = null, name = "", tel_number = "", email = "" }) {
     return this.repository.create({
       nickname: nickname,
       name: name,
