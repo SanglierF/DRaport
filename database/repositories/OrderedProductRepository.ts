@@ -30,6 +30,11 @@ export default class OrderedProductRepository {
     return await this.findByUuid(orderedProduct.uuid);
   }
   public async saveAll(orderedProducts: OrderedProduct[]) {
+    orderedProducts.forEach((orderedProduct) => {
+      if (!orderedProduct.uuid) {
+        orderedProduct.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(orderedProducts);
   }
   public async modify(orderedProduct: OrderedProduct) {

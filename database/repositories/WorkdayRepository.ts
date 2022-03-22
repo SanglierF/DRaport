@@ -34,6 +34,11 @@ export default class WorkdayRepository {
     return await this.findByUuid(workday.uuid);
   }
   public async saveAll(workdays: Workday[]) {
+    workdays.forEach((workday) => {
+      if (!workday.uuid) {
+        workday.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(workdays);
   }
   public async modify(workday: Workday) {

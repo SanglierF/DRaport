@@ -30,6 +30,11 @@ export default class VisitRepository {
     return await this.findByUuid(visit.uuid);
   }
   public async saveAll(visits: Visit[]) {
+    visits.forEach((visit) => {
+      if (!visit.uuid) {
+        visit.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(visits);
   }
   public async modify(visit: Visit) {

@@ -28,6 +28,11 @@ export default class ProductRepository {
     return await this.findByUuid(product.uuid);
   }
   public async saveAll(products: Product[]) {
+    products.forEach((product) => {
+      if (!product.uuid) {
+        product.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(products);
   }
   public async modify(product: Product) {

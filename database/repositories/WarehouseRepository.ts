@@ -29,6 +29,11 @@ export default class WarehouseRepository {
     return await this.findByUuid(warehouse.uuid);
   }
   public async saveAll(warehouses: Warehouse[]) {
+    warehouses.forEach((warehouse) => {
+      if (!warehouse.uuid) {
+        warehouse.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(warehouses);
   }
   public async modify(warehouse: Warehouse) {

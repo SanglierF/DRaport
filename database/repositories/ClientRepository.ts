@@ -21,6 +21,7 @@ export default class ClientRepository {
     return await this.repository.findOne({ where: { uuid: uuid } });
   }
   public async save(client: Client) {
+    console.log(client);
     if (!client.uuid) {
       client.uuid = new Date().toISOString();
     }
@@ -28,6 +29,11 @@ export default class ClientRepository {
     return await this.findByUuid(client.uuid);
   }
   public async saveAll(clients: Client[]) {
+    clients.forEach((client) => {
+      if (!client.uuid) {
+        client.uuid = new Date().toISOString();
+      }
+    });
     return await this.repository.save(clients);
   }
   public async modify(client: Client) {
@@ -45,6 +51,7 @@ export default class ClientRepository {
     tel_number = "",
     longitude = null,
     latitude = null,
+    uuid = null,
   }) {
     return this.repository.create({
       nickname: nickname,
