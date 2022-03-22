@@ -3,6 +3,7 @@ import { StyleSheet, View, FlatList, Image, Text } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
 import ClientRepository from "../../database/repositories/ClientRepository";
+import { ContextVisitedClients } from "./Workdays";
 
 export default function VisitClientListScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -10,9 +11,14 @@ export default function VisitClientListScreen({ navigation, route }: any) {
 
   const [clientList, setClientList] = React.useState([]);
 
+  const contextVisitedClients = React.useContext(ContextVisitedClients);
+
   React.useEffect(() => {
     clientRepository.getAll().then((found) => {
-      setClientList(found); //TODO maybe set list after sorting
+      const filteredList = found.filter((client) => {
+        return !contextVisitedClients.visitedClients.includes(client.id);
+      });
+      setClientList(filteredList);
     });
   }, []);
 

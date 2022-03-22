@@ -7,6 +7,7 @@ import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import VisitRepository from "../../database/repositories/VisitRepository";
 import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
+import { ContextVisitedClients } from "./Workdays";
 
 export default function WorkdayScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -18,6 +19,8 @@ export default function WorkdayScreen({ navigation, route }: any) {
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [deleteVisitId, setDeleteVisitId] = React.useState(-1);
+
+  const contextVisitedClients = React.useContext(ContextVisitedClients);
 
   let isFocused = useIsFocused();
 
@@ -34,6 +37,11 @@ export default function WorkdayScreen({ navigation, route }: any) {
       });
     }
   }, [isFocused, changeCounter, workday]);
+
+  React.useEffect(() => {
+    const visitedClients = visitList.map((visit) => visit.client.id);
+    contextVisitedClients.setVisitedClients(visitedClients);
+  }, [visitList]);
 
   function renderItem({ item }) {
     return (
