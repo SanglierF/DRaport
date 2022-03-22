@@ -155,12 +155,6 @@ export default function VisitAddScreen({ navigation, route }: any) {
           keyExtractor={(order) => order.id}
           ItemSeparatorComponent={Divider}
         />
-        <ModalConfirmation
-          deleteObjectFn={deleteOrder}
-          objectId={deleteOrderId}
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
       </View>
     );
   }
@@ -181,6 +175,12 @@ export default function VisitAddScreen({ navigation, route }: any) {
           onPress={goAddOrder}
         />
       ) : null}
+      <ModalConfirmation
+        deleteObjectFn={deleteOrder}
+        objectId={deleteOrderId}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
   );
 }
