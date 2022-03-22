@@ -97,7 +97,12 @@ export default function OrderAddScreen({ navigation, route }) {
   }
 
   function deleteOrderedProduct(productId) {
-    // TODO delete here by product id from array lmao
+    setOrderedProducts(
+      orderedProducts.filter((orderedProduct) => {
+        return !(orderedProduct.product.id === productId);
+      })
+    );
+    setChangeCounter(changeCounter + 1);
   }
 
   function saveOrder() {
@@ -113,7 +118,7 @@ export default function OrderAddScreen({ navigation, route }) {
       <FlatList
         renderItem={renderProductItem}
         data={orderedProducts}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.product.id}
         ItemSeparatorComponent={Divider}
       />
       <FAB
