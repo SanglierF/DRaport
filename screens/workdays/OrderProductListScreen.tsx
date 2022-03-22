@@ -15,18 +15,23 @@ export default function OrderProductListScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     productRepository.getAll().then((found) => {
-      setProductList(found); //TODO maybe set list after sorting
+      const filteredList = found.filter((product) => {
+        return !contextOrderProductList.orderedProducts.includes(product.id);
+      });
+      setProductList(filteredList);
     });
   }, []);
 
   function renderProductItem({ item }) {
     return (
       <Pressable
-        onPress={()=>navigation.navigate({
-          name: "AddOrder",
-          params: { productId: item.id },
-          merge: true,
-        })}
+        onPress={() =>
+          navigation.navigate({
+            name: "AddOrder",
+            params: { productId: item.id },
+            merge: true,
+          })
+        }
       >
         <List.Item title={`${item.name}`} right={() => <Text>Cena: {item.price}</Text>} />
       </Pressable>

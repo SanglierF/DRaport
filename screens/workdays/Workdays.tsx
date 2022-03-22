@@ -9,11 +9,18 @@ import OrderAddScreen from "./OrderAddScreen";
 import OrderProductListScreen from "./OrderProductListScreen";
 
 const Stack = createNativeStackNavigator();
-export const ContextOrderProductList = React.createContext({ productList: [] });
+
+export const ContextOrderProductList = React.createContext({
+  orderedProducts: [],
+  setOrderedProducts: () => {},
+});
 
 export default function Workdays() {
+  const [orderedProducts, setOrderedProducts] = React.useState([]);
+  const providerValue = { orderedProducts, setOrderedProducts };
+
   return (
-    <ContextOrderProductList.Provider value={{ productList: [] }}>
+    <ContextOrderProductList.Provider value={providerValue}>
       <Stack.Navigator
         initialRouteName="Calendar"
         screenOptions={{ headerShown: true, headerTitleAlign: "center" }}

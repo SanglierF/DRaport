@@ -35,9 +35,7 @@ export default function OrderAddScreen({ navigation, route }) {
 
   React.useEffect(() => {
     visitRepository.findById(route.params.visitId).then((found) => {
-      console.log(route.params.visitId)
       setVisit(found);
-      console.log(found.id)
     });
     warehouseRepository.getAll().then((found) => {
       const noWarehouse = warehouseRepository.create({ nickname: "Default" });
@@ -63,10 +61,9 @@ export default function OrderAddScreen({ navigation, route }) {
   }, [isFocused]);
 
   React.useEffect(() => {
-    console.log(orderedProducts.length)
     orderedProducts.length > 0 ? setSaveDisabled(false) : setSaveDisabled(true);
     const selectedProducts = orderedProducts.map((orderedProduct) => orderedProduct.product.id);
-    contextOrderProductList.productList = selectedProducts;
+    contextOrderProductList.setOrderedProducts(selectedProducts);
   }, [changeCounter]);
 
   function renderProductItem({ item }) {
@@ -105,11 +102,11 @@ export default function OrderAddScreen({ navigation, route }) {
 
   function saveOrder() {
     orderRepository.save(order).then((found) => {
-      orderedProducts.forEach(orderedProduct => (orderedProduct.order = found))
+      orderedProducts.forEach((orderedProduct) => (orderedProduct.order = found));
       orderedProductRepository.saveAll(orderedProducts);
     });
     navigation.goBack();
-  }// TODO in flatlist keyExtractor there is no item.id because the orders arent saved untill button press
+  } // TODO in flatlist keyExtractor there is no item.id because the orders arent saved untill button press
   // TODO option to add warehouse to order and send productids in orderedproducts so they aren't shown in product lists pass context with param arrays
   return (
     <View style={{ flex: 1 }}>
