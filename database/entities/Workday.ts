@@ -18,7 +18,7 @@ export class Workday {
   @Column({ nullable: true })
   car_counter_end: number;
 
-  @OneToMany(() => Visit, (visit) => visit.workday)
+  @OneToMany(() => Visit, (visit) => visit.workday, {cascade: true })
   visits: Visit[];
 
   @Column()

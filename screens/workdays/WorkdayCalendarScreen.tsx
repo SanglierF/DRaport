@@ -38,6 +38,7 @@ export default function WorkdayCalendarScreen({ navigation }) {
     year: 1,
   }); // maybe extract to function with all fields correctly set
   const [workedDays, setWorkedDays] = React.useState([]);
+  let disableLongPress = false;
 
   React.useEffect(() => {
     const month = changedMonth.dateString.slice(0, 7);
@@ -48,12 +49,15 @@ export default function WorkdayCalendarScreen({ navigation }) {
   }, [changedMonth]);
 
   function gotoDay(day: string) {
-    if (workedDays.includes(day.slice(0, 10))) {
-      console.log("Widac");
-    } else {
-      console.log("Nie ma takiego");
+    const existingDay = workedDays.find((found) => {
+      return found.work_time_begin.toISOString().slice(0, 10) === day.slice(0, 10);
+    });
+    if (existingDay) {
+      navigation.navigate("Workdays", {
+        screen: "Workday",
+        params: { workdayId: existingDay.id },
+      });
     }
-    // TODO find day if doesntexist dont do anything else navigation.navigate("Workday", params: {workdayId: 0})
   }
 
   function changeMarked(workdays) {
@@ -65,9 +69,6 @@ export default function WorkdayCalendarScreen({ navigation }) {
     //TODO maybe add disabled days to future days from now
     setMarkedDates(markedDates);
   }
-  function viewMarked() {
-    console.log(markedDates);
-  }
 
   return (
     <View>
@@ -76,9 +77,24 @@ export default function WorkdayCalendarScreen({ navigation }) {
           gotoDay(day.dateString);
         }}
         onDayLongPress={(day) => {
-          workdayRepository.save(
-            workdayRepository.create(new Date(day.dateString.slice(0, 10)).toISOString())
-          );
+          const existingDay = workedDays.find((found) => {
+            return found.work_time_begin.toISOString().slice(0, 10) === day.dateString.slice(0, 10);
+          });
+          if (existingDay !== undefined) {
+            workdayRepository.delete(existingDay.id).then(() => {
+              setChangedMonth(day);
+            });
+          } else {
+            if(!disableLongPress){
+              disableLongPress = true;
+              workdayRepository
+                .save(workdayRepository.create(new Date(day.dateString.slice(0, 10)).toISOString()))
+                .then(() => {
+                  setChangedMonth(day);
+                  disableLongPress = false;
+                });
+            }
+          }
         }}
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
         monthFormat={"yyyy MM"}
@@ -107,9 +123,6 @@ export default function WorkdayCalendarScreen({ navigation }) {
         enableSwipeMonths={true}
         markedDates={markedDates}
       />
-      <Button onPress={viewMarked} mode="contained">
-        view
-      </Button>
     </View>
   );
 }

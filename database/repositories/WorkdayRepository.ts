@@ -57,6 +57,6 @@ export default class WorkdayRepository {
     });
   }
   public async delete(id: number) {
-    this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }
