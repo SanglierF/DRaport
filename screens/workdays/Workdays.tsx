@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkdayCalendarScreen from "./WorkdayCalendarScreen";
 import WorkdayScreen from "./WorkdayScreen";
 import VisitAddScreen from "./VisitAddScreen";
+import VisitModifyScreen from "./VisitModifyScreen"
 import VisitClientListScreen from "./VisitClientListScreen";
 import OrderAddScreen from "./OrderAddScreen";
 import OrderProductListScreen from "./OrderProductListScreen";
@@ -12,12 +13,12 @@ const Stack = createNativeStackNavigator();
 
 export const ContextOrderProductList = React.createContext({
   orderedProducts: [],
-  setOrderedProducts: () => {},
+  setOrderedProducts: null,
 });
 
 export const ContextVisitedClients = React.createContext({
   visitedClients: [],
-  setVisitedClients: () => {},
+  setVisitedClients: null,
 });
 
 export default function Workdays() {
@@ -40,6 +41,7 @@ export default function Workdays() {
           />
           <Stack.Screen name="Workday" component={WorkdayScreen} options={{ title: "Workday" }} />
           <Stack.Screen name="VisitAdd" component={VisitAddScreen} options={{ title: "Visit" }} />
+            <Stack.Screen name="VisitModify" component={VisitModifyScreen} options={{ title: "Visit" }} />
           <Stack.Screen
             name="VisitClient"
             component={VisitClientListScreen}

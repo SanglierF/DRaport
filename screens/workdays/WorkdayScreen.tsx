@@ -62,7 +62,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   icon="account-edit"
                   mode="text"
                   onPress={() => {
-                    navigation.navigate("VisitAddScreen", {
+                    navigation.navigate("VisitModify", {
                       visit: item.id,
                     });
                   }}
