@@ -13,6 +13,12 @@ export default class WorkdayRepository {
     const workdayList = await this.repository.find();
     return workdayList;
   }
+  public async getAllInMonth(month: string) {
+    const workdayList = await this.repository.find({
+      work_time_begin: Like(month + "%"),
+    });
+    return workdayList;
+  }
   public async findById(id: number) {
     const workday = await this.repository.findOne(id);
     return workday;
@@ -51,6 +57,6 @@ export default class WorkdayRepository {
     });
   }
   public async delete(id: number) {
-    this.repository.delete(id);
+    return await this.repository.delete(id);
   }
 }

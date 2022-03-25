@@ -8,7 +8,7 @@ export class Visit {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(() => Workday, (workday) => workday.visits, {nullable: false})
+  @ManyToOne(() => Workday, (workday) => workday.visits, {nullable: false, onDelete: "CASCADE"})
   workday: Workday;
 
   @ManyToOne(() => Client, (client) => client.visits, {nullable: false})
