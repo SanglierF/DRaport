@@ -10,6 +10,8 @@ export default function HomeScreen({ navigation }: any) {
 
   const [workdayId, setWorkdayId] = React.useState(-1); // If workdayId = -1 dont use it
   const [isWorking, setIsWorking] = React.useState("Start new day");
+  const [workdayCreated, setWorkdayCreated] = React.useState(false);
+  const [disableWorkdayButton, setDisableWorkdayButton] = React.useState(false);
 
   let isFocused = useIsFocused();
 
@@ -26,17 +28,24 @@ export default function HomeScreen({ navigation }: any) {
         }
       });
     }
+    setDisableWorkdayButton(false);
   }, [isFocused]);
+
+  React.useEffect(() => {
+    if (workdayCreated) {
+      navigation.navigate("Workdays", {
+        screen: "Workday",
+        params: { workdayId: workdayId },
+      });
+    }
+  }, [workdayCreated]);
 
   function saveNewWorkday() {
     const workday = workdayRepository.create(new Date().toISOString());
-    let id = -1;
-    workdayRepository.save(workday).then(() => {
-      workdayRepository.findByDate(workday.work_time_begin).then((found) => {
-        id = found.id;
-      });
+    workdayRepository.save(workday).then((saved) => {
+      setWorkdayId(saved.id);
+      setWorkdayCreated(true);
     });
-    return id;
   }
 
   return (
@@ -48,18 +57,16 @@ export default function HomeScreen({ navigation }: any) {
       <Button title="Go to Calendar" onPress={() => navigation.navigate("Workdays")} />
       <Button
         title={isWorking}
+        disabled={disableWorkdayButton}
         onPress={() => {
+          setDisableWorkdayButton(true);
           if (workdayId > -1) {
             navigation.navigate("Workdays", {
               screen: "Workday",
               params: { workdayId: workdayId },
             });
           } else {
-            const savedWorkdayId = saveNewWorkday();
-            navigation.navigate("Workdays", {
-              screen: "Workday",
-              params: { workdayId: savedWorkdayId },
-            });
+            saveNewWorkday();
           }
         }}
       />
