@@ -9,6 +9,7 @@ import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import VisitRepository from "../../database/repositories/VisitRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ModalConfirmation from "../../components/ModalConfirmation";
+import { ContextVisitedClients } from "./Workdays";
 
 export default function VisitModifyScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -25,10 +26,17 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 
   let isFocused = useIsFocused();
 
+  const contextVisitedClients = React.useContext(ContextVisitedClients);
+
   React.useEffect(() => {
-    visitRepository.findById(route.params.visitId).then((found) => {
+    visitRepository.findByIdWithClient(route.params.visitId).then((found) => {
       setVisit(found);
-      setClient(found.client)
+      setClient(found.client);
+      const filteredClientList = contextVisitedClients.visitedClients.filter((filteredClient) => {
+        return filteredClient !== found.client.id;
+      });
+      console.log(filteredClientList)
+      contextVisitedClients.setVisitedClients(filteredClientList);
     });
   }, []);
 
@@ -42,7 +50,6 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (route.params?.clientId) {
-      // TODO modify visitedclientslist by changes
       clientRepository.findById(route.params.clientId).then((found) => {
         setClient(found);
       });
@@ -51,8 +58,8 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (client && visit.client !== client) {
-      visit.client = client
-      visitRepository.save(visit);
+      visit.client = client;
+      visitRepository.save(visit)
     }
   }, [client]);
 
@@ -120,7 +127,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   }
 
   function selectClient() {
-    navigation.navigate("VisitClient");
+    navigation.navigate("VisitClient", { previousScreenName: route.name });
   }
 
   function goAddOrder() {
@@ -148,14 +155,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
         Wybierz
       </Button>
       {client ? <Orders /> : <Text>Select client</Text>}
-      {client ? (
-        <FAB
-          style={localStyle.fab}
-          small
-          icon="plus"
-          onPress={goAddOrder}
-        />
-      ) : null}
+      {client ? <FAB style={localStyle.fab} small icon="plus" onPress={goAddOrder} /> : null}
       <ModalConfirmation
         deleteObjectFn={deleteOrder}
         objectId={deleteOrderId}

@@ -32,7 +32,7 @@ export default function VisitClientListScreen({ navigation, route }: any) {
             icon="plus"
             onPress={() => {
               navigation.navigate({
-                name: "VisitAdd",
+                name: route.params.previousScreenName,
                 params: { clientId: item.id },
                 merge: true,
               });

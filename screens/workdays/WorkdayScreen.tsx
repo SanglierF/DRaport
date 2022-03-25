@@ -64,6 +64,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   onPress={() => {
                     navigation.navigate("VisitModify", {
                       visitId: item.id,
+                      workdayId: workday.id,
                     });
                   }}
                 >

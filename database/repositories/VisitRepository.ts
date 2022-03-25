@@ -19,6 +19,10 @@ export default class VisitRepository {
     const visit = await this.repository.findOne(id);
     return visit;
   }
+  public async findByIdWithClient(id: number) {
+    const visit = await this.repository.findOne({ where: { id: id }, relations: ["client"] });
+    return visit;
+  }
   public async findByUuid(uuid: string) {
     return await this.repository.findOne({ where: { uuid: uuid } });
   }

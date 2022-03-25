@@ -9,6 +9,7 @@ import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import VisitRepository from "../../database/repositories/VisitRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ModalConfirmation from "../../components/ModalConfirmation";
+import { ContextVisitedClients } from "./Workdays";
 
 export default function VisitAddScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -28,11 +29,13 @@ export default function VisitAddScreen({ navigation, route }: any) {
 
   let isFocused = useIsFocused();
 
+  const contextVisitedClients = React.useContext(ContextVisitedClients);
+
   React.useEffect(() => {
     workdayRepository.findById(route.params.workdayId).then((found) => {
       setWorkday(found);
       if (!client) {
-        navigation.navigate("VisitClient");
+        navigation.navigate("VisitClient", { previousScreenName: route.name });
       }
     });
   }, []);
@@ -138,7 +141,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
   }
 
   function selectClient() {
-    navigation.navigate("VisitClient");
+    navigation.navigate("VisitClient", { previousScreenName: route.name });
   }
 
   function goAddOrder() {
