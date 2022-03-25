@@ -97,7 +97,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
                   icon="account-edit"
                   mode="text"
                   onPress={() => {
-                    navigation.navigate("ModifyVisit", {
+                    navigation.navigate("ModifyOrder", {
                       id: item.id,
                     });
                   }}
