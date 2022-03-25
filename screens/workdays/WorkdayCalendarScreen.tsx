@@ -14,6 +14,7 @@ export default function WorkdayCalendarScreen({ navigation }) {
   const [markedDates, setMarkedDates] = React.useState<{
     [key: string]: {
       marked?: boolean;
+      color?: string;
       selected?: boolean;
       selectedColor?: string;
       dotColor?: string;
@@ -21,25 +22,48 @@ export default function WorkdayCalendarScreen({ navigation }) {
       activeOpacity?: number;
       disableTouchEvent?: boolean;
     };
-  }>({
-    "2022-03-02": { selected: true, marked: true, selectedColor: "blue" },
-    "2022-03-07": { marked: true },
-    "2022-03-13": { marked: true, dotColor: "red", activeOpacity: 0 },
-    "2022-03-11": { disabled: true, disableTouchEvent: true },
-  });
+  }>({});
 
-  function gotoDay(day: Date) {
-    console.log("selected day", day.toISOString());
+  const [changedMonth, setChangedMonth] = React.useState<{
+    dateString: string;
+    day: number;
+    month: number;
+    timestamp: number;
+    year: number;
+  }>({
+    dateString: new Date().toISOString().slice(0, 10),
+    day: 1,
+    month: 1,
+    timestamp: 1,
+    year: 1,
+  }); // maybe extract to function with all fields correctly set
+  const [workedDays, setWorkedDays] = React.useState([]);
+
+  React.useEffect(() => {
+    const month = changedMonth.dateString.slice(0, 7);
+    workdayRepository.getAllInMonth(month).then((found) => {
+      setWorkedDays(found);
+      changeMarked(found);
+    });
+  }, [changedMonth]);
+
+  function gotoDay(day: string) {
+    if (workedDays.includes(day.slice(0, 10))) {
+      console.log("Widac");
+    } else {
+      console.log("Nie ma takiego");
+    }
     // TODO find day if doesntexist dont do anything else navigation.navigate("Workday", params: {workdayId: 0})
   }
 
-  function changeMarked() {
-    setMarkedDates({
-      "2022-03-03": { selected: true, marked: true, selectedColor: "blue" },
-      "2022-03-08": { marked: true },
-      "2022-03-22": { marked: true, dotColor: "red", activeOpacity: 0 },
-      "2022-03-11": { disabled: true, disableTouchEvent: true },
+  function changeMarked(workdays) {
+    let markedDates = {};
+    workdays.forEach((workday) => {
+      const date = workday.work_time_begin.toISOString().slice(0, 10);
+      markedDates[date] = { marked: true, selectedColor: "blue", selected: true };
     });
+    //TODO maybe add disabled days to future days from now
+    setMarkedDates(markedDates);
   }
   function viewMarked() {
     console.log(markedDates);
@@ -49,18 +73,19 @@ export default function WorkdayCalendarScreen({ navigation }) {
     <View>
       <Calendar
         onDayPress={(day) => {
-          gotoDay(new Date(day.timestamp));
+          gotoDay(day.dateString);
         }}
         onDayLongPress={(day) => {
-          // TODO if doesnt exist create new day
-          console.log("longprees");
+          workdayRepository.save(
+            workdayRepository.create(new Date(day.dateString.slice(0, 10)).toISOString())
+          );
         }}
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
         monthFormat={"yyyy MM"}
         // Handler which gets executed when visible month changes in calendar. Default = undefined
         onMonthChange={(month) => {
           // TODO rerender calendar with this month
-          console.log("month changed", month);
+          setChangedMonth(month);
         }}
         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
         firstDay={1}
@@ -82,9 +107,6 @@ export default function WorkdayCalendarScreen({ navigation }) {
         enableSwipeMonths={true}
         markedDates={markedDates}
       />
-      <Button onPress={changeMarked} mode="contained">
-        Zmien
-      </Button>
       <Button onPress={viewMarked} mode="contained">
         view
       </Button>
