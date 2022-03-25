@@ -28,6 +28,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   React.useEffect(() => {
     visitRepository.findById(route.params.visitId).then((found) => {
       setVisit(found);
+      setClient(visit.client)
     });
   }, []);
 
@@ -49,8 +50,8 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   }, [route.params?.clientId]);
 
   React.useEffect(() => {
-    if (client) {
-      visit.client = client;
+    if (client && visit.client !== client) {
+      visit.client = client
       visitRepository.save(visit);
     }
   }, [client]);
