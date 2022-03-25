@@ -27,7 +27,7 @@ export default function OrderProductListScreen({ navigation, route }: any) {
       <Pressable
         onPress={() =>
           navigation.navigate({
-            name: "AddOrder",
+            name: route.params.previousScreenName,
             params: { productId: item.id },
             merge: true,
           })

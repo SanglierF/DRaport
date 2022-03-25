@@ -126,7 +126,7 @@ export default function OrderAddScreen({ navigation, route }) {
         small
         icon="plus"
         onPress={() => {
-          navigation.navigate("OrderProductList");
+          navigation.navigate("OrderProductList", { previousScreenName: route.name });
         }}
       />
       <Button onPress={saveOrder} disabled={saveDisabled}>

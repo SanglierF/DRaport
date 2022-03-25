@@ -63,7 +63,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
                   mode="text"
                   onPress={() => {
                     navigation.navigate("VisitModify", {
-                      visit: item.id,
+                      visitId: item.id,
                     });
                   }}
                 >

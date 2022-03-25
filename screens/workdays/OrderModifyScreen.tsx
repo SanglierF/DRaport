@@ -27,7 +27,7 @@ export default function OrderAddScreen({ navigation, route }) {
   const [selectProductId, setSelectedProductId] = React.useState(-1);
   const [productQuantity, setProductQuantity] = React.useState(1);
   const [changeCounter, setChangeCounter] = React.useState(0);
-  const [saveDisabled, setSaveDisabled] = React.useState(true);
+  const [saveDisabled, setSaveDisabled] = React.useState(false);
 
   const contextOrderProductList = React.useContext(ContextOrderProductList);
 
@@ -48,6 +48,9 @@ export default function OrderAddScreen({ navigation, route }) {
   React.useEffect(() => {
     orderedProductRepository.getAllInOrder(order).then((found) => {
       setOrderedProducts(found);
+      const selectedProducts = found.map((orderedProduct) => orderedProduct.product.id);
+      contextOrderProductList.setOrderedProducts(selectedProducts);
+      setSaveDisabled(false);
     });
   }, [order]);
 
@@ -127,7 +130,7 @@ export default function OrderAddScreen({ navigation, route }) {
         small
         icon="plus"
         onPress={() => {
-          navigation.navigate("OrderProductList");
+          navigation.navigate("OrderProductList", { previousScreenName: route.name });
         }}
       />
       <Button onPress={saveOrder} disabled={saveDisabled}>
