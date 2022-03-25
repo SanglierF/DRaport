@@ -10,11 +10,10 @@ import VisitRepository from "../../database/repositories/VisitRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
-export default function VisitAddScreen({ navigation, route }: any) {
+export default function VisitModifyScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
   const orderRepository = new OrderRepository(localDb.dbConnection);
   const clientRepository = new ClientRepository(localDb.dbConnection);
-  const workdayRepository = new WorkdayRepository(localDb.dbConnection);
   const visitRepository = new VisitRepository(localDb.dbConnection);
 
   const [orderList, setOrderList] = React.useState([]);
@@ -23,17 +22,12 @@ export default function VisitAddScreen({ navigation, route }: any) {
   const [deleteOrderId, setDeleteOrderId] = React.useState(-1);
   const [visit, setVisit] = React.useState(null);
   const [client, setClient] = React.useState(null);
-  const [workday, setWorkday] = React.useState(null);
-  const [addVisitDisabled, setAddVisitDisabled] = React.useState(true);
 
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    workdayRepository.findById(route.params.workdayId).then((found) => {
-      setWorkday(found);
-      if (!client) {
-        navigation.navigate("VisitClient");
-      }
+    visitRepository.findById(route.params.visitId).then((found) => {
+      setVisit(found);
     });
   }, []);
 
@@ -47,6 +41,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     if (route.params?.clientId) {
+      // TODO modify visitedclientslist by changes
       clientRepository.findById(route.params.clientId).then((found) => {
         setClient(found);
       });
@@ -54,25 +49,11 @@ export default function VisitAddScreen({ navigation, route }: any) {
   }, [route.params?.clientId]);
 
   React.useEffect(() => {
-    if (client === null) {
-      return;
-    }
-    if (!visit) {
-      const newVisit = visitRepository.create(workday, client);
-      visitRepository.save(newVisit).then(() => {
-        //TODO if multiple clients are allowed in a single workday it has to be changed to functionality returning id
-        visitRepository.findVisitByWorkdayClient(workday, client).then((found) => {
-          setVisit(found);
-          setAddVisitDisabled(false);
-        });
-      });
-    } else {
+    if (client) {
       visit.client = client;
       visitRepository.save(visit);
     }
   }, [client]);
-
-  React.useEffect(() => {}, [visit]);
 
   function renderOrderItem({ item }) {
     return (
@@ -171,7 +152,6 @@ export default function VisitAddScreen({ navigation, route }: any) {
           style={localStyle.fab}
           small
           icon="plus"
-          disabled={addVisitDisabled}
           onPress={goAddOrder}
         />
       ) : null}
