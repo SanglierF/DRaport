@@ -5,28 +5,35 @@ import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import { nameValidation } from "../../components/Validators";
+import WarehouseForm from "./WarehouseForm";
 
 export default function WarehouseAddScreen({ navigation }: any) {
   const localDb = LocalDatabase.getInstance();
   const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
 
-  const [name, setName] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [nip, setNip] = React.useState("");
-  const [regon, setRegon] = React.useState("");
-  const [tel, setTel] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [warehouseDetails, setWarehouseDetails] = React.useState({
+    name: "",
+    nickname: "",
+    nip: "",
+    regon: "",
+    tel: "",
+    email: "",
+  });
 
   function addWarehouse() {
-    const validFields = nameValidation(name) && nameValidation(nickname) ? true : false;
+    const validFields =
+      nameValidation(warehouseDetails.name) && nameValidation(warehouseDetails.nickname)
+        ? true
+        : false;
 
     if (validFields) {
       const newWarehouse = warehouseRepository.create({
-        nickname: nickname,
-        name: name,
-        regon: regon,
-        tel_number: tel,
-        email: email,
+        nickname: warehouseDetails.nickname,
+        name: warehouseDetails.name,
+        nip: warehouseDetails.nip!=="" ? Number(warehouseDetails.nip) : null,
+        regon: warehouseDetails.regon!=="" ? Number(warehouseDetails.regon) : null,
+        tel_number: warehouseDetails.tel,
+        email: warehouseDetails.email,
       });
       console.log(newWarehouse);
       warehouseRepository.save(newWarehouse);
@@ -36,56 +43,10 @@ export default function WarehouseAddScreen({ navigation }: any) {
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <View style={styleItemDetails.containerInputs}>
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse name"
-          mode="outlined"
-          value={name}
-          onChangeText={setName}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse nickname"
-          mode="outlined"
-          value={nickname}
-          onChangeText={setNickname}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse nip"
-          mode="outlined"
-          value={nip}
-          onChangeText={setNip}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse regon"
-          mode="outlined"
-          value={regon}
-          onChangeText={setRegon}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse tel_number"
-          mode="outlined"
-          value={tel}
-          onChangeText={setTel}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse email"
-          mode="outlined"
-          value={email}
-          onChangeText={setEmail}
-          autoComplete="off"
-        />
-      </View>
+      <WarehouseForm
+        warehouseDetails={warehouseDetails}
+        setWarehouseDetails={setWarehouseDetails}
+      />
       <Button style={styleItemDetails.buttonAdd} onPress={addWarehouse} mode="contained">
         Add warehouse
       </Button>
