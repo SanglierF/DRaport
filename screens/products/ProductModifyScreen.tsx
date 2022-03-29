@@ -4,6 +4,7 @@ import { TextInput, Button } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
+import ProductForm from "./ProductForm";
 
 export default function ProductModifyScreen({ route }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -12,6 +13,7 @@ export default function ProductModifyScreen({ route }: any) {
   const [product, setProduct] = React.useState(null);
   const [name, setName] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const [image, setImage] = React.useState(null);
 
   React.useEffect(() => {
     productRepository.findById(route.params.productId).then(
@@ -34,27 +36,14 @@ export default function ProductModifyScreen({ route }: any) {
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <Image style={styleItemDetails.image} source={require("../../assets/icon.png")} />
-      <View style={styleItemDetails.containerInputs}>
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Product name"
-          mode="outlined"
-          value={name}
-          onChangeText={setName}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Product price"
-          mode="outlined"
-          value={price}
-          onChangeText={setPrice}
-          autoComplete="off"
-        />
-      </View>
+      <ProductForm
+        productName={name}
+        setProductName={setName}
+        productPrice={price}
+        setProductPrice={setPrice}
+      />
       <Button style={styleItemDetails.buttonAdd} onPress={editProduct} mode="contained">
-        Add product
+        Edit product
       </Button>
     </View>
   );
