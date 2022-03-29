@@ -31,7 +31,7 @@ export default function ClientsListScreen({ navigation }: any) {
         title={item.nickname}
         left={(props) => <List.Icon {...props} icon="basket" />}
       >
-        <List.Item title={`Nickname: ${item.name}`} right={() => <View />} />
+        {item.name ? <List.Item title={`Name: ${item.name}`} right={() => <View />} /> : null}
         {item.nip ? <List.Item title={`Nip: ${item.nip}`} right={() => <View />} /> : null}
         {item.regon ? <List.Item title={`regon: ${item.regon}`} right={() => <View />} /> : null}
         {item.voivodeship ? (

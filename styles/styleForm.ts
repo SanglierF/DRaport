@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-const styleItemDetails = StyleSheet.create({
-  containerAdd: {
+const styleForm = StyleSheet.create({
+  containerForm: {
     flex: 1,
     justifyContent: "space-around",
     flexDirection: "column",
@@ -33,4 +33,4 @@ const styleItemDetails = StyleSheet.create({
   },
 });
 
-export default styleItemDetails;
+export default styleForm;
