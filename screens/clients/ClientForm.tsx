@@ -1,12 +1,65 @@
 import * as React from "react";
 import { Text, View } from "react-native";
 import { TextInput, Button } from "react-native-paper";
+import axios from "axios";
+import { useQuery } from "react-query";
 import styleForm from "../../styles/styleForm";
 
-export default function ClientForm({clientDetails, setClientDetails, loadingStatus, fillData=()=>{}, disableFillData=true}) {
+export default function ClientForm({clientDetails, setClientDetails, disableFillData=true}) {
+  const [loadingStatus, setLoadingStatus] = React.useState(false);
+
   const handleChange = (key, value) => {
     setClientDetails({ ...clientDetails, [key]: value });
   };
+
+  function fillData() {
+    setLoadingStatus(true);
+    refetch();
+  }
+
+  async function axi() {
+    //pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_"
+    return await axios({
+      method: "post",
+      url: "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj",
+      data: {
+        pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_",
+      },
+    })
+      .then((r) => r.data.d)
+      .then((sessionId) => {
+        return axios({
+          method: "post",
+          url: "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/daneSzukaj",
+          headers: {
+            sid: sessionId,
+          },
+          data: {
+            jestWojPowGmnMiej: true,
+            pParametryWyszukiwania: {
+              Nip: 5252344078,
+              PrzewazajacePKD: false,
+            },
+          },
+        });
+      });
+  }
+
+  const { refetch } = useQuery("gusinfo", async () => axi(), {
+    enabled: false,
+    onSuccess: (result) => {
+      console.log(result.data.d); // success
+      setLoadingStatus(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setLoadingStatus(false);
+    },
+    onSettled: () => {
+      console.log("xdd");
+      setLoadingStatus(false);
+    },
+  });
 
   return (
     <View style={styleForm.containerForm}>

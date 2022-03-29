@@ -10,7 +10,6 @@ export default function ClientModifyScreen({ route }: any) {
   const localDb = LocalDatabase.getInstance();
   const clientRepository = new ClientRepository(localDb.dbConnection);
 
-  const [loadingStatus, setLoadingStatus] = React.useState(false);
   const [client, setClient] = React.useState(null);
   const [clientDetails, setClientDetails] = React.useState({
     name: "",
@@ -65,9 +64,6 @@ export default function ClientModifyScreen({ route }: any) {
       <ClientForm
         clientDetails={clientDetails}
         setClientDetails={setClientDetails}
-        loadingStatus={loadingStatus}
-        fillData={() => {}}
-        disableFillData={true}
       />
       <Button style={styleItemDetails.buttonAdd} onPress={editClient} mode="contained">
         Edit client
