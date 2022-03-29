@@ -52,7 +52,7 @@ export default function ProductsListScreen({ navigation }: any) {
                 mode="text"
                 onPress={() => {
                   navigation.navigate("ModifyProduct", {
-                    id: item.id,
+                    productId: item.id,
                   });
                 }}
               >
