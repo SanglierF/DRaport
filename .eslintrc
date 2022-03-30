@@ -1,3 +1,11 @@
 {
   "extends": ["@callstack"],
+  "overrides": [
+    {
+      "files": ["*.tsx"],
+      "rules": {
+        "react-native-a11y/has-valid-accessibility-descriptors": "off"
+      }
+    }
+  ]
 }
