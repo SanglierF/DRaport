@@ -101,7 +101,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
                   mode="text"
                   onPress={() => {
                     navigation.navigate("ModifyOrder", {
-                      id: item.id,
+                      orderId: item.id,
                     });
                   }}
                 >

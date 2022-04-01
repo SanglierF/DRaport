@@ -35,7 +35,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
       const filteredClientList = contextVisitedClients.visitedClients.filter((filteredClient) => {
         return filteredClient !== found.client.id;
       });
-      console.log(filteredClientList)
+      console.log(filteredClientList);
       contextVisitedClients.setVisitedClients(filteredClientList);
     });
   }, []);
@@ -59,7 +59,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   React.useEffect(() => {
     if (client && visit.client !== client) {
       visit.client = client;
-      visitRepository.save(visit)
+      visitRepository.save(visit);
     }
   }, [client]);
 
@@ -87,7 +87,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
                   mode="text"
                   onPress={() => {
                     navigation.navigate("ModifyOrder", {
-                      id: item.id,
+                      orderId: item.id,
                     });
                   }}
                 >
