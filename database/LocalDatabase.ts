@@ -19,8 +19,6 @@ import OrderedProductRepository from "./repositories/OrderedProductRepository";
 export default class LocalDatabase {
   static dbInstance = null;
   dbConnection: Connection;
-;
-
   constructor() {
     DbConnection().then(
       (value) => {
@@ -28,7 +26,7 @@ export default class LocalDatabase {
       },
       () => {
         this.dbConnection = null;
-        console.log("Baza popsuta")
+        console.log("Baza popsuta");
       }
     );
   }
@@ -89,7 +87,7 @@ export default class LocalDatabase {
     }
     return initalized;
   }
-  static getInstance() {
+  static getInstance(): LocalDatabase {
     if (LocalDatabase.dbInstance === null) {
       LocalDatabase.dbInstance = new LocalDatabase();
     }
