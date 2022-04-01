@@ -9,7 +9,9 @@ import OrderRepository from "../../database/repositories/OrderRepository";
 import OrderedProductRepository from "../../database/repositories/OrderedProductRepository";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
+import { OrderedProduct } from "../../database/entities/OrderedProduct";
 import { ContextOrderProductList } from "./Workdays";
+import OrderComponent from "./OrderComponent";
 
 export default function OrderAddScreen({ navigation, route }) {
   const localDb = LocalDatabase.getInstance();
@@ -23,7 +25,7 @@ export default function OrderAddScreen({ navigation, route }) {
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [warehouseId, setWarehouseId] = React.useState(-1);
   const [order, setOrder] = React.useState(null);
-  const [orderedProducts, setOrderedProducts] = React.useState([]);
+  const [orderedProducts, setOrderedProducts] = React.useState<OrderedProduct[]>([]);
   const [selectProductId, setSelectedProductId] = React.useState(-1);
   const [productQuantity, setProductQuantity] = React.useState(1);
   const [changeCounter, setChangeCounter] = React.useState(0);
@@ -115,11 +117,9 @@ export default function OrderAddScreen({ navigation, route }) {
   // TODO option to add warehouse to order and send productids in orderedproducts so they aren't shown in product lists pass context with param arrays
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        renderItem={renderProductItem}
-        data={orderedProducts}
-        keyExtractor={(item) => item.product.id}
-        ItemSeparatorComponent={Divider}
+      <OrderComponent
+        orderedProducts={orderedProducts}
+        deleteOrderedProduct={deleteOrderedProduct}
       />
       <FAB
         style={localStyle.fab}

@@ -1,19 +1,18 @@
+/* eslint-disable react-native/no-raw-text */
 import * as React from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import { Button, List, Divider, FAB, TextInput } from "react-native-paper";
-import { Picker } from "@react-native-picker/picker";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
-import VisitRepository from "../../database/repositories/VisitRepository";
 import OrderRepository from "../../database/repositories/OrderRepository";
 import OrderedProductRepository from "../../database/repositories/OrderedProductRepository";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import { ContextOrderProductList } from "./Workdays";
+import OrderComponent from "./OrderComponent";
 
 export default function OrderAddScreen({ navigation, route }) {
   const localDb = LocalDatabase.getInstance();
-  const visitRepository = new VisitRepository(localDb.dbConnection);
   const orderRepository = new OrderRepository(localDb.dbConnection);
   const orderedProductRepository = new OrderedProductRepository(localDb.dbConnection);
   const productRepository = new ProductRepository(localDb.dbConnection);
@@ -107,23 +106,27 @@ export default function OrderAddScreen({ navigation, route }) {
         return !(orderedProduct.product.id === productId);
       })
     );
-    setChangeCounter(changeCounter + 1);
+    setChangeCounter((counter) => counter++);
   }
 
   function saveOrder() {
-    orderRepository.save(order).then((found) => {
-      orderedProducts.forEach((orderedProduct) => (orderedProduct.order = found));
-      orderedProductRepository.saveAll(orderedProducts);
-    });
+    orderRepository
+      .save(order)
+      .then((order) => {
+        orderedProducts.forEach((orderedProduct) => (orderedProduct.order = order));
+        orderedProductRepository.saveAll(orderedProducts);
+        return order;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     navigation.goBack();
   }
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        renderItem={renderProductItem}
-        data={orderedProducts}
-        keyExtractor={(item) => item.product.id}
-        ItemSeparatorComponent={Divider}
+      <OrderComponent
+        orderedProducts={orderedProducts}
+        deleteOrderedProduct={deleteOrderedProduct}
       />
       <FAB
         style={localStyle.fab}
