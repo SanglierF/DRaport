@@ -1,7 +1,6 @@
 import * as React from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
-import { Button, List, Divider, FAB, TextInput } from "react-native-paper";
-import { Picker } from "@react-native-picker/picker";
+import { View, StyleSheet } from "react-native";
+import { Button, FAB } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
 import VisitRepository from "../../database/repositories/VisitRepository";
@@ -26,25 +25,34 @@ export default function OrderAddScreen({ navigation, route }) {
   const [warehouseId, setWarehouseId] = React.useState(-1);
   const [order, setOrder] = React.useState(null);
   const [orderedProducts, setOrderedProducts] = React.useState<OrderedProduct[]>([]);
-  const [selectProductId, setSelectedProductId] = React.useState(-1);
-  const [productQuantity, setProductQuantity] = React.useState(1);
   const [changeCounter, setChangeCounter] = React.useState(0);
-  const [saveDisabled, setSaveDisabled] = React.useState(true);
 
   const contextOrderProductList = React.useContext(ContextOrderProductList);
 
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    visitRepository.findById(route.params.visitId).then((found) => {
-      setVisit(found);
-    });
-    warehouseRepository.getAll().then((found) => {
-      const noWarehouse = warehouseRepository.create({ nickname: "Default" });
-      noWarehouse.id = -1;
-      const warehouses = [noWarehouse].concat(found);
-      setWarehouseList(warehouses);
-    });
+    visitRepository
+      .findById(route.params.visitId)
+      .then((visit) => {
+        setVisit(visit);
+        return visit;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    warehouseRepository
+      .getAll()
+      .then((warehouse) => {
+        const noWarehouse = warehouseRepository.create({ nickname: "Default" });
+        noWarehouse.id = -1;
+        const warehouses = [noWarehouse].concat(warehouse);
+        setWarehouseList(warehouses);
+        return warehouse;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   React.useEffect(() => {
@@ -53,50 +61,25 @@ export default function OrderAddScreen({ navigation, route }) {
 
   React.useEffect(() => {
     if (route.params?.productId) {
-      productRepository.findById(route.params.productId).then((found) => {
-        const orderedProduct = orderedProductRepository.create(order, found, 1);
-        setOrderedProducts(orderedProducts.concat(orderedProduct));
-        setChangeCounter(changeCounter + 1);
-      });
+      productRepository
+        .findById(route.params.productId)
+        .then((product) => {
+          const orderedProduct = orderedProductRepository.create(order, product, 1);
+          setOrderedProducts((orderedProducts) => orderedProducts.concat(orderedProduct));
+          setChangeCounter((changeCounter) => changeCounter++);
+          return product;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
       navigation.setParams({ productId: undefined });
     }
   }, [isFocused]);
 
   React.useEffect(() => {
-    orderedProducts.length > 0 ? setSaveDisabled(false) : setSaveDisabled(true);
     const selectedProducts = orderedProducts.map((orderedProduct) => orderedProduct.product.id);
     contextOrderProductList.setOrderedProducts(selectedProducts);
   }, [changeCounter]);
-
-  function renderProductItem({ item }) {
-    return (
-      <View style={{ justifyContent: "space-evenly" }}>
-        <List.Item
-          title={`${item.product.name}`}
-          right={() => (
-            <TextInput
-              style={{ width: 120 }}
-              label="Quantity"
-              mode="outlined"
-              defaultValue={item.quantity.toString()}
-              onChangeText={(text) => {
-                item.quantity = Number(text);
-              }}
-              autoComplete="off"
-              keyboardType="decimal-pad"
-            />
-          )}
-        />
-        <FAB
-          small
-          icon="minus"
-          onPress={() => {
-            deleteOrderedProduct(item.product.id);
-          }}
-        />
-      </View>
-    );
-  }
 
   function deleteOrderedProduct(productId) {
     setOrderedProducts(
@@ -108,10 +91,16 @@ export default function OrderAddScreen({ navigation, route }) {
   }
 
   function saveOrder() {
-    orderRepository.save(order).then((found) => {
-      orderedProducts.forEach((orderedProduct) => (orderedProduct.order = found));
-      orderedProductRepository.saveAll(orderedProducts);
-    });
+    orderRepository
+      .save(order)
+      .then((order) => {
+        orderedProducts.forEach((orderedProduct) => (orderedProduct.order = order));
+        orderedProductRepository.saveAll(orderedProducts);
+        return orderedProducts;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     navigation.goBack();
   } // TODO in flatlist keyExtractor there is no item.id because the orders arent saved untill button press
   // TODO option to add warehouse to order and send productids in orderedproducts so they aren't shown in product lists pass context with param arrays
@@ -129,7 +118,7 @@ export default function OrderAddScreen({ navigation, route }) {
           navigation.navigate("OrderProductList", { previousScreenName: route.name });
         }}
       />
-      <Button onPress={saveOrder} disabled={saveDisabled}>
+      <Button onPress={saveOrder} disabled={!(orderedProducts.length > 0)}>
         Zapisz zamówienie
       </Button>
     </View>
