@@ -5,6 +5,7 @@ import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import { nameValidation, priceValidation } from "../../components/Validators";
+import ProductForm from "./ProductForm";
 
 export default function ProductAddScreen({ navigation }: any) {
   const localDb = LocalDatabase.getInstance();
@@ -12,10 +13,7 @@ export default function ProductAddScreen({ navigation }: any) {
 
   const [name, setName] = React.useState("");
   const [price, setPrice] = React.useState("");
-
-  React.useEffect(() => {
-    setPrice(price.replace(",", "."));
-  }, [price]);
+  const [image, setImage] = React.useState(null);
 
   function addProduct() {
     let validFields = false;
@@ -29,7 +27,7 @@ export default function ProductAddScreen({ navigation }: any) {
     if (validFields) {
       const newProduct = productRepository.create(name, priceConv);
       productRepository.save(newProduct).then((saved) => {
-        console.log(saved)
+        console.log(saved);
       });
       navigation.goBack();
     }
@@ -37,26 +35,12 @@ export default function ProductAddScreen({ navigation }: any) {
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <Image style={styleItemDetails.image} source={require("../../assets/icon.png")} />
-      <View style={styleItemDetails.containerInputs}>
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Product name"
-          mode="outlined"
-          value={name}
-          onChangeText={setName}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Product price"
-          mode="outlined"
-          value={price}
-          onChangeText={setPrice}
-          autoComplete="off"
-          keyboardType="decimal-pad"
-        />
-      </View>
+      <ProductForm
+        productName={name}
+        setProductName={setName}
+        productPrice={price}
+        setProductPrice={setPrice}
+      />
       <Button style={styleItemDetails.buttonAdd} onPress={addProduct} mode="contained">
         Add product
       </Button>

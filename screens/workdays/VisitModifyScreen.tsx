@@ -1,21 +1,20 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, Text } from "react-native";
-import { List, Button, FAB, Divider, TextInput } from "react-native-paper";
-import LocalDatabase from "../../database/LocalDatabase";
+import { StyleSheet, View, Text } from "react-native";
+import { Button, FAB } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
+import LocalDatabase from "../../database/LocalDatabase";
 import OrderRepository from "../../database/repositories/OrderRepository";
 import ClientRepository from "../../database/repositories/ClientRepository";
-import WorkdayRepository from "../../database/repositories/WorkdayRepository";
 import VisitRepository from "../../database/repositories/VisitRepository";
-import styleItemDetails from "../../styles/styleItemDetails";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { ContextVisitedClients } from "./Workdays";
+import OrderlistComponent from "./OrderlistComponent";
 
 export default function VisitModifyScreen({ navigation, route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const orderRepository = new OrderRepository(localDb.dbConnection);
-  const clientRepository = new ClientRepository(localDb.dbConnection);
-  const visitRepository = new VisitRepository(localDb.dbConnection);
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const orderRepository = React.useRef(new OrderRepository(dbConnection.current));
+  const clientRepository = React.useRef(new ClientRepository(dbConnection.current));
+  const visitRepository = React.useRef(new VisitRepository(dbConnection.current));
 
   const [orderList, setOrderList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
@@ -26,103 +25,62 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 
   let isFocused = useIsFocused();
 
-  const contextVisitedClients = React.useContext(ContextVisitedClients);
+  const contextVisitedClients = React.useRef(React.useContext(ContextVisitedClients));
 
   React.useEffect(() => {
-    visitRepository.findByIdWithClient(route.params.visitId).then((found) => {
-      setVisit(found);
-      setClient(found.client);
-      const filteredClientList = contextVisitedClients.visitedClients.filter((filteredClient) => {
-        return filteredClient !== found.client.id;
-      });
-      console.log(filteredClientList)
-      contextVisitedClients.setVisitedClients(filteredClientList);
-    });
-  }, []);
+    async function fetchVisit() {
+      try {
+        const found = await visitRepository.current.findByIdWithClient(route.params.visitId);
+        setVisit(found);
+        setClient(found.client);
+        const filteredClientList = contextVisitedClients.current.visitedClients.filter(
+          (filteredClient) => {
+            return filteredClient !== found.client.id;
+          }
+        );
+        console.log(filteredClientList);
+        contextVisitedClients.current.setVisitedClients(filteredClientList);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchVisit();
+  }, [route.params.visitId]);
 
   React.useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const list = await orderRepository.current.getAllInVisit(visit);
+        setOrderList(list);
+      } catch (e) {
+        console.log(e);
+      }
+    }
     if (visit) {
-      orderRepository.getAllInVisit(visit).then((found) => {
-        setOrderList(found);
-      });
+      fetchOrders();
     }
   }, [isFocused, changeCounter, visit]);
 
   React.useEffect(() => {
+    async function fetchClient() {
+      const found = await clientRepository.current.findById(route.params.clientId);
+      setClient(found);
+    }
     if (route.params?.clientId) {
-      clientRepository.findById(route.params.clientId).then((found) => {
-        setClient(found);
-      });
+      fetchClient();
     }
   }, [route.params?.clientId]);
 
   React.useEffect(() => {
-    if (client && visit.client !== client) {
+    if (!client) return;
+    if (visit.client.id !== client.id) {
       visit.client = client;
-      visitRepository.save(visit)
+      visitRepository.current.save(visit);
     }
-  }, [client]);
-
-  function renderOrderItem({ item }) {
-    return (
-      <View>
-        <List.Accordion title={item.id} left={(props) => <List.Icon {...props} icon="basket" />}>
-          <FlatList
-            extraData={isFocused}
-            renderItem={renderOrderedProductItem}
-            data={item.orderedProducts}
-            keyExtractor={(item) => item.id}
-            ItemSeparatorComponent={Divider}
-          />
-          <List.Item
-            title={() => (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                }}
-              >
-                <Button
-                  icon="account-edit"
-                  mode="text"
-                  onPress={() => {
-                    navigation.navigate("ModifyOrder", {
-                      id: item.id,
-                    });
-                  }}
-                >
-                  Edytuj
-                </Button>
-                <Button
-                  icon="delete"
-                  mode="text"
-                  onPress={() => {
-                    setDeleteOrderId(item.id);
-                    setModalVisible(true);
-                  }}
-                >
-                  Usuń
-                </Button>
-              </View>
-            )}
-            right={() => <View />}
-          />
-        </List.Accordion>
-      </View>
-    );
-  }
-
-  function renderOrderedProductItem({ item }) {
-    return (
-      <List.Item
-        title={`Product: ${item.product.name} Price: ${item.product.price} Number: ${item.quantity}`}
-        right={() => <View />}
-      />
-    );
-  }
+  }, [client, visit]);
 
   function deleteOrder(id: number) {
-    orderRepository.delete(id);
+    orderRepository.current.delete(id);
     setChangeCounter(changeCounter + 1);
   }
 
@@ -134,18 +92,10 @@ export default function VisitModifyScreen({ navigation, route }: any) {
     navigation.navigate("AddOrder", { visitId: visit.id });
   }
 
-  function Orders() {
-    return (
-      <View>
-        <FlatList
-          extraData={isFocused}
-          renderItem={renderOrderItem}
-          data={orderList}
-          keyExtractor={(order) => order.id}
-          ItemSeparatorComponent={Divider}
-        />
-      </View>
-    );
+  function modifyOrder(id) {
+    navigation.navigate("ModifyOrder", {
+      orderId: id,
+    });
   }
 
   return (
@@ -154,7 +104,17 @@ export default function VisitModifyScreen({ navigation, route }: any) {
       <Button onPress={selectClient} mode="contained" style={{ width: 200, alignSelf: "flex-end" }}>
         Wybierz
       </Button>
-      {client ? <Orders /> : <Text>Select client</Text>}
+      {client ? (
+        <OrderlistComponent
+          isFocused={isFocused}
+          orderList={orderList}
+          setDeleteOrderId={setDeleteOrderId}
+          setModalVisible={setModalVisible}
+          modifyOrder={modifyOrder}
+        />
+      ) : (
+        <Text>Select client</Text>
+      )}
       {client ? <FAB style={localStyle.fab} small icon="plus" onPress={goAddOrder} /> : null}
       <ModalConfirmation
         deleteObjectFn={deleteOrder}
@@ -167,9 +127,6 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 }
 
 const localStyle = StyleSheet.create({
-  list: {
-    textAlign: "center",
-  },
   fab: {
     position: "absolute",
     bottom: 25,

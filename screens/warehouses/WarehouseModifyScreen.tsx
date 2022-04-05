@@ -4,94 +4,57 @@ import { TextInput, Button } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
+import WarehouseForm from "./WarehouseForm";
 
 export default function WarehouseModifyScreen({ route }: any) {
   const localDb = LocalDatabase.getInstance();
   const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
 
   const [warehouse, setWarehouse] = React.useState(null);
-  const [name, setName] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [nip, setNip] = React.useState("");
-  const [regon, setRegon] = React.useState("");
-  const [tel, setTel] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [warehouseDetails, setWarehouseDetails] = React.useState({
+    name: "",
+    nickname: "",
+    nip: "",
+    regon: "",
+    tel: "",
+    email: "",
+  });
 
   React.useEffect(() => {
     warehouseRepository.findById(route.params.warehouseId).then(
       (found) => {
         setWarehouse(found);
-        setName(found.name);
-        setNickname(found.nickname);
+        setWarehouseDetails({
+          name: found.name,
+          nickname: found.nickname,
+          nip: found.nip?.toString(),
+          regon: found.regon?.toString(),
+          tel: found.tel_number,
+          email: found.email,
+        });
       },
       () => {}
     );
   }, []);
 
   function editWarehouse() {
-    if (name && nickname) {
-      warehouse.name = name;
-      warehouse.nickname = nickname;
-      warehouse.nip = nip;
-      warehouse.regon = regon;
-      warehouse.tel_number = tel;
-      warehouse.email = email;
+    if (warehouseDetails.name && warehouseDetails.nickname) {
+      warehouse.name = warehouseDetails.name;
+      warehouse.nickname = warehouseDetails.nickname;
+      warehouse.nip = warehouseDetails.nip;
+      warehouse.regon = warehouseDetails.regon;
+      warehouse.tel_number = warehouseDetails.tel;
+      warehouse.email = warehouseDetails.email;
       warehouseRepository.modify(warehouse);
     }
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <View style={styleItemDetails.containerInputs}>
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse name"
-          mode="outlined"
-          value={name}
-          onChangeText={setName}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse nickname"
-          mode="outlined"
-          value={nickname}
-          onChangeText={setNickname}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse nip"
-          mode="outlined"
-          value={nip}
-          onChangeText={setNip}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse regon"
-          mode="outlined"
-          value={regon}
-          onChangeText={setRegon}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse tel_number"
-          mode="outlined"
-          value={tel}
-          onChangeText={setTel}
-          autoComplete="off"
-        />
-        <TextInput
-          style={styleItemDetails.textInput}
-          label="Warehouse email"
-          mode="outlined"
-          value={email}
-          onChangeText={setEmail}
-          autoComplete="off"
-        />
-      </View>
+      <WarehouseForm
+        warehouseDetails={warehouseDetails}
+        setWarehouseDetails={setWarehouseDetails}
+      />
       <Button style={styleItemDetails.buttonAdd} onPress={editWarehouse} mode="contained">
         Edit warehouse
       </Button>
