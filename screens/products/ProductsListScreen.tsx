@@ -7,8 +7,8 @@ import ProductRepository from "../../database/repositories/ProductRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function ProductsListScreen({ navigation }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const productRepository = new ProductRepository(localDb.dbConnection);
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const productRepository = React.useRef(new ProductRepository(dbConnection.current));
 
   const [productList, setProductList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
@@ -18,10 +18,12 @@ export default function ProductsListScreen({ navigation }: any) {
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
+    async function fetchProducts() {
+      const products = await productRepository.current.getAll();
+      setProductList(products);
+    }
     if (productRepository) {
-      productRepository.getAll().then((found) => {
-        setProductList(found);
-      });
+      fetchProducts();
     }
   }, [isFocused, changeCounter]);
 
@@ -37,6 +39,7 @@ export default function ProductsListScreen({ navigation }: any) {
             height: 140,
             alignSelf: "center",
           }}
+          accessibilityIgnoresInvertColors={true}
           source={require("../../assets/icon.png")}
         />
         <List.Item
@@ -77,7 +80,7 @@ export default function ProductsListScreen({ navigation }: any) {
   }
 
   function deleteProduct(id: number) {
-    productRepository.delete(id);
+    productRepository.current.delete(id);
     setChangeCounter(changeCounter + 1);
   }
 
@@ -107,9 +110,6 @@ export default function ProductsListScreen({ navigation }: any) {
 }
 
 const localStyle = StyleSheet.create({
-  list: {
-    textAlign: "center",
-  },
   fab: {
     position: "absolute",
     bottom: 25,

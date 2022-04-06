@@ -1,50 +1,52 @@
 import * as React from "react";
-import { View, Image } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { ToastAndroid, View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ProductForm from "./ProductForm";
 
 export default function ProductModifyScreen({ route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const productRepository = new ProductRepository(localDb.dbConnection);
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const productRepository = React.useRef(new ProductRepository(dbConnection.current));
 
   const [product, setProduct] = React.useState(null);
-  const [name, setName] = React.useState("");
-  const [price, setPrice] = React.useState("");
+  const [productDetails, setProductDetails] = React.useState({
+    name: "",
+    price: "",
+    image: "",
+    fetched: false,
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [image, setImage] = React.useState(null);
 
   React.useEffect(() => {
-    productRepository.findById(route.params.productId).then(
-      (found) => {
-        setProduct(found);
-        setName(found.name);
-        setPrice(found.price.toString());
-      },
-      () => {}
-    );
-  }, []);
-
-  function editProduct() {
-    if (name && price) {
-      product.name = name;
-      product.price = price;
-      productRepository.modify(product);
+    async function fetchProduct() {
+      try {
+        const product = await productRepository.current.findById(route.params.productId);
+        setProduct(product);
+        setProductDetails({
+          name: product.name,
+          price: product.price.toString(),
+          image: "",
+          fetched: true,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchProduct();
+  }, [route.params.productId]);
+
+  function editProduct(data) {
+    product.name = data.name;
+    product.price = data.price;
+    productRepository.current.modify(product);
+    (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <ProductForm
-        productName={name}
-        setProductName={setName}
-        productPrice={price}
-        setProductPrice={setPrice}
-      />
-      <Button style={styleItemDetails.buttonAdd} onPress={editProduct} mode="contained">
-        Edit product
-      </Button>
+      <ProductForm productDetails={productDetails} submitProduct={editProduct} />
     </View>
   );
 }
