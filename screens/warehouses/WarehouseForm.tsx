@@ -146,7 +146,12 @@ export default function WarehouseForm({
           name="email"
         />
       </View>
-      <Button style={styleForm.buttonAdd} onPress={handleSubmit(onSubmit)} mode="contained">
+      <Button
+        style={styleForm.buttonAdd}
+        onPress={handleSubmit(onSubmit)}
+        mode="contained"
+        disabled={!warehouseDetails.fetched} //TODO change to separate var/function
+      >
         {submitText}
       </Button>
     </ScrollView>

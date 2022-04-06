@@ -7,8 +7,8 @@ import WarehouseRepository from "../../database/repositories/WarehouseRepository
 import ModalConfirmation from "../../components/ModalConfirmation";
 
 export default function WarehousesListScreen({ navigation }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
 
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
@@ -18,12 +18,14 @@ export default function WarehousesListScreen({ navigation }: any) {
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (warehouseRepository) {
-      warehouseRepository.getAll().then((found) => {
-        setWarehouseList(found);
-      });
+    async function fetchWarehouseList() {
+      const warehouseList = await warehouseRepository.current.getAll();
+      setWarehouseList(warehouseList);
     }
-  }, [isFocused, changeCounter]);
+    if (warehouseRepository) {
+      fetchWarehouseList();
+    }
+  }, []);
 
   function renderItem({ item }) {
     return (
@@ -77,7 +79,7 @@ export default function WarehousesListScreen({ navigation }: any) {
   }
 
   function deleteWarehouse(warehouseId: number) {
-    warehouseRepository.delete(warehouseId);
+    warehouseRepository.current.delete(warehouseId);
     setChangeCounter(changeCounter + 1);
   }
 
@@ -107,9 +109,6 @@ export default function WarehousesListScreen({ navigation }: any) {
 }
 
 const localStyle = StyleSheet.create({
-  list: {
-    textAlign: "center",
-  },
   fab: {
     position: "absolute",
     bottom: 25,

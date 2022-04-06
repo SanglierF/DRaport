@@ -5,9 +5,9 @@ import WarehouseRepository from "../../database/repositories/WarehouseRepository
 import styleItemDetails from "../../styles/styleItemDetails";
 import WarehouseForm from "./WarehouseForm";
 
-export default function WarehouseModifyScreen({ navigation, route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
+export default function WarehouseModifyScreen({ route }: any) {
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
 
   const [warehouse, setWarehouse] = React.useState(null);
   const [warehouseDetails, setWarehouseDetails] = React.useState({
@@ -17,24 +17,29 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
     regon: "",
     tel: "",
     email: "",
+    fetched: false,
   });
 
   React.useEffect(() => {
-    warehouseRepository.findById(route.params.warehouseId).then(
-      (found) => {
-        setWarehouse(found);
+    async function fetchWarehouse() {
+      try {
+        const warehouse = await warehouseRepository.current.findById(route.params.warehouseId);
+        setWarehouse(warehouse);
         setWarehouseDetails({
-          name: found.name,
-          nickname: found.nickname,
-          nip: found.nip?.toString(),
-          regon: found.regon?.toString(),
-          tel: found.tel_number,
-          email: found.email,
+          name: warehouse.name,
+          nickname: warehouse.nickname,
+          nip: warehouse.nip?.toString(),
+          regon: warehouse.regon?.toString(),
+          tel: warehouse.tel_number,
+          email: warehouse.email,
+          fetched: true,
         });
-      },
-      () => {}
-    );
-  }, []);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchWarehouse();
+  }, [route.params.warehouseId]);
 
   function editWarehouse(data) {
     if (data.name && data.nickname) {
@@ -44,7 +49,7 @@ export default function WarehouseModifyScreen({ navigation, route }: any) {
       warehouse.regon = data.regon;
       warehouse.tel_number = data.tel;
       warehouse.email = data.email;
-      warehouseRepository.modify(warehouse);
+      warehouseRepository.current.modify(warehouse);
       (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
     }
   }
