@@ -1,12 +1,11 @@
 import * as React from "react";
-import { View } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { ToastAndroid, View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import WarehouseForm from "./WarehouseForm";
 
-export default function WarehouseModifyScreen({ route }: any) {
+export default function WarehouseModifyScreen({ navigation, route }: any) {
   const localDb = LocalDatabase.getInstance();
   const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
 
@@ -37,27 +36,22 @@ export default function WarehouseModifyScreen({ route }: any) {
     );
   }, []);
 
-  function editWarehouse() {
-    if (warehouseDetails.name && warehouseDetails.nickname) {
-      warehouse.name = warehouseDetails.name;
-      warehouse.nickname = warehouseDetails.nickname;
-      warehouse.nip = warehouseDetails.nip;
-      warehouse.regon = warehouseDetails.regon;
-      warehouse.tel_number = warehouseDetails.tel;
-      warehouse.email = warehouseDetails.email;
+  function editWarehouse(data) {
+    if (data.name && data.nickname) {
+      warehouse.name = data.name;
+      warehouse.nickname = data.nickname;
+      warehouse.nip = data.nip;
+      warehouse.regon = data.regon;
+      warehouse.tel_number = data.tel;
+      warehouse.email = data.email;
       warehouseRepository.modify(warehouse);
+      (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
     }
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <WarehouseForm
-        warehouseDetails={warehouseDetails}
-        setWarehouseDetails={setWarehouseDetails}
-      />
-      <Button style={styleItemDetails.buttonAdd} onPress={editWarehouse} mode="contained">
-        Edit warehouse
-      </Button>
+      <WarehouseForm warehouseDetails={warehouseDetails} submitWarehouse={editWarehouse} />
     </View>
   );
 }
