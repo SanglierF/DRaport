@@ -25,7 +25,7 @@ export default function WarehousesListScreen({ navigation }: any) {
     if (warehouseRepository) {
       fetchWarehouseList();
     }
-  }, []);
+  }, [changeCounter, isFocused]);
 
   function renderItem({ item }) {
     return (

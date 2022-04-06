@@ -42,16 +42,14 @@ export default function WarehouseModifyScreen({ route }: any) {
   }, [route.params.warehouseId]);
 
   function editWarehouse(data) {
-    if (data.name && data.nickname) {
-      warehouse.name = data.name;
-      warehouse.nickname = data.nickname;
-      warehouse.nip = data.nip;
-      warehouse.regon = data.regon;
-      warehouse.tel_number = data.tel;
-      warehouse.email = data.email;
-      warehouseRepository.current.modify(warehouse);
-      (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
-    }
+    warehouse.name = data.name;
+    warehouse.nickname = data.nickname;
+    warehouse.nip = data.nip;
+    warehouse.regon = data.regon;
+    warehouse.tel_number = data.tel;
+    warehouse.email = data.email;
+    warehouseRepository.current.modify(warehouse);
+    (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
   }
 
   return (
