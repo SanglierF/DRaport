@@ -15,7 +15,7 @@ export class Product {
   @Column({ nullable: true })
   image: string;
 
-  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.product)
+  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.product, { cascade: true })
   orderedProducts: OrderedProduct[];
 
   @Column()
