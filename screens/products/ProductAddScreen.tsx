@@ -3,7 +3,7 @@ import { View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
-import { priceValidation } from "../../components/Validators";
+import { priceValidation } from "../../utils/validators";
 import ProductForm from "./ProductForm";
 
 export default function ProductAddScreen({ navigation }: any) {
