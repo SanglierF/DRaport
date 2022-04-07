@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { View, Image, Text } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import styleForm from "../../styles/styleForm";
+import { priceValidation } from "../../utils/validators";
 
 export default function ProductForm({ productDetails, submitProduct, submitText = "Submit" }) {
   const {
@@ -55,7 +56,7 @@ export default function ProductForm({ productDetails, submitProduct, submitText 
         {errors.name ? <Text style={{ color: "red" }}>Required</Text> : null}
         <Controller
           control={control}
-          rules={{ required: false, maxLength: 9 }}
+          rules={{ required: false, maxLength: 20, validate: priceValidation }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}

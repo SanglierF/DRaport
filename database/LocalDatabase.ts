@@ -130,7 +130,7 @@ export default class LocalDatabase {
 async function DbConnection() {
   return await createConnection({
     name: "default",
-    database: "develop2",
+    database: "dev",
     driver: require("expo-sqlite"),
     entities: [Client, Product, Warehouse, Workday, Visit, Order, OrderedProduct],
     synchronize: true,

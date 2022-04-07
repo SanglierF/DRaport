@@ -3,7 +3,6 @@ import { View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
-import { priceValidation } from "../../utils/validators";
 import ProductForm from "./ProductForm";
 
 export default function ProductAddScreen({ navigation }: any) {
@@ -19,19 +18,15 @@ export default function ProductAddScreen({ navigation }: any) {
   const [image, setImage] = React.useState(null);
 
   function addProduct(data) {
-    let validFields = false;
     let priceConv = 0;
     try {
-      priceConv = parseFloat(data.price);
-      validFields = priceValidation(priceConv);
+      priceConv = parseFloat(data.price.replace(/,/g, "."));
     } catch (exception) {
       alert("Invalid price");
     }
-    if (validFields) {
-      const newProduct = productRepository.create(data.name, priceConv);
-      productRepository.save(newProduct);
-      navigation.goBack();
-    }
+    const newProduct = productRepository.create(data.name, priceConv);
+    productRepository.save(newProduct);
+    navigation.goBack();
   }
 
   return (

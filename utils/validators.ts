@@ -4,9 +4,14 @@ export function nameValidation(name: string): boolean {
   return validName;
 }
 
-export function priceValidation(price: number): boolean {
-  let validPrice = true;
-  if (isNaN(price)) validPrice = false;
-  if (!((price * 100) % 1 === 0)) validPrice = false;
-  return validPrice;
+export function priceValidation(price: string): boolean {
+  try {
+    let priceConv = parseFloat(price.replace(/,/g, "."));
+    if (isNaN(priceConv)) return false;
+    if (!((priceConv * 100) % 1 === 0)) return false;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+  return true;
 }
