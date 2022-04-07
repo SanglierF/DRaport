@@ -1,18 +1,12 @@
 import * as React from "react";
-import { Text, View } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
-import ClientRepository from "../../database/repositories/ClientRepository";
-import styleItemDetails from "../../styles/styleItemDetails";
-import { nameValidation } from "../../components/Validators";
 import ClientForm from "./ClientForm";
 
+const localDb = LocalDatabase.getInstance();
+
 export default function ClientAddScreen({ navigation }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const clientRepository = new ClientRepository(localDb.dbConnection);
-
-
-  const [clientDetails, setClientDetails] = React.useState({
+  const [clientDetails] = React.useState({
     name: "",
     nickname: "",
     nip: "",
@@ -22,42 +16,35 @@ export default function ClientAddScreen({ navigation }: any) {
     zip: "",
     street: "",
     tel: "",
+    fetched: true,
   });
 
-  function addClient() {
-    // const validFields = nameValidation(name) && nameValidation(nickname) ? true : false;
-
-    if (true) {
-      //validFields
-      const newClient = clientRepository.create({
-        nickname: clientDetails.nickname,
-        name: clientDetails.name,
-        nip: clientDetails.nip,
-        regon: clientDetails.regon,
-        voivodeship: clientDetails.voivodeship,
-        city: clientDetails.city,
-        zip_code: clientDetails.zip,
-        street: clientDetails.street,
-        tel_number: clientDetails.tel,
-      });
-      clientRepository.save(newClient);
-      console.log(newClient);
-      navigation.goBack();
-    }
+  function addClient(data) {
+    const newClient = localDb.clientRepository.create({
+      nickname: data.nickname,
+      name: data.name,
+      nip: data.nip,
+      regon: data.regon,
+      voivodeship: data.voivodeship,
+      city: data.city,
+      zip_code: data.zip,
+      street: data.street,
+      tel_number: data.tel,
+    });
+    localDb.clientRepository.save(newClient);
+    console.log(newClient);
+    navigation.goBack();
   }
 
-
-
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <ClientForm
         clientDetails={clientDetails}
-        setClientDetails={setClientDetails}
+        submitAction={addClient}
         disableFillData={false}
+        disableSubmit={false}
+        submitText={"Add client"}
       />
-      <Button style={styleItemDetails.buttonAdd} onPress={addClient} mode="contained">
-        Add client
-      </Button>
     </View>
   );
 }
