@@ -93,7 +93,7 @@ export default function ClientsListScreen({ navigation }: any) {
         extraData={isFocused}
         renderItem={renderItem}
         data={clientList}
-        keyExtractor={(item) => item.clientId}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
       />
       <FAB
