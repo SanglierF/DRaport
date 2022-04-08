@@ -219,7 +219,7 @@ export default function ClientForm({
         name="tel"
       />
       <View style={styleForm.containerInputs}>
-        {loadingStatus ? <Text>&aposLoading data from GUS...&apos</Text> : null}
+        {loadingStatus ? <Text>Loading data from GUS...</Text> : null}
       </View>
       {disableFillData ? null : (
         <Button style={styleForm.buttonAdd} onPress={fillData} mode="contained">
