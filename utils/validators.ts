@@ -18,3 +18,15 @@ export function priceValidation(price: string): boolean {
   }
   return true;
 }
+
+export function isNIP(snumber: string): boolean {
+  if (snumber.includes("'") || snumber.includes(".") || snumber.includes("-")) return false;
+  let result = false;
+  try {
+    const number = Number(snumber);
+    if (!isNaN(number) && Number.isInteger(number)) result = true;
+  } catch (error) {
+    console.log(error);
+  }
+  return result;
+}

@@ -1,16 +1,14 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-import { DOMParser } from "xmldom";
 let gusKey: string = null;
 
-export default function useGUSRefetch(setLoadingData: Function) {
+export default function useGUSRefetch(nip: string, setLoadingData: Function) {
   async function axi() {
-    //pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_
     return await axios({
       method: "post",
       url: "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc/ajaxEndpoint/Zaloguj",
       data: {
-        pKluczUzytkownika: "_S7$@3V^4)9T_DKZz*T_",
+        pKluczUzytkownika: gusKey,
       },
     })
       .then((r) => r.data.d)
@@ -24,7 +22,7 @@ export default function useGUSRefetch(setLoadingData: Function) {
           data: {
             jestWojPowGmnMiej: true,
             pParametryWyszukiwania: {
-              Nip: 5252344078,
+              Nip: nip, //5252344078
               PrzewazajacePKD: false,
             },
           },
@@ -39,10 +37,8 @@ export default function useGUSRefetch(setLoadingData: Function) {
     const script = docEnd[2];
     const charsString = script.split("eval(String.fromCharCode(")[1].split(")")[0];
     const charArray = charsString.split(",").map((charC) => Number(charC));
-    let pKluczUzytkownika = "";
-    console.log(String.fromCharCode(...charArray));
-  ]
-    console.log(pKluczUzytkownika);
+    const pKluczUzytkownika = String.fromCharCode(...charArray).slice(19, -1);
+    gusKey = pKluczUzytkownika;
   }
 
   const { refetch } = useQuery("gusinfo", async () => axi(), {
@@ -54,17 +50,18 @@ export default function useGUSRefetch(setLoadingData: Function) {
       console.log(error);
     },
     onSettled: () => {
-      console.log("xdd");
+      console.log("Finished");
     },
   });
 
   async function fetchGUS() {
+    if (nip.length < 10) return null;
     if (!gusKey) {
       await getGusKey();
     }
-    // const results = await refetch();
+    const results = await refetch();
     setLoadingData(false);
-    return "hrh";
+    return results;
   }
 
   return fetchGUS;

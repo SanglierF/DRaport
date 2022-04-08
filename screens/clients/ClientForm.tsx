@@ -3,6 +3,7 @@ import { Text, View, ScrollView } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import styleForm from "../../styles/styleForm";
+import { isNIP } from "../../utils/validators";
 import ClientType from "./ClientType";
 import useGUSRefetch from "./apiGUS";
 
@@ -24,6 +25,7 @@ export default function ClientForm({
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -39,9 +41,11 @@ export default function ClientForm({
       tel: "",
     },
   });
+  const [nip, setNip] = React.useState("");
+
   const onSubmit = (data) => submitAction(data);
   const [loadingStatus, setLoadingStatus] = React.useState(false); //TODO change showing from text to some floating thingy
-  const fetchGUSData = useGUSRefetch(setLoadingStatus);
+  const fetchGUSData = useGUSRefetch(nip, setLoadingStatus);
 
   React.useEffect(() => {
     setValue("nickname", clientDetails.nickname);
@@ -55,6 +59,7 @@ export default function ClientForm({
   }, [setValue, clientDetails]);
 
   function fillData() {
+    setNip(getValues("nip"));
     setLoadingStatus(true);
     const response = fetchGUSData();
     console.log(response);
@@ -99,7 +104,7 @@ export default function ClientForm({
       />
       <Controller
         control={control}
-        rules={{ required: false, maxLength: 9 }}
+        rules={{ required: false, maxLength: 10, validate: isNIP }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={styleForm.textInput}
