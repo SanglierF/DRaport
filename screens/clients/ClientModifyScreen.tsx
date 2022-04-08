@@ -1,15 +1,12 @@
 import * as React from "react";
-import { View } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { ToastAndroid, View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
-import ClientRepository from "../../database/repositories/ClientRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ClientForm from "./ClientForm";
 
-export default function ClientModifyScreen({ route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const clientRepository = new ClientRepository(localDb.dbConnection);
+const localDb = LocalDatabase.getInstance();
 
+export default function ClientModifyScreen({ route }: any) {
   const [client, setClient] = React.useState(null);
   const [clientDetails, setClientDetails] = React.useState({
     name: "",
@@ -22,52 +19,56 @@ export default function ClientModifyScreen({ route }: any) {
     street: "",
     tel: "",
   });
+  const [disableSubmit, setDisableSubmit] = React.useState(true);
 
   React.useEffect(() => {
-    clientRepository.findById(route.params.clientId).then(
-      (found) => {
-        setClient(found);
-        console.log(found);
+    async function fetchClient() {
+      try {
+        const client = await localDb.clientRepository.findById(route.params.clientId);
+        setClient(client);
+        console.log(client);
         setClientDetails({
-          nickname: found.nickname,
-          name: found.name,
-          nip: found.nip?.toString(),
-          regon: found.regon?.toString(),
-          voivodeship: found.voivodeship,
-          city: found.city,
-          zip: found.zip_code,
-          street: found.street,
-          tel: found.tel_number,
+          nickname: client.nickname,
+          name: client.name,
+          nip: client.nip?.toString(),
+          regon: client.regon?.toString(),
+          voivodeship: client.voivodeship,
+          city: client.city,
+          zip: client.zip_code,
+          street: client.street,
+          tel: client.tel_number,
         });
-      },
-      () => {}
-    );
-  }, []);
-
-  function editClient() {
-    if (clientDetails.name && clientDetails.nickname) {
-      client.name = clientDetails.name;
-      client.nickname = clientDetails.nickname;
-      client.nip = clientDetails.nip;
-      client.regon = clientDetails.regon;
-      client.voivodeship = clientDetails.voivodeship;
-      client.city = clientDetails.city;
-      client.zip_code = clientDetails.zip;
-      client.street = clientDetails.street;
-      client.tel_number = clientDetails.tel;
-      clientRepository.modify(client);
+      } catch (error) {
+        console.log(error);
+      }
+      setDisableSubmit(false);
     }
+    fetchClient();
+  }, [route.params.clientId]);
+
+  function editClient(data) {
+    client.name = data.name;
+    client.nickname = data.nickname;
+    client.nip = data.nip;
+    client.regon = data.regon;
+    client.voivodeship = data.voivodeship;
+    client.city = data.city;
+    client.zip_code = data.zip;
+    client.street = data.street;
+    client.tel_number = data.tel;
+    localDb.clientRepository.modify(client);
+    (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
       <ClientForm
         clientDetails={clientDetails}
-        setClientDetails={setClientDetails}
+        submitAction={editClient}
+        disableSubmit={disableSubmit}
+        disableFillData={false}
+        submitText={"Update client"}
       />
-      <Button style={styleItemDetails.buttonAdd} onPress={editClient} mode="contained">
-        Edit client
-      </Button>
     </View>
   );
 }

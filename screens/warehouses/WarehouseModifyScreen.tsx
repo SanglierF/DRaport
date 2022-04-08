@@ -1,14 +1,13 @@
 import * as React from "react";
-import { View } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { ToastAndroid, View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import WarehouseForm from "./WarehouseForm";
 
 export default function WarehouseModifyScreen({ route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const warehouseRepository = new WarehouseRepository(localDb.dbConnection);
+  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
+  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
 
   const [warehouse, setWarehouse] = React.useState(null);
   const [warehouseDetails, setWarehouseDetails] = React.useState({
@@ -18,46 +17,44 @@ export default function WarehouseModifyScreen({ route }: any) {
     regon: "",
     tel: "",
     email: "",
+    fetched: false,
   });
 
   React.useEffect(() => {
-    warehouseRepository.findById(route.params.warehouseId).then(
-      (found) => {
-        setWarehouse(found);
+    async function fetchWarehouse() {
+      try {
+        const warehouse = await warehouseRepository.current.findById(route.params.warehouseId);
+        setWarehouse(warehouse);
         setWarehouseDetails({
-          name: found.name,
-          nickname: found.nickname,
-          nip: found.nip?.toString(),
-          regon: found.regon?.toString(),
-          tel: found.tel_number,
-          email: found.email,
+          name: warehouse.name,
+          nickname: warehouse.nickname,
+          nip: warehouse.nip?.toString(),
+          regon: warehouse.regon?.toString(),
+          tel: warehouse.tel_number,
+          email: warehouse.email,
+          fetched: true,
         });
-      },
-      () => {}
-    );
-  }, []);
-
-  function editWarehouse() {
-    if (warehouseDetails.name && warehouseDetails.nickname) {
-      warehouse.name = warehouseDetails.name;
-      warehouse.nickname = warehouseDetails.nickname;
-      warehouse.nip = warehouseDetails.nip;
-      warehouse.regon = warehouseDetails.regon;
-      warehouse.tel_number = warehouseDetails.tel;
-      warehouse.email = warehouseDetails.email;
-      warehouseRepository.modify(warehouse);
+      } catch (e) {
+        console.log(e);
+      }
     }
+    fetchWarehouse();
+  }, [route.params.warehouseId]);
+
+  function editWarehouse(data) {
+    warehouse.name = data.name;
+    warehouse.nickname = data.nickname;
+    warehouse.nip = data.nip;
+    warehouse.regon = data.regon;
+    warehouse.tel_number = data.tel;
+    warehouse.email = data.email;
+    warehouseRepository.current.modify(warehouse);
+    (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <WarehouseForm
-        warehouseDetails={warehouseDetails}
-        setWarehouseDetails={setWarehouseDetails}
-      />
-      <Button style={styleItemDetails.buttonAdd} onPress={editWarehouse} mode="contained">
-        Edit warehouse
-      </Button>
+      <WarehouseForm warehouseDetails={warehouseDetails} submitWarehouse={editWarehouse} />
     </View>
   );
 }

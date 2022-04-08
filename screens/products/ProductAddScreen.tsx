@@ -1,49 +1,37 @@
 import * as React from "react";
-import { View, Image } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
 import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
-import { nameValidation, priceValidation } from "../../components/Validators";
 import ProductForm from "./ProductForm";
 
 export default function ProductAddScreen({ navigation }: any) {
   const localDb = LocalDatabase.getInstance();
   const productRepository = new ProductRepository(localDb.dbConnection);
 
-  const [name, setName] = React.useState("");
-  const [price, setPrice] = React.useState("");
+  const [productDetails] = React.useState({
+    name: "",
+    price: "",
+    image: "",
+    fetched: true,
+  });
   const [image, setImage] = React.useState(null);
 
-  function addProduct() {
-    let validFields = false;
+  function addProduct(data) {
     let priceConv = 0;
     try {
-      priceConv = parseFloat(price);
-      validFields = nameValidation(name) && priceValidation(priceConv) ? true : false;
+      priceConv = parseFloat(data.price.replace(/,/g, "."));
     } catch (exception) {
       alert("Invalid price");
     }
-    if (validFields) {
-      const newProduct = productRepository.create(name, priceConv);
-      productRepository.save(newProduct).then((saved) => {
-        console.log(saved);
-      });
-      navigation.goBack();
-    }
+    const newProduct = productRepository.create(data.name, priceConv);
+    productRepository.save(newProduct);
+    navigation.goBack();
   }
 
   return (
     <View style={styleItemDetails.containerAdd}>
-      <ProductForm
-        productName={name}
-        setProductName={setName}
-        productPrice={price}
-        setProductPrice={setPrice}
-      />
-      <Button style={styleItemDetails.buttonAdd} onPress={addProduct} mode="contained">
-        Add product
-      </Button>
+      <ProductForm productDetails={productDetails} submitProduct={addProduct} />
     </View>
   );
 }

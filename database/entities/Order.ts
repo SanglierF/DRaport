@@ -11,10 +11,13 @@ export class Order {
   @ManyToOne(() => Visit, (visit) => visit.orders, { nullable: false, onDelete: "CASCADE" })
   visit: Visit;
 
-  @ManyToOne(() => Warehouse, (warehouse) => warehouse.orders, { nullable: true, onDelete: "CASCADE" })
+  @ManyToOne(() => Warehouse, (warehouse) => warehouse.orders, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
   warehouse: Warehouse;
 
-  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.order, {cascade: true})
+  @OneToMany(() => OrderedProduct, (orderedProduct) => orderedProduct.order, { cascade: true })
   orderedProducts: OrderedProduct[];
 
   @Column()

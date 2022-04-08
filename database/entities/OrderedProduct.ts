@@ -7,10 +7,16 @@ export class OrderedProduct {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(() => Order, (order) => order.orderedProducts, { nullable: false, onDelete: "CASCADE"})
+  @ManyToOne(() => Order, (order) => order.orderedProducts, {
+    nullable: false,
+    onDelete: "CASCADE",
+  })
   order: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderedProducts, { nullable: false })
+  @ManyToOne(() => Product, (product) => product.orderedProducts, {
+    nullable: false,
+    onDelete: "CASCADE",
+  })
   product: Product;
 
   @Column({ nullable: false })
