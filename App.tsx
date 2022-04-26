@@ -5,6 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import HomeScreen from "./screens/HomeScreen";
 import Clients from "./screens/clients/Clients";
 import Products from "./screens/products/Products";
@@ -46,48 +47,61 @@ export default function App() {
   }, [isAppReady]);
 
   return isAppReady ? (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <Drawer.Navigator initialRouteName="Home" screenOptions={{ headerTitleAlign: "center" }}>
-          <Drawer.Screen name="Home" component={HomeScreen} options={{ title: "Main screen" }} />
-          <Drawer.Screen
-            name="Clients"
-            component={Clients}
-            options={{
-              title: "Clients",
-              headerShown: false,
-              unmountOnBlur: true,
-            }}
-          />
-          <Drawer.Screen
-            name="Products"
-            component={Products}
-            options={{
-              title: "Products",
-              headerShown: false,
-              unmountOnBlur: true,
-            }}
-          />
-          <Drawer.Screen
-            name="Warehouses"
-            component={Warehouses}
-            options={{
-              title: "Warehouses",
-              headerShown: false,
-              unmountOnBlur: true,
-            }}
-          />
-          <Drawer.Screen
-            name="Workdays"
-            component={Workdays}
-            options={{
-              title: "Workdays",
-              headerShown: false,
-              unmountOnBlur: true,
-            }}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </QueryClientProvider>
+    <PaperProvider theme={defaultTheme}>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Home" screenOptions={{ headerTitleAlign: "center" }}>
+            <Drawer.Screen name="Home" component={HomeScreen} options={{ title: "DRaport" }} />
+            <Drawer.Screen
+              name="Clients"
+              component={Clients}
+              options={{
+                title: "Clients",
+                headerShown: false,
+                unmountOnBlur: true,
+              }}
+            />
+            <Drawer.Screen
+              name="Products"
+              component={Products}
+              options={{
+                title: "Products",
+                headerShown: false,
+                unmountOnBlur: true,
+              }}
+            />
+            <Drawer.Screen
+              name="Warehouses"
+              component={Warehouses}
+              options={{
+                title: "Warehouses",
+                headerShown: false,
+                unmountOnBlur: true,
+              }}
+            />
+            <Drawer.Screen
+              name="Workdays"
+              component={Workdays}
+              options={{
+                title: "Workdays",
+                headerShown: false,
+                unmountOnBlur: true,
+              }}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </QueryClientProvider>
+    </PaperProvider>
   ) : null;
 }
+
+const defaultTheme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "#3498db",
+    accent: "#f1c40f",
+  },
+  dark: true,
+};
