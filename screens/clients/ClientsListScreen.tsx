@@ -3,13 +3,11 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
-import ClientRepository from "../../database/repositories/ClientRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
-export default function ClientsListScreen({ navigation }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const clientRepository = new ClientRepository(localDb.dbConnection);
+const localDb = LocalDatabase.getInstance();
 
+export default function ClientsListScreen({ navigation }: any) {
   const [clientList, setClientList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -18,11 +16,15 @@ export default function ClientsListScreen({ navigation }: any) {
   let isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (clientRepository) {
-      clientRepository.getAll().then((found) => {
+    async function fetchClients() {
+      try {
+        const found = await localDb.clientRepository.getAll();
         setClientList(found);
-      });
+      } catch (error) {
+        console.log(error);
+      }
     }
+    fetchClients();
   }, [isFocused, changeCounter]);
 
   function renderItem({ item }) {
@@ -83,7 +85,7 @@ export default function ClientsListScreen({ navigation }: any) {
   }
 
   function deleteClient(clientId: number) {
-    clientRepository.delete(clientId);
+    localDb.clientRepository.delete(clientId);
     setChangeCounter(changeCounter + 1);
   }
 
@@ -113,9 +115,6 @@ export default function ClientsListScreen({ navigation }: any) {
 }
 
 const localStyle = StyleSheet.create({
-  list: {
-    textAlign: "center",
-  },
   fab: {
     position: "absolute",
     bottom: 25,
