@@ -22,7 +22,7 @@ export default function useGUSRefetch(nip: string, setLoadingData: Function) {
           data: {
             jestWojPowGmnMiej: true,
             pParametryWyszukiwania: {
-              Nip: nip, //5252344078
+              Nip: nip,
               PrzewazajacePKD: false,
             },
           },
@@ -39,6 +39,7 @@ export default function useGUSRefetch(nip: string, setLoadingData: Function) {
     const charArray = charsString.split(",").map((charC) => Number(charC));
     const pKluczUzytkownika = String.fromCharCode(...charArray).slice(19, -1);
     gusKey = pKluczUzytkownika;
+    return true;
   }
 
   const { refetch } = useQuery("gusinfo", async () => axi(), {
@@ -55,9 +56,13 @@ export default function useGUSRefetch(nip: string, setLoadingData: Function) {
   });
 
   async function fetchGUS() {
-    if (nip.length < 10) return null;
+    if (nip.length < 10) {
+      setLoadingData(false);
+      return null;
+    }
     if (!gusKey) {
-      await getGusKey();
+      const xd = await getGusKey();
+      console.log(gusKey);
     }
     const results = await refetch();
     setLoadingData(false);
