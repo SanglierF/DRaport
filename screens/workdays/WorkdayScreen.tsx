@@ -48,7 +48,7 @@ export default function WorkdayScreen({ navigation, route }: any) {
       <View>
         <List.Accordion
           title={item.client.nickname}
-          left={(props) => <List.Icon {...props} icon="basket" />}
+          left={(props) => <List.Icon {...props} icon="view-list" />}
         >
           <List.Item
             title={() => (
