@@ -29,7 +29,7 @@ export default function ClientsListScreen({ navigation }: any) {
     return (
       <List.Accordion
         title={item.nickname}
-        left={(props) => <List.Icon {...props} icon="basket" />}
+        left={(props) => <List.Icon {...props} icon="account" />}
       >
         {item.name ? <List.Item title={`Name: ${item.name}`} right={() => <View />} /> : null}
         {item.nip ? <List.Item title={`Nip: ${item.nip}`} right={() => <View />} /> : null}
