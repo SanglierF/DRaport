@@ -30,9 +30,10 @@ const styleForm = StyleSheet.create({
     marginBottom: 10,
   },
   buttonAdd: {
-    width: "50%",
+    width: "80%",
     alignSelf: "center",
     borderRadius: 20,
+    margin: 5,
   },
 });
 

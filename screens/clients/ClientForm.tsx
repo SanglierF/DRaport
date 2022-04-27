@@ -45,7 +45,7 @@ export default function ClientForm({
 
   const onSubmit = (data) => submitAction(data);
   const [loadingStatus, setLoadingStatus] = React.useState(false); //TODO change showing from text to some floating thingy
-  const fetchGUSData = useGUSRefetch(nip, setLoadingStatus);
+  const fetchGUSData = useGUSRefetch(nip, setLoadingStatus); //TODO refresh on change nip otherwise button has to be pressed twice
 
   React.useEffect(() => {
     setValue("nickname", clientDetails.nickname);
