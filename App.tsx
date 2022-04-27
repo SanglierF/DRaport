@@ -51,7 +51,11 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
           <Drawer.Navigator initialRouteName="Home" screenOptions={{ headerTitleAlign: "center" }}>
-            <Drawer.Screen name="Home" component={HomeScreen} options={{ title: "DRaport" }} />
+            <Drawer.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ title: "DRaport", drawerLabel: "Home screen" }}
+            />
             <Drawer.Screen
               name="Clients"
               component={Clients}
