@@ -16,7 +16,6 @@ export default function ClientAddScreen({ navigation }: any) {
     zip: "",
     street: "",
     tel: "",
-    fetched: true,
   });
 
   function addClient(data) {
