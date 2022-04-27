@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 const styleForm = StyleSheet.create({
   containerForm: {
     flex: 1,
-    justifyContent: "space-around",
     flexDirection: "column",
   },
   image: {
@@ -15,15 +14,19 @@ const styleForm = StyleSheet.create({
   },
   containerInputs: {
     flex: 1,
-    flexDirection: "column",
-    width: "70%",
+    flexDirection: "row",
+    width: "80%",
     justifyContent: "center",
     alignSelf: "center",
+    flexWrap: "wrap",
   },
   textLabel: {
-    margin: "auto",
+    width: "25%",
+    alignSelf: "center",
+    marginRight: "5%",
   },
   textInput: {
+    width: "70%",
     marginBottom: 10,
   },
   buttonAdd: {
