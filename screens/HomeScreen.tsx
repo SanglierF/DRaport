@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, StyleSheet, Pressable, Text, Image } from "react-native";
-import { Divider, Surface } from "react-native-paper";
+import { Surface } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../database/LocalDatabase";
 import WorkdayRepository from "../database/repositories/WorkdayRepository";
@@ -54,7 +54,13 @@ export default function HomeScreen({ navigation }: any) {
   return (
     <View style={localStyle.container}>
       <View style={localStyle.welcomeContainer}>
-        <Text style={localStyle.welcomeText}>Welcome!</Text>
+        <Text style={localStyle.welcomeText}>
+          Welcome! {"\n"}
+          {"\n"}
+          Today is:
+          {"\n"}
+          {new Date().toLocaleDateString()}
+        </Text>
       </View>
       <View style={localStyle.smallTilesContainer}>
         <TouchableOpacity
