@@ -1,14 +1,12 @@
 import * as React from "react";
 import { ToastAndroid, View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
-import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ProductForm from "./ProductForm";
 
-export default function ProductModifyScreen({ route }: any) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-  const productRepository = React.useRef(new ProductRepository(dbConnection.current));
+const localDb = LocalDatabase.getInstance();
 
+export default function ProductModifyScreen({ route }: any) {
   const [product, setProduct] = React.useState(null);
   const [productDetails, setProductDetails] = React.useState({
     name: "",
@@ -22,7 +20,7 @@ export default function ProductModifyScreen({ route }: any) {
   React.useEffect(() => {
     async function fetchProduct() {
       try {
-        const product = await productRepository.current.findById(route.params.productId);
+        const product = await localDb.productRepository.findById(route.params.productId);
         setProduct(product);
         setProductDetails({
           name: product.name,
@@ -40,7 +38,7 @@ export default function ProductModifyScreen({ route }: any) {
   function editProduct(data) {
     product.name = data.name;
     product.price = data.price;
-    productRepository.current.modify(product);
+    localDb.productRepository.modify(product);
     (() => ToastAndroid.show("Succesfuly updated", ToastAndroid.SHORT))();
   }
 
