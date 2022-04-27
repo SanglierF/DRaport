@@ -29,10 +29,7 @@ export default function WarehousesListScreen({ navigation }: any) {
 
   function renderItem({ item }) {
     return (
-      <List.Accordion
-        title={item.nickname}
-        left={(props) => <List.Icon {...props} icon="basket" />}
-      >
+      <List.Accordion title={item.nickname} left={(props) => <List.Icon {...props} icon="truck" />}>
         {item.name ? <List.Item title={`Full name ${item.name}`} right={() => <View />} /> : null}
         {item.nip ? <List.Item title={`Nip: ${item.nip}`} right={() => <View />} /> : null}
 
