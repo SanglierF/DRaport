@@ -6,11 +6,9 @@ const styleForm = StyleSheet.create({
     flexDirection: "column",
   },
   image: {
-    margin: "auto",
-    flex: 0,
-    alignSelf: "center",
-    height: "30%",
     width: "30%",
+    height: 150,
+    alignSelf: "center",
   },
   containerInputs: {
     flex: 1,

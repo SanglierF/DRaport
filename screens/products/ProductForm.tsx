@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View, Image, Text } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { Button, TextInput } from "react-native-paper";
 import styleForm from "../../styles/styleForm";
 import { priceValidation } from "../../utils/validators";
@@ -29,20 +30,21 @@ export default function ProductForm({ productDetails, submitProduct, submitText 
 
   //TODO add custom validator to price
   return (
-    <View style={styleForm.containerForm}>
-      <View>
-        <Image
-          style={styleForm.image}
-          source={require("../../assets/icon.png")}
-          accessibilityIgnoresInvertColors={true}
-        />
+    <ScrollView style={styleForm.containerForm}>
+      <Image
+        style={styleForm.image}
+        source={require("../../assets/icon.png")}
+        accessibilityIgnoresInvertColors={true}
+      />
+      <View style={styleForm.containerInputs}>
+        <Text style={styleForm.textLabel}>Nickname</Text>
         <Controller
           control={control}
           rules={{ required: true }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Product nickname"
+              label="Nickname"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -53,14 +55,17 @@ export default function ProductForm({ productDetails, submitProduct, submitText 
           )}
           name="name"
         />
-        {errors.name ? <Text style={{ color: "red" }}>Required</Text> : null}
+        {errors.name ? <Text style={{ color: "red" }}>Nickname required</Text> : null}
+      </View>
+      <View style={styleForm.containerInputs}>
+        <Text style={styleForm.textLabel}>Price</Text>
         <Controller
           control={control}
           rules={{ required: false, maxLength: 20, validate: priceValidation }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Product price"
+              label="Price"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -72,6 +77,7 @@ export default function ProductForm({ productDetails, submitProduct, submitText 
           )}
           name="price"
         />
+        {errors.price ? <Text style={{ color: "red" }}>Price required</Text> : null}
       </View>
       <Button
         style={styleForm.buttonAdd}
@@ -81,6 +87,6 @@ export default function ProductForm({ productDetails, submitProduct, submitText 
       >
         {submitText}
       </Button>
-    </View>
+    </ScrollView>
   );
 }
