@@ -3,13 +3,11 @@ import { StyleSheet, View, FlatList } from "react-native";
 import { List, Button, FAB, Divider } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
-import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 
-export default function WarehousesListScreen({ navigation }: any) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
+const localDb = LocalDatabase.getInstance();
 
+export default function WarehousesListScreen({ navigation }: any) {
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -19,12 +17,10 @@ export default function WarehousesListScreen({ navigation }: any) {
 
   React.useEffect(() => {
     async function fetchWarehouseList() {
-      const warehouseList = await warehouseRepository.current.getAll();
+      const warehouseList = await localDb.warehouseRepository.getAll();
       setWarehouseList(warehouseList);
     }
-    if (warehouseRepository) {
-      fetchWarehouseList();
-    }
+    fetchWarehouseList();
   }, [changeCounter, isFocused]);
 
   function renderItem({ item }) {
@@ -76,7 +72,7 @@ export default function WarehousesListScreen({ navigation }: any) {
   }
 
   function deleteWarehouse(warehouseId: number) {
-    warehouseRepository.current.delete(warehouseId);
+    localDb.warehouseRepository.delete(warehouseId);
     setChangeCounter(changeCounter + 1);
   }
 

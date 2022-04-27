@@ -1,25 +1,27 @@
 import * as React from "react";
-import { StyleSheet, View, FlatList, Image, Text, Pressable } from "react-native";
-import { List, Button, FAB, Divider } from "react-native-paper";
+import { FlatList, Text, Pressable } from "react-native";
+import { List, Divider } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
-import ProductRepository from "../../database/repositories/ProductRepository";
 import { ContextOrderProductList } from "./Workdays";
 
-export default function OrderProductListScreen({ navigation, route }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const productRepository = new ProductRepository(localDb.dbConnection);
+const localDb = LocalDatabase.getInstance();
 
-  const contextOrderProductList = React.useContext(ContextOrderProductList);
+export default function OrderProductListScreen({ navigation, route }: any) {
+  const contextOrderProductList = React.useRef(React.useContext(ContextOrderProductList));
 
   const [productList, setProductList] = React.useState([]);
 
   React.useEffect(() => {
-    productRepository.getAll().then((found) => {
-      const filteredList = found.filter((product) => {
-        return !contextOrderProductList.orderedProducts.includes(product.id);
-      });
-      setProductList(filteredList);
-    });
+    localDb.productRepository
+      .getAll()
+      .then((found) => {
+        const filteredList = found.filter((product) => {
+          return !contextOrderProductList.current.orderedProducts.includes(product.id);
+        });
+        setProductList(filteredList);
+        return true;
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   function renderProductItem({ item }) {

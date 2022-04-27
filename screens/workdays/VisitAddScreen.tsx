@@ -3,20 +3,12 @@ import { StyleSheet, View, Text } from "react-native";
 import { Button, FAB } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
-import OrderRepository from "../../database/repositories/OrderRepository";
-import ClientRepository from "../../database/repositories/ClientRepository";
-import WorkdayRepository from "../../database/repositories/WorkdayRepository";
-import VisitRepository from "../../database/repositories/VisitRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import OrderlistComponent from "./OrderlistComponent";
 
-export default function VisitAddScreen({ navigation, route }: any) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-  const orderRepository = React.useRef(new OrderRepository(dbConnection.current));
-  const clientRepository = React.useRef(new ClientRepository(dbConnection.current));
-  const workdayRepository = React.useRef(new WorkdayRepository(dbConnection.current));
-  const visitRepository = React.useRef(new VisitRepository(dbConnection.current));
+const localDb = LocalDatabase.getInstance();
 
+export default function VisitAddScreen({ navigation, route }: any) {
   const [orderList, setOrderList] = React.useState([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [deleteOrderId, setDeleteOrderId] = React.useState(-1);
@@ -31,7 +23,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function fetchWorkday() {
       try {
-        const found = await workdayRepository.current.findById(route.params.workdayId);
+        const found = await localDb.workdayRepository.findById(route.params.workdayId);
         setWorkday(found);
       } catch (e) {
         console.log(e);
@@ -50,7 +42,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function fetchClient() {
       try {
-        const found = await clientRepository.current.findById(route.params.clientId);
+        const found = await localDb.clientRepository.findById(route.params.clientId);
         setClient(found);
       } catch (e) {
         console.log(e);
@@ -64,10 +56,10 @@ export default function VisitAddScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function createVisit() {
       try {
-        const newVisit = visitRepository.current.create(workday, client);
-        await visitRepository.current.save(newVisit);
+        const newVisit = localDb.visitRepository.create(workday, client);
+        await localDb.visitRepository.save(newVisit);
         //TODO if multiple clients are allowed in a single workday it has to be changed to functionality returning id
-        const found = await visitRepository.current.findVisitByWorkdayClient(workday, client);
+        const found = await localDb.visitRepository.findVisitByWorkdayClient(workday, client);
         setVisit(found);
         setAddVisitDisabled(false);
       } catch (e) {
@@ -77,7 +69,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
     async function updateClient() {
       try {
         visit.client = client;
-        visitRepository.current.save(visit);
+        localDb.visitRepository.save(visit);
       } catch (e) {
         console.log(e);
       }
@@ -93,7 +85,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function fetchOrderList() {
       try {
-        const orders = await orderRepository.current.getAllInVisit(visit);
+        const orders = await localDb.orderRepository.getAllInVisit(visit);
         setOrderList(orders);
       } catch (e) {
         console.log(e);
@@ -104,7 +96,7 @@ export default function VisitAddScreen({ navigation, route }: any) {
   }, [visit, isFocused, changeCounter]);
 
   function deleteOrder(id: number) {
-    orderRepository.current.delete(id);
+    localDb.orderRepository.delete(id);
     setChangeCounter(changeCounter + 1);
   }
 

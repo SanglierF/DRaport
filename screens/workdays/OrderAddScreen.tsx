@@ -2,11 +2,6 @@ import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, FAB } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
-import VisitRepository from "../../database/repositories/VisitRepository";
-import OrderRepository from "../../database/repositories/OrderRepository";
-import OrderedProductRepository from "../../database/repositories/OrderedProductRepository";
-import ProductRepository from "../../database/repositories/ProductRepository";
-import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import { OrderedProduct } from "../../database/entities/OrderedProduct";
 import { Visit } from "../../database/entities/Visit";
 import { Order } from "../../database/entities/Order";
@@ -14,17 +9,13 @@ import { Warehouse } from "../../database/entities/Warehouse";
 import { ContextOrderProductList } from "./Workdays";
 import OrderComponent from "./OrderComponent";
 
+const localDb = LocalDatabase.getInstance();
+
 export default function OrderAddScreen({ navigation, route }) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-
-  const visitRepository = React.useRef(new VisitRepository(dbConnection.current));
-  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
-  const orderRepository = React.useRef(new OrderRepository(dbConnection.current));
-  const orderedProductRepository = React.useRef(new OrderedProductRepository(dbConnection.current));
-  const productRepository = React.useRef(new ProductRepository(dbConnection.current));
-
   const [visit, setVisit] = React.useState<Visit>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [warehouseList, setWarehouseList] = React.useState<Warehouse[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [warehouseId, setWarehouseId] = React.useState(-1);
   const [order, setOrder] = React.useState<Order>(null);
   const [orderedProducts, setOrderedProducts] = React.useState<OrderedProduct[]>([]);
@@ -34,7 +25,7 @@ export default function OrderAddScreen({ navigation, route }) {
   React.useEffect(() => {
     async function fetchVisit() {
       try {
-        const visit = await visitRepository.current.findById(route.params.visitId);
+        const visit = await localDb.visitRepository.findById(route.params.visitId);
         setVisit(visit);
       } catch (e) {
         console.log(e);
@@ -46,8 +37,8 @@ export default function OrderAddScreen({ navigation, route }) {
   React.useEffect(() => {
     async function fetchWarehouses() {
       try {
-        const warehouses = await warehouseRepository.current.getAll();
-        const noWarehouse = warehouseRepository.current.create({ nickname: "Default" });
+        const warehouses = await localDb.warehouseRepository.getAll();
+        const noWarehouse = localDb.warehouseRepository.create({ nickname: "Default" });
         noWarehouse.id = -1;
         const warehousesList = [noWarehouse].concat(warehouses);
         setWarehouseList(warehousesList);
@@ -60,15 +51,15 @@ export default function OrderAddScreen({ navigation, route }) {
 
   React.useEffect(() => {
     if (visit !== null) {
-      setOrder(orderRepository.current.create(visit));
+      setOrder(localDb.orderRepository.create(visit));
     }
   }, [visit]);
 
   React.useEffect(() => {
     async function createProduct() {
       try {
-        const product = await productRepository.current.findById(route.params.productId);
-        const orderedProduct = orderedProductRepository.current.create(order, product, 1);
+        const product = await localDb.productRepository.findById(route.params.productId);
+        const orderedProduct = localDb.orderedProductRepository.create(order, product, 1);
         setOrderedProducts((orderedProducts) => orderedProducts.concat(orderedProduct));
       } catch (e) {
         console.log(e);
@@ -96,9 +87,9 @@ export default function OrderAddScreen({ navigation, route }) {
   function saveOrder() {
     (async () => {
       try {
-        const savedOrder = await orderRepository.current.save(order);
+        const savedOrder = await localDb.orderRepository.save(order);
         orderedProducts.forEach((orderedProduct) => (orderedProduct.order = savedOrder));
-        await orderedProductRepository.current.saveAll(orderedProducts);
+        await localDb.orderedProductRepository.saveAll(orderedProducts);
       } catch (e) {
         console.log(e);
       }

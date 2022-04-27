@@ -1,16 +1,11 @@
 import * as React from "react";
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from "react-native";
-import { List, Button, FAB, Divider, Modal } from "react-native-paper";
-import { useIsFocused, useFocusEffect } from "@react-navigation/native";
+import { View } from "react-native";
+import { Calendar } from "react-native-calendars";
 import LocalDatabase from "../../database/LocalDatabase";
-import WorkdayRepository from "../../database/repositories/WorkdayRepository";
-import ModalConfirmation from "../../components/ModalConfirmation";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+
+const localDb = LocalDatabase.getInstance();
 
 export default function WorkdayCalendarScreen({ navigation }) {
-  const localDb = LocalDatabase.getInstance();
-  const workdayRepository = new WorkdayRepository(localDb.dbConnection);
-
   const [markedDates, setMarkedDates] = React.useState<{
     [key: string]: {
       marked?: boolean;
@@ -42,10 +37,14 @@ export default function WorkdayCalendarScreen({ navigation }) {
 
   React.useEffect(() => {
     const month = changedMonth.dateString.slice(0, 7);
-    workdayRepository.getAllInMonth(month).then((found) => {
-      setWorkedDays(found);
-      changeMarked(found);
-    });
+    localDb.workdayRepository
+      .getAllInMonth(month)
+      .then((found) => {
+        setWorkedDays(found);
+        changeMarked(found);
+        return true;
+      })
+      .catch((error) => console.log(error));
   }, [changedMonth]);
 
   function gotoDay(day: string) {
@@ -81,18 +80,28 @@ export default function WorkdayCalendarScreen({ navigation }) {
             return found.work_time_begin.toISOString().slice(0, 10) === day.dateString.slice(0, 10);
           });
           if (existingDay !== undefined) {
-            workdayRepository.delete(existingDay.id).then(() => {
-              setChangedMonth(day);
-            });
+            localDb.workdayRepository
+              .delete(existingDay.id)
+              .then(() => {
+                setChangedMonth(day);
+                return true;
+              })
+              .catch((error) => console.log(error));
           } else {
-            if(!disableLongPress){
+            if (!disableLongPress) {
               disableLongPress = true;
-              workdayRepository
-                .save(workdayRepository.create(new Date(day.dateString.slice(0, 10)).toISOString()))
+              localDb.workdayRepository
+                .save(
+                  localDb.workdayRepository.create(
+                    new Date(day.dateString.slice(0, 10)).toISOString()
+                  )
+                )
                 .then(() => {
                   setChangedMonth(day);
                   disableLongPress = false;
-                });
+                  return true;
+                })
+                .catch((error) => console.log(error));
             }
           }
         }}

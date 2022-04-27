@@ -3,19 +3,13 @@ import { StyleSheet, View, Text } from "react-native";
 import { Button, FAB } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import LocalDatabase from "../../database/LocalDatabase";
-import OrderRepository from "../../database/repositories/OrderRepository";
-import ClientRepository from "../../database/repositories/ClientRepository";
-import VisitRepository from "../../database/repositories/VisitRepository";
 import ModalConfirmation from "../../components/ModalConfirmation";
 import { ContextVisitedClients } from "./Workdays";
 import OrderlistComponent from "./OrderlistComponent";
 
-export default function VisitModifyScreen({ navigation, route }: any) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-  const orderRepository = React.useRef(new OrderRepository(dbConnection.current));
-  const clientRepository = React.useRef(new ClientRepository(dbConnection.current));
-  const visitRepository = React.useRef(new VisitRepository(dbConnection.current));
+const localDb = LocalDatabase.getInstance();
 
+export default function VisitModifyScreen({ navigation, route }: any) {
   const [orderList, setOrderList] = React.useState([]);
   const [changeCounter, setChangeCounter] = React.useState(0);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -30,7 +24,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function fetchVisit() {
       try {
-        const found = await visitRepository.current.findByIdWithClient(route.params.visitId);
+        const found = await localDb.visitRepository.findByIdWithClient(route.params.visitId);
         setVisit(found);
         setClient(found.client);
         const filteredClientList = contextVisitedClients.current.visitedClients.filter(
@@ -50,7 +44,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
   React.useEffect(() => {
     async function fetchOrders() {
       try {
-        const list = await orderRepository.current.getAllInVisit(visit);
+        const list = await localDb.orderRepository.getAllInVisit(visit);
         setOrderList(list);
       } catch (e) {
         console.log(e);
@@ -63,7 +57,7 @@ export default function VisitModifyScreen({ navigation, route }: any) {
 
   React.useEffect(() => {
     async function fetchClient() {
-      const found = await clientRepository.current.findById(route.params.clientId);
+      const found = await localDb.clientRepository.findById(route.params.clientId);
       setClient(found);
     }
     if (route.params?.clientId) {
@@ -75,12 +69,12 @@ export default function VisitModifyScreen({ navigation, route }: any) {
     if (!client) return;
     if (visit.client.id !== client.id) {
       visit.client = client;
-      visitRepository.current.save(visit);
+      localDb.visitRepository.save(visit);
     }
   }, [client, visit]);
 
   function deleteOrder(id: number) {
-    orderRepository.current.delete(id);
+    localDb.orderRepository.delete(id);
     setChangeCounter(changeCounter + 1);
   }
 

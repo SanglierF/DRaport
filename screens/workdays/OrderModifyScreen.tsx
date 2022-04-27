@@ -2,25 +2,18 @@ import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, FAB } from "react-native-paper";
 import LocalDatabase from "../../database/LocalDatabase";
-import OrderRepository from "../../database/repositories/OrderRepository";
-import OrderedProductRepository from "../../database/repositories/OrderedProductRepository";
-import ProductRepository from "../../database/repositories/ProductRepository";
-import WarehouseRepository from "../../database/repositories/WarehouseRepository";
 import { Warehouse } from "../../database/entities/Warehouse";
 import { OrderedProduct } from "../../database/entities/OrderedProduct";
 import { Order } from "../../database/entities/Order";
 import { ContextOrderProductList } from "./Workdays";
 import OrderComponent from "./OrderComponent";
 
+const localDb = LocalDatabase.getInstance();
+
 export default function OrderModifyScreen({ navigation, route }) {
-  const dbConnection = React.useRef(LocalDatabase.getInstance().dbConnection);
-
-  const orderRepository = React.useRef(new OrderRepository(dbConnection.current));
-  const orderedProductRepository = React.useRef(new OrderedProductRepository(dbConnection.current));
-  const productRepository = React.useRef(new ProductRepository(dbConnection.current));
-  const warehouseRepository = React.useRef(new WarehouseRepository(dbConnection.current));
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [warehouseList, setWarehouseList] = React.useState<Warehouse[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [warehouseId, setWarehouseId] = React.useState(-1);
   const [order, setOrder] = React.useState<Order>(null);
   const [orderedProducts, setOrderedProducts] = React.useState<OrderedProduct[]>([]);
@@ -29,7 +22,7 @@ export default function OrderModifyScreen({ navigation, route }) {
   const contextOrderProductList = React.useRef(React.useContext(ContextOrderProductList));
 
   React.useEffect(() => {
-    orderRepository.current
+    localDb.orderRepository
       .findById(route.params.orderId)
       .then((order) => {
         setOrder(order);
@@ -40,10 +33,10 @@ export default function OrderModifyScreen({ navigation, route }) {
       });
   }, [route.params.orderId]);
   React.useEffect(() => {
-    warehouseRepository.current
+    localDb.warehouseRepository
       .getAll()
       .then((warehouse) => {
-        const noWarehouse = warehouseRepository.current.create({ nickname: "Default" });
+        const noWarehouse = localDb.warehouseRepository.create({ nickname: "Default" });
         noWarehouse.id = -1;
         const warehouses = [noWarehouse].concat(warehouse);
         setWarehouseList(warehouses);
@@ -55,7 +48,7 @@ export default function OrderModifyScreen({ navigation, route }) {
   }, []);
 
   React.useEffect(() => {
-    orderedProductRepository.current
+    localDb.orderedProductRepository
       .getAllInOrder(order)
       .then((orderedProducts) => {
         setOrderedProducts(orderedProducts);
@@ -70,10 +63,10 @@ export default function OrderModifyScreen({ navigation, route }) {
 
   React.useEffect(() => {
     if (route.params?.productId) {
-      productRepository.current
+      localDb.productRepository
         .findById(route.params.productId)
         .then((product) => {
-          const orderedProduct = orderedProductRepository.current.create(order, product, 1);
+          const orderedProduct = localDb.orderedProductRepository.create(order, product, 1);
           setOrderedProducts((orderedProducts) => orderedProducts.concat(orderedProduct));
           return product;
         })
@@ -107,13 +100,13 @@ export default function OrderModifyScreen({ navigation, route }) {
   function saveOrder() {
     (async () => {
       removedOrderedProductsIds.forEach((removedOrderedProductId) => {
-        orderedProductRepository.current.delete(removedOrderedProductId);
+        localDb.orderedProductRepository.delete(removedOrderedProductId);
       });
-      orderRepository.current
+      localDb.orderRepository
         .save(order)
         .then((order) => {
           orderedProducts.forEach((orderedProduct) => (orderedProduct.order = order));
-          orderedProductRepository.current.saveAll(orderedProducts);
+          localDb.orderedProductRepository.saveAll(orderedProducts);
           return order;
         })
         .catch((e) => {
