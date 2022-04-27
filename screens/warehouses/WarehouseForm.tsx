@@ -38,15 +38,16 @@ export default function WarehouseForm({
   }, [setValue, warehouseDetails]);
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={styleForm.containerForm}>
       <View style={styleForm.containerInputs}>
+        <Text style={styleForm.textLabel}>Nickname</Text>
         <Controller
           control={control}
           rules={{ required: true }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse nickname"
+              label="Nickname"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -58,13 +59,14 @@ export default function WarehouseForm({
           name="nickname"
         />
         {errors.nickname ? <Text style={{ color: "red" }}>Required</Text> : null}
+        <Text style={styleForm.textLabel}>Name</Text>
         <Controller
           control={control}
           rules={{ required: false, maxLength: 20 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse name"
+              label="Name"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -75,13 +77,14 @@ export default function WarehouseForm({
           )}
           name="name"
         />
+        <Text style={styleForm.textLabel}>NIP</Text>
         <Controller
           control={control}
           rules={{ required: false, maxLength: 9 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse nip"
+              label="NIP"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -93,13 +96,14 @@ export default function WarehouseForm({
           )}
           name="nip"
         />
+        <Text style={styleForm.textLabel}>Regon</Text>
         <Controller
           control={control}
           rules={{ maxLength: 9 }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse regon"
+              label="Regon"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -111,13 +115,14 @@ export default function WarehouseForm({
           )}
           name="regon"
         />
+        <Text style={styleForm.textLabel}>Telephone number</Text>
         <Controller
           control={control}
           rules={{ required: false }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse tel_number"
+              label="Tel number"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
@@ -128,13 +133,14 @@ export default function WarehouseForm({
           )}
           name="tel"
         />
+        <Text style={styleForm.textLabel}>Email</Text>
         <Controller
           control={control}
           rules={{ required: false }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styleForm.textInput}
-              label="Warehouse email"
+              label="Email"
               mode="outlined"
               onChangeText={onChange}
               autoComplete="off"
