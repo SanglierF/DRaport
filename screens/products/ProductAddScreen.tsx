@@ -1,14 +1,12 @@
 import * as React from "react";
 import { View } from "react-native";
 import LocalDatabase from "../../database/LocalDatabase";
-import ProductRepository from "../../database/repositories/ProductRepository";
 import styleItemDetails from "../../styles/styleItemDetails";
 import ProductForm from "./ProductForm";
 
-export default function ProductAddScreen({ navigation }: any) {
-  const localDb = LocalDatabase.getInstance();
-  const productRepository = new ProductRepository(localDb.dbConnection);
+const localDb = LocalDatabase.getInstance();
 
+export default function ProductAddScreen({ navigation }: any) {
   const [productDetails] = React.useState({
     name: "",
     price: "",
@@ -24,8 +22,8 @@ export default function ProductAddScreen({ navigation }: any) {
     } catch (exception) {
       alert("Invalid price");
     }
-    const newProduct = productRepository.create(data.name, priceConv);
-    productRepository.save(newProduct);
+    const newProduct = localDb.productRepository.create(data.name, priceConv);
+    localDb.productRepository.save(newProduct);
     navigation.goBack();
   }
 
