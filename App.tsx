@@ -27,7 +27,7 @@ export default function App() {
         await SplashScreen.preventAutoHideAsync();
         await localDatabase.initialize();
         await localDatabase.awaitDbConnection();
-        await localDatabase.populateDatabase();
+        // await localDatabase.populateDatabase();
       } catch (e) {
         console.warn(e);
       } finally {
