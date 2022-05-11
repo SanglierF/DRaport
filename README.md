@@ -11,8 +11,14 @@ Mobile application intending to help sales representatives in their daily work b
 ### GUS site scraping
 
 Application fetches data for clients from Baza Internetowa Regon by employing web scraping.
+
+![Client details scraped from BIR](/doc/assets/briscrap.png "Client details from BRI")
+
 It works by extracting user key from GUS website.
-Then it uses it to get session id, and get client details.
+Then it uses key to establish session, and get client details. \
+User has to input NIP and simply press the fill data button.
+
+![Client details](/doc/assets/clientdetails.png "Client details")
 
 ## Planned features
 
@@ -57,4 +63,4 @@ Use eas to build apk.
 
 ## Troubleshooting
 
-Sometimes while using Expo Go it won't want to connect to computer, which necessities reinstalation of Expo Go application.
+Sometimes while using Expo Go it won't connect to Expo cli, which necessites reinstallation of Expo Go application.
