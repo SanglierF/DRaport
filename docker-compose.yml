@@ -1,0 +1,14 @@
+version: '3.8' # Specify docker-compose version
+services:
+   expo: # Name of the frontend service
+      container_name: expo-go
+      build: ./ # Specify the directory of the Dockerfile
+      ports:
+         - 19000:19000 # Specify port-forwarding
+         - 19001:19001
+         - 19002:19002
+      volumes: # Mount host path in the container
+         - ./:/usr/src/draport-go-docker
+         - /usr/src/draport-go-docker/node_modules
+      environment:
+         - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
