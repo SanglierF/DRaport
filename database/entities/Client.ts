@@ -39,7 +39,7 @@ export class Client {
   @Column({ type: "float", nullable: true })
   longitude: number;
 
-  @OneToMany(() => Visit, (visit) => visit.client)
+  @OneToMany(() => Visit, (visit) => visit.client, { cascade: true })
   visits: Visit[];
 
   @Column()

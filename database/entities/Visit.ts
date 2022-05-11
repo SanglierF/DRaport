@@ -8,10 +8,10 @@ export class Visit {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(() => Workday, (workday) => workday.visits, {nullable: false, onDelete: "CASCADE"})
+  @ManyToOne(() => Workday, (workday) => workday.visits, { nullable: false, onDelete: "CASCADE" })
   workday: Workday;
 
-  @ManyToOne(() => Client, (client) => client.visits, {nullable: false})
+  @ManyToOne(() => Client, (client) => client.visits, { nullable: false, onDelete: "CASCADE" })
   client: Client;
 
   @Column({ length: 150, nullable: true })
@@ -20,7 +20,7 @@ export class Visit {
   @Column({ nullable: true })
   visit_time: number;
 
-  @OneToMany(() => Order, (order) => order.visit, {cascade: true })
+  @OneToMany(() => Order, (order) => order.visit, { cascade: true })
   orders: Order[];
 
   @Column()
