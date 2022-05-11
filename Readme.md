@@ -1,1 +1,0 @@
-# DRaport mobile sales application
