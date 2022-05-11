@@ -6,6 +6,8 @@ React Native application for sales representatives.
 
 Mobile application intending to help sales representatives in their daily work by helping them with creating daily raports. It has certain type of sales represantative in mind that has to drive from client to client, take their orders and forward them to warehouses.
 
+![Home screen and client list](/doc/assets/homeclientlist.png "Home screen and client list view")
+
 ## Features
 
 ### GUS site scraping
